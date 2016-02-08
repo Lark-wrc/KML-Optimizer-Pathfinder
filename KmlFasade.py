@@ -10,8 +10,11 @@ class KmlFasade(object):
 
     def __init__(self, path):
         self.filepath = path
+        self.placemarks = None
+        self.geometrics = None
         self.kmlTree = etree.parse(path)
         self.kmlRoot = self.kmlTree.getroot()
+
 
     def rewrite(self, path=None):
         if path == None:
@@ -30,24 +33,34 @@ class KmlFasade(object):
             if x.tag == 'Placemark':
                 if debug: print x.tag, x.text
                 ret.append(x)
+        self.placemarks = ret
         return ret
 
-    def placemarkToGeometrics(self, list):
+    def placemarkToGeometrics(self):
+        if(self.placemarks is None):
+            self.loadPlacemarks()
         factory = GeometricFactory()
         ret = []
-        for element in list:
+        for element in self.placemarks:
             for x in element.iter():
                 if x.tag in Utils.geometryTypes:
                     z = factory.create(x, x.tag, x[0].text)
                     if z is not None: ret.append(z)
+        self.geometrics = ret
         return ret
+
+    def fasadeUpdate(self):
+        for element in self.geometrics:
+            #element.coordinates = [0,1]
+            element.removeFrom(self,self.geometrics)
+            element.applyEdits()
 
 if __name__ == '__main__':
     fasade = KmlFasade('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1.kml')
-    y = fasade.loadPlacemarks()
-    z = LocationRadialRestriction(1, 2)
-    geos = fasade.placemarkToGeometrics(y)
-    for element in geos:
-        element.coordinates = 0
+    fasade.loadPlacemarks()
+    z = LocationRadialRestriction([-99,40], 75)
+    fasade.placemarkToGeometrics()
+    z.restrict(fasade.geometrics)
+    for element in fasade.geometrics:
         element.applyEdits()
     fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')

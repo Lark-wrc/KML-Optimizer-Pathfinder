@@ -10,6 +10,7 @@ class RestrictionFactory(object):
     def newLocationRestriction(self):
         pass
 
+
 # kinda really an interface
 class Restriction(object):
 
@@ -27,6 +28,11 @@ class LocationRadialRestriction(object):
         self.distance = distance
 
     def restrict(self, geometrics):
-        for element in geometrics:
-            pass
+        for geometry in geometrics:
+            d = Utils.haversine(self.center, geometry.coordinates)
+            if d > self.distance:
+                geometry.remove = 1
+
+
+
 

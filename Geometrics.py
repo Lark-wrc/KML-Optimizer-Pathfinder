@@ -8,13 +8,29 @@ class GeometricObject(object):
     def __init__(self, element, tag, coordinates):
         self.element = element
         self.tag = tag
+        self.remove = 0
         self.coordinates = []
         for x in coordinates.split('\n'):
-            self.coordinates.append((x.split(',')[0], x.split(',')[1]))
-        print coordinates
+            s = x.split(',')
+            self.coordinates.append(float(s[0]))
+            self.coordinates.append(float(s[1]))
+        #print self.coordinates
 
     def applyEdits(self):
-            print self.__str__()
+            if self.remove:
+                x = self.element.getparent()
+                y = x.getparent()
+                y.remove(x)
+
+    def removeFrom(self, source, geometrics):
+        pass
+        #     for geometry in geometrics:
+        #         if geometry.remove:
+        #             x = geometry.element.getparent()
+        #             y = x.getparent()
+        #             y.remove(x)
+
+
 
 
 class Point(GeometricObject):
@@ -22,14 +38,26 @@ class Point(GeometricObject):
         super(Point, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
-        self.element.find('coordinates').text = str(self.coordinates)
+        super(Point,self).applyEdits()
+        if self.remove == 1: return 0
+        self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
+
+    def removeFrom(self, source, list):
+        super(Point,self).removeFrom(source, list)
+
 
 class LinearRing(GeometricObject):
     def __init__(self, element, tag, coordinates):
         super(LinearRing, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
-        self.element.find('coordinates').text = str(self.coordinates)
+        super(LinearRing,self).applyEdits()
+        if self.remove == 1: return 0
+        self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
+
+    def removeFrom(self, source, list):
+        super(LinearRing,self).removeFrom(source, list)
+
 
 class GeometricFactory(object):
 
