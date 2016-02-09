@@ -15,18 +15,21 @@ def coordinateDistance(start, end):
     return sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))
 
 
+def haversine(start, end, metric):
+    if metric:
+        r = 6371  # Earth radius in kilometers
+    else:
+        r = 3959  # Earth radius in miles
 
-# def haversine(start, end):
-#
-#     R = 6372.8 # Earth radius in kilometers
-#
-#     dLat = radians(end[0] - start[0])
-#     dLon = radians(end[1] - start[1])
-#     start[0] = radians(start[0])
-#     end[0] = radians(end[0])
-#
-#     a = sin(dLat/2)**2 + cos(start[0])*cos(end[0])*sin(dLon/2)**2
-#     c = 2*asin(sqrt(a))
-#
-#     print start, end, R*c
-#     return R * c
+    d_lat = radians(end[0] - start[0])
+    d_lon = radians(end[1] - start[1])
+    start[0] = radians(start[0])
+    end[0] = radians(end[0])
+    a = sin(d_lat / 2)**2 + cos(start[0]) * cos(end[0]) * sin(d_lon / 2)**2
+    c = 2*asin(sqrt(a))
+
+    #  Returns distance in km
+    print start, end, r * c
+    return r * c
+
+haversine([39.706583333333334, 75.11438888888888], [39.71036111111111, 75.12022222222221])
