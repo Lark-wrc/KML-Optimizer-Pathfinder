@@ -5,9 +5,9 @@ geometryTypes = ('Point', 'LineString','LinearRing', 'MultiGeometry') #Polygon i
 
 def elementPrint(element, bool=0):
     if bool:
-        return etree.tostring(element,pretty_print=False)
+        return etree.tostring(element, pretty_print=False)
     else:
-        return etree.tostring(element,pretty_print=True)
+        return etree.tostring(element, pretty_print=True)
 
 
 def coordinateDistance(start, end):

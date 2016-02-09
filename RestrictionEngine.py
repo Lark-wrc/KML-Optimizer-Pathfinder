@@ -29,10 +29,6 @@ class LocationRadialRestriction(object):
 
     def restrict(self, geometrics):
         for geometry in geometrics:
-            d = Utils.haversine(self.center, geometry.coordinates)
+            d = Utils.coordinateDistance(self.center, geometry.coordinates)
             if d > self.distance:
                 geometry.remove = 1
-
-
-
-

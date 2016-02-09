@@ -22,16 +22,6 @@ class GeometricObject(object):
                 y = x.getparent()
                 y.remove(x)
 
-    def removeFrom(self, source, geometrics):
-        pass
-        #     for geometry in geometrics:
-        #         if geometry.remove:
-        #             x = geometry.element.getparent()
-        #             y = x.getparent()
-        #             y.remove(x)
-
-
-
 
 class Point(GeometricObject):
     def __init__(self, element, tag, coordinates):
@@ -42,21 +32,21 @@ class Point(GeometricObject):
         if self.remove == 1: return 0
         self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
 
-    def removeFrom(self, source, list):
-        super(Point,self).removeFrom(source, list)
-
 
 class LinearRing(GeometricObject):
     def __init__(self, element, tag, coordinates):
         super(LinearRing, self).__init__(element, tag, coordinates)
+        self.remove = 1
 
     def applyEdits(self):
         super(LinearRing,self).applyEdits()
-        if self.remove == 1: return 0
+        if self.remove:
+                x = self.element.getparent()
+                x = x.getparent()
+                y = x.getparent()
+                y.remove(x)
+                return 0
         self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
-
-    def removeFrom(self, source, list):
-        super(LinearRing,self).removeFrom(source, list)
 
 
 class GeometricFactory(object):

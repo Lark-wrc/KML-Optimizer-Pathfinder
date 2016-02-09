@@ -52,7 +52,6 @@ class KmlFasade(object):
     def fasadeUpdate(self):
         for element in self.geometrics:
             #element.coordinates = [0,1]
-            element.removeFrom(self,self.geometrics)
             element.applyEdits()
 
 if __name__ == '__main__':
@@ -61,6 +60,5 @@ if __name__ == '__main__':
     z = LocationRadialRestriction([-99,40], 75)
     fasade.placemarkToGeometrics()
     z.restrict(fasade.geometrics)
-    for element in fasade.geometrics:
-        element.applyEdits()
+    fasade.fasadeUpdate()
     fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')
