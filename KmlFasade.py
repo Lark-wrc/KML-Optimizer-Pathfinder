@@ -9,6 +9,12 @@ debug = 0
 class KmlFasade(object):
 
     def __init__(self, path):
+        """
+        This object wraps an lxml object and makes it easy to worth with. This is designed for quick, useful
+        functionality that ignores irrelevant carry over data. It provides function to return list of useful
+        xml data, tools to apply changes to the xml file based on the objects it generates, and other features.
+        :param path: Path of the source file.
+        """
         self.filepath = path
         self.placemarks = None
         self.geometrics = None
@@ -17,6 +23,11 @@ class KmlFasade(object):
 
 
     def rewrite(self, path=None):
+        """
+        Writes the stored file back to the orginal file or a provided path. Basically combines a few lxml methods
+        to make this task quicker.
+        :param path: The path to write to, otherwise it will use the original write path.
+        """
         if path == None:
             f = open(self.filepath, 'w')
             f.write(Utils.elementPrint(self.kmlRoot))

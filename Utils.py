@@ -1,5 +1,6 @@
 from lxml import etree
 from math import radians, sin, cos, sqrt, asin
+
 debug = 0
 geometryTypes = ('Point', 'LineString','LinearRing', 'MultiGeometry') #Polygon is removed
 
