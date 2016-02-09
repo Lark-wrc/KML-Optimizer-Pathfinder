@@ -3,9 +3,22 @@ import Utils
 class GeometricObject(object):
 
     def __str__(self):
+        """
+        Overrides the tostring method of a geometic object.
+        :return: This object as a string.
+        """
         return str(self.tag)+ ' ' +str(self.coordinates)+ " " + Utils.elementPrint(self.element)
 
     def __init__(self, element, tag, coordinates):
+        """
+        Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
+        This class makes it easier to access the values in the xml element and provides a quick method of
+        replacing or removing them.
+        :param element: The element that is being wrapped.
+        :param tag: The tag value, otherwise the name of the element.
+        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
+        :return:
+        """
         self.element = element
         self.tag = tag
         self.remove = 0
@@ -17,29 +30,50 @@ class GeometricObject(object):
         #print self.coordinates
 
     def applyEdits(self):
-            if self.remove:
-                x = self.element.getparent()
-                y = x.getparent()
-                y.remove(x)
+        """
+        ToDO: Setup for differing high removal or delegate to subclasses.
+        This is the super method for all applyEdit methods. This method and it's children are used to take the changes
+        made to the pulled out xml values and apply them back to the file.
+        This super method removes any geometric flagged for removal.
+        """
+        if self.remove:
+            x = self.element.getparent()
+            y = x.getparent()
+            y.remove(x)
 
 
 class Point(GeometricObject):
     def __init__(self, element, tag, coordinates):
+        """
+        See Geometric Object. This class specifies rules for a point xml object.
+        """
         super(Point, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
+        """
+        See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
+        which may have been changed, back to the file.
+        """
         super(Point,self).applyEdits()
         if self.remove == 1: return 0
         self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
 
 
 class LinearRing(GeometricObject):
+    """
+    See Geometric Object. This class specifies rules for a linearring xml object.
+    """
     def __init__(self, element, tag, coordinates):
         super(LinearRing, self).__init__(element, tag, coordinates)
         self.remove = 1
 
     def applyEdits(self):
-        super(LinearRing,self).applyEdits()
+        """
+        See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
+        which may have been changed, back to the file. This method also overrides the super's functionality to
+        remove the object from the xml if the remove flag is set.
+        """
+        #super(LinearRing,self).applyEdits()
         if self.remove:
                 x = self.element.getparent()
                 x = x.getparent()
@@ -52,9 +86,21 @@ class LinearRing(GeometricObject):
 class GeometricFactory(object):
 
     def __init__(self):
+        """
+        Simple factory object to produce geometric objects. Can be extended to do input checking and other
+        such utility functions.
+        """
         pass
 
     def create(self, element, tag, coordinates):
+        """
+        Generates a new Geometric object based on what the extracted tag is. This is important as certain objects
+        require different functions to properly update changes.
+        :param element: The element that is being wrapped.
+        :param tag: The tag value, otherwise the name of the element.
+        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
+        :return:
+        """
         if tag == 'Point':
             return Point(element, tag, coordinates)
         elif tag == 'LinearRing':
