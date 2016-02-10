@@ -19,8 +19,8 @@ def elementPrint(element, bool=0):
     :param element: lxml element.
     :param bool: To pretty print or to compress to a single line.
     :return: the tostring of the element.
-
     """
+
     if bool:
         return etree.tostring(element, pretty_print=False)
     else:
@@ -32,7 +32,7 @@ def coordinateDistance(start, end):
     return sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))
 
 
-def haversine(start, end, metric):
+def haversine(start, end, metric=0):
     """
     Author: Nick Laposta, Bill Clark
     Version = 1.0
@@ -42,6 +42,7 @@ def haversine(start, end, metric):
     :param metric: A boolean value to use the metric system or imperial system.
     :return: The distance in the given metric system.
     """
+
     if metric:
         r = 6371  # Earth radius in kilometers
     else:

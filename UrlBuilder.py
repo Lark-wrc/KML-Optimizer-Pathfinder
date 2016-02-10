@@ -10,6 +10,7 @@ class UrlBuilder(object):
         Using the methods contained, the user may create a valid google maps static api url.
         Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
         """
+
         self.url = 'https://maps.googleapis.com/maps/api/staticmap?'
 
     def addparam(self, feature, value):
@@ -22,6 +23,7 @@ class UrlBuilder(object):
                                                                 png, jpg, png32, gif, jpg-baseline
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
+
         curr = self.url[:]
         curr += '&&' + feature + '='
         curr += value
@@ -36,6 +38,7 @@ class UrlBuilder(object):
         :param dict: a dictionary of features:values from the addparam method.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
+
         curr = self.url[:]
         for key in dict:
             curr += '&&' + key + '=' + dict[key]
@@ -53,6 +56,7 @@ class UrlBuilder(object):
         :param zoom: How far zoomed in the map slice will be. [1-20]
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
+
         curr = self.url[:]
         curr += 'center='+center
         curr += '&&size='+size
@@ -71,6 +75,7 @@ class UrlBuilder(object):
         :param locations: Locations in a list format. Each will be added to be marked. list of lat long coordinates.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
+
         curr = self.url[:]
         curr += '&&markers='
 
@@ -95,6 +100,7 @@ class UrlBuilder(object):
         :param locations: Locations in a list format. Each will be added to be marked. list of lat long coordinates.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
+
         curr = self.url[:]
         curr += '&&path='
         for key in styles:
@@ -113,6 +119,7 @@ class UrlBuilder(object):
         :param path: a file path to save the generated image to.
         :return: the download function returns the saved path and response data, which is returned.
         """
+
         return urlretrieve(self.url, path)
 
 if __name__ == "__main__":

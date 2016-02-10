@@ -9,6 +9,7 @@ class GeometricObject(object):
         Overrides the tostring method of a geometic object.
         :return: This object as a string.
         """
+
         return str(self.tag)+ ' ' +str(self.coordinates)+ " " + Utils.elementPrint(self.element)
 
     def __init__(self, element, tag, coordinates):
@@ -21,8 +22,8 @@ class GeometricObject(object):
         :param element: The element that is being wrapped.
         :param tag: The tag value, otherwise the name of the element.
         :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
-        :return:
         """
+
         self.element = element
         self.tag = tag
         self.remove = 0
@@ -40,12 +41,8 @@ class GeometricObject(object):
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file.
         This super method removes any geometric flagged for removal.
-        ToDO: Setup for differing high removal or delegate to subclasses.
         """
-        if self.remove:
-            x = self.element.getparent()
-            y = x.getparent()
-            y.remove(x)
+        self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
 
 
 class Point(GeometricObject):
@@ -55,6 +52,7 @@ class Point(GeometricObject):
         Version = 1.0
         See Geometric Object. This class specifies rules for a point xml object.
         """
+
         super(Point, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
@@ -64,9 +62,13 @@ class Point(GeometricObject):
         See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
         which may have been changed, back to the file.
         """
+
+        if self.remove:
+            x = self.element.getparent()
+            y = x.getparent()
+            y.remove(x)
         super(Point,self).applyEdits()
-        if self.remove == 1: return 0
-        self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
+
 
 
 class LinearRing(GeometricObject):
@@ -75,6 +77,7 @@ class LinearRing(GeometricObject):
     Version = 1.0
     See Geometric Object. This class specifies rules for a linearring xml object.
     """
+
     def __init__(self, element, tag, coordinates):
         super(LinearRing, self).__init__(element, tag, coordinates)
         self.remove = 1
@@ -87,14 +90,13 @@ class LinearRing(GeometricObject):
         which may have been changed, back to the file. This method also overrides the super's functionality to
         remove the object from the xml if the remove flag is set.
         """
-        #super(LinearRing,self).applyEdits()
+
         if self.remove:
-                x = self.element.getparent()
-                x = x.getparent()
+                x = self.element.getparent().getparent().getparent()
                 y = x.getparent()
                 y.remove(x)
                 return 0
-        self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
+        super(LinearRing,self).applyEdits()
 
 
 class GeometricFactory(object):
@@ -119,6 +121,7 @@ class GeometricFactory(object):
         :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
         :return:
         """
+
         if tag == 'Point':
             return Point(element, tag, coordinates)
         elif tag == 'LinearRing':

@@ -42,15 +42,16 @@ class Restriction(object):
 
 class LocationRadialRestriction(object):
 
-    def __init__(self, center, distance, metric):
+    def __init__(self, center, distance, metric=0):
         """
         Author: Bill Clark
-        Version = 1.0
+        Version = 1.1
         A restriction that flags all points that are not with in distance x from a given center point to be removed.
         :param center: the center point to draw distances from.
         :param distance: the distance in the given metric that a point must be within from center.
         :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
+
         self.center = center
         self.distance = distance
 
@@ -61,6 +62,7 @@ class LocationRadialRestriction(object):
         Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.
         :param geometrics: A list of geometic objects.
         """
+
         for geometry in geometrics:
             d = Utils.coordinateDistance(self.center, geometry.coordinates)
             if d > self.distance:

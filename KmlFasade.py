@@ -16,6 +16,7 @@ class KmlFasade(object):
         xml data, tools to apply changes to the xml file based on the objects it generates, and other features.
         :param path: Path of the source file.
         """
+
         self.filepath = path
         self.placemarks = None
         self.geometrics = None
@@ -31,6 +32,7 @@ class KmlFasade(object):
         to make this task quicker.
         :param path: The path to write to, otherwise it will use the original write path.
         """
+
         if path == None:
             f = open(self.filepath, 'w')
             f.write(Utils.elementPrint(self.kmlRoot))
@@ -50,6 +52,7 @@ class KmlFasade(object):
         to prevent excess searching.
         :return: A list of lxml Element objects matching the placemark tag. This is also stored in class
         """
+
         ret = []
         for x in self.kmlRoot.iter():
             if x.tag == 'Placemark':
@@ -67,6 +70,7 @@ class KmlFasade(object):
         :return: List of geometric objects for each placemark in this object's placemark list. This is stored in class
                   as well.
         """
+
         if(self.placemarks is None):
             self.loadPlacemarks()
 
@@ -86,6 +90,7 @@ class KmlFasade(object):
         Version = 1.0
         Runs the applyedit function on every geometric object contained in this objects geometric's list.
         """
+
         for element in self.geometrics:
             #element.coordinates = [0,1]
             element.applyEdits()
