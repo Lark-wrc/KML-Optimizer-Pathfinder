@@ -1,3 +1,5 @@
+from urllib import urlretrieve
+
 class UrlBuilder(object):
 
     def __init__(self):
@@ -103,6 +105,16 @@ class UrlBuilder(object):
         self.url = curr
         return curr
 
+    def download(self, path="C:\Users\Research\Desktop\\image.png"):
+        """
+        Author: Bill Clark
+        Version: 1.0
+        Takes a parameter path and downloads the generated url to that path.
+        :param path: a file path to save the generated image to.
+        :return: the download function returns the saved path and response data, which is returned.
+        """
+        return urlretrieve(self.url, path)
+
 if __name__ == "__main__":
     url = UrlBuilder()
     url.requiredparam('40.714728,-73.998672', '600x600', '17')
@@ -112,3 +124,4 @@ if __name__ == "__main__":
     #url.addparams({'scale': '2', 'zoom': '17'})
     url.addmarkers({'color': 'red'}, loc)
     print url.addpath({'weight':'5'}, loc)
+    url.download()
