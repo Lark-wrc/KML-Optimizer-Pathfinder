@@ -1,5 +1,4 @@
 from lxml import etree
-#import lxml.etree.ElementTree as ET
 from RestrictionEngine import LocationRadialRestriction
 from Geometrics import *
 import Utils
@@ -10,6 +9,8 @@ class KmlFasade(object):
 
     def __init__(self, path):
         """
+        Author: Bill Clark
+        Version = 1.0
         This object wraps an lxml object and makes it easy to worth with. This is designed for quick, useful
         functionality that ignores irrelevant carry over data. It provides function to return list of useful
         xml data, tools to apply changes to the xml file based on the objects it generates, and other features.
@@ -24,6 +25,8 @@ class KmlFasade(object):
 
     def rewrite(self, path=None):
         """
+        Author: Bill Clark
+        Version = 1.0
         Writes the stored file back to the orginal file or a provided path. Basically combines a few lxml methods
         to make this task quicker.
         :param path: The path to write to, otherwise it will use the original write path.
@@ -39,6 +42,14 @@ class KmlFasade(object):
 
     #Returns a list of elements that contain geometric coordinates (Placemarks)
     def loadPlacemarks(self):
+        """
+        Author: Bill Clark
+        Version = 2.0
+        This method is used to append any xml tag with the placemark tag to a list and return it.
+        As the most relevant data in a kml file appears in a placemark tag, this is a convience method
+        to prevent excess searching.
+        :return: A list of lxml Element objects matching the placemark tag. This is also stored in class
+        """
         ret = []
         for x in self.kmlRoot.iter():
             if x.tag == 'Placemark':
@@ -48,8 +59,17 @@ class KmlFasade(object):
         return ret
 
     def placemarkToGeometrics(self):
+        """
+        Author: Bill Clark
+        Version = 2.0
+        This method take the list of placemarks it has generated (or generates them) and creates geometric
+        objects to allow for easy of editing.
+        :return: List of geometric objects for each placemark in this object's placemark list. This is stored in class
+                  as well.
+        """
         if(self.placemarks is None):
             self.loadPlacemarks()
+
         factory = GeometricFactory()
         ret = []
         for element in self.placemarks:
@@ -61,6 +81,11 @@ class KmlFasade(object):
         return ret
 
     def fasadeUpdate(self):
+        """
+        Author: Bill Clark
+        Version = 1.0
+        Runs the applyedit function on every geometric object contained in this objects geometric's list.
+        """
         for element in self.geometrics:
             #element.coordinates = [0,1]
             element.applyEdits()

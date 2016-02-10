@@ -4,6 +4,8 @@ class GeometricObject(object):
 
     def __str__(self):
         """
+        Author: Bill Clark
+        Version = 1.0
         Overrides the tostring method of a geometic object.
         :return: This object as a string.
         """
@@ -11,6 +13,8 @@ class GeometricObject(object):
 
     def __init__(self, element, tag, coordinates):
         """
+        Author: Bill Clark
+        Version = 1.0
         Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
         This class makes it easier to access the values in the xml element and provides a quick method of
         replacing or removing them.
@@ -31,10 +35,12 @@ class GeometricObject(object):
 
     def applyEdits(self):
         """
-        ToDO: Setup for differing high removal or delegate to subclasses.
+        Author: Bill Clark
+        Version = 2.0
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file.
         This super method removes any geometric flagged for removal.
+        ToDO: Setup for differing high removal or delegate to subclasses.
         """
         if self.remove:
             x = self.element.getparent()
@@ -45,12 +51,16 @@ class GeometricObject(object):
 class Point(GeometricObject):
     def __init__(self, element, tag, coordinates):
         """
+        Author: Bill Clark
+        Version = 1.0
         See Geometric Object. This class specifies rules for a point xml object.
         """
         super(Point, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
         """
+        Author: Bill Clark
+        Version = 2.0
         See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
         which may have been changed, back to the file.
         """
@@ -61,6 +71,8 @@ class Point(GeometricObject):
 
 class LinearRing(GeometricObject):
     """
+    Author: Bill Clark
+    Version = 1.0
     See Geometric Object. This class specifies rules for a linearring xml object.
     """
     def __init__(self, element, tag, coordinates):
@@ -69,6 +81,8 @@ class LinearRing(GeometricObject):
 
     def applyEdits(self):
         """
+        Author: Bill Clark
+        Version = 2.0
         See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
         which may have been changed, back to the file. This method also overrides the super's functionality to
         remove the object from the xml if the remove flag is set.
@@ -87,6 +101,8 @@ class GeometricFactory(object):
 
     def __init__(self):
         """
+        Author: Bill Clark
+        Version = 0
         Simple factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
@@ -94,6 +110,8 @@ class GeometricFactory(object):
 
     def create(self, element, tag, coordinates):
         """
+        Author: Bill Clark
+        Version = 1.0
         Generates a new Geometric object based on what the extracted tag is. This is important as certain objects
         require different functions to properly update changes.
         :param element: The element that is being wrapped.

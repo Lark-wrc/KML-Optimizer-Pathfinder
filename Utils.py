@@ -1,3 +1,10 @@
+"""
+The Utility module contains individual methods that are useful to multiple others.
+The value of having each of these pulled out is simply that they can be accessed from
+a variety of modules, preventing code repetition.
+"""
+
+
 from lxml import etree
 from math import radians, sin, cos, sqrt, asin
 
@@ -5,6 +12,15 @@ debug = 0
 geometryTypes = ('Point', 'LineString','LinearRing', 'MultiGeometry') #Polygon is removed
 
 def elementPrint(element, bool=0):
+    """
+    Author: Bill Clark
+    Version = 1.0
+    Quick method to print an lxml element. For quicker writing.
+    :param element: lxml element.
+    :param bool: To pretty print or to compress to a single line.
+    :return: the tostring of the element.
+
+    """
     if bool:
         return etree.tostring(element, pretty_print=False)
     else:
@@ -17,6 +33,15 @@ def coordinateDistance(start, end):
 
 
 def haversine(start, end, metric):
+    """
+    Author: Nick Laposta, Bill Clark
+    Version = 1.0
+    Uses the mathmatical function of the same name to find the distance between to lat long coordinates.
+    :param start: The first coordinate, a lat long value pair in a list.
+    :param end: The second coordinate, a lat long value pair in a list.
+    :param metric: A boolean value to use the metric system or imperial system.
+    :return: The distance in the given metric system.
+    """
     if metric:
         r = 6371  # Earth radius in kilometers
     else:
