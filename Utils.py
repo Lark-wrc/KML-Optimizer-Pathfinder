@@ -28,7 +28,7 @@ def elementPrint(element, bool=0):
 
 
 def coordinateDistance(start, end):
-    print start, end, sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))
+    #print start, end, sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))
     return sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))
 
 
@@ -36,12 +36,15 @@ def haversine(start, end, metric=0):
     """
     Author: Nick Laposta, Bill Clark
     Version = 1.0
-    Uses the mathmatical function of the same name to find the distance between to lat long coordinates.
-    :param start: The first coordinate, a lat long value pair in a list.
-    :param end: The second coordinate, a lat long value pair in a list.
+    Uses the mathmatical function of the same name to find the distance between two long lat coordinates.
+    :param start: The first coordinate, a long lat value pair in a list.
+    :param end: The second coordinate, a long lat value pair in a list.
     :param metric: A boolean value to use the metric system or imperial system.
     :return: The distance in the given metric system.
     """
+
+    start = [start[1],start[0]]
+    end = [end[1],end[0]]
 
     if metric:
         r = 6371  # Earth radius in kilometers
@@ -56,7 +59,7 @@ def haversine(start, end, metric=0):
     c = 2*asin(sqrt(a))
 
     #  Returns distance in km
-    print start, end, r * c
+    #print start, end, r * c
     return r * c
 
-haversine([39.706583333333334, 75.11438888888888], [39.71036111111111, 75.12022222222221])
+#haversine([39.706583333333334, 75.11438888888888], [39.71036111111111, 75.12022222222221])

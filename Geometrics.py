@@ -30,6 +30,7 @@ class GeometricObject(object):
         self.coordinates = []
         for x in coordinates.split('\n'):
             s = x.split(',')
+
             self.coordinates.append(float(s[0]))
             self.coordinates.append(float(s[1]))
         #print self.coordinates
@@ -43,6 +44,18 @@ class GeometricObject(object):
         This super method removes any geometric flagged for removal.
         """
         self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
+
+    def switchCoordinates(self):
+        """
+        Switches the coordinates in each string. This is used for the google maps static map api, which wants lat long
+        as opposed to long lat as our files provide.
+        :return: the tostring of the coordinate swap. This a side effect, useful for script building.
+        """
+        self.coordinates[0], self.coordinates[1] = self.coordinates[1], self.coordinates[0]
+        return self.printCoordinates()
+
+    def printCoordinates(self):
+        return ','.join([str(x)for x in self.coordinates])
 
 
 class Point(GeometricObject):
@@ -81,6 +94,7 @@ class LinearRing(GeometricObject):
     def __init__(self, element, tag, coordinates):
         super(LinearRing, self).__init__(element, tag, coordinates)
         self.remove = 1
+        print self.coordinates
 
     def applyEdits(self):
         """

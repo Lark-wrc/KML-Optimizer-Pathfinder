@@ -7,14 +7,15 @@ class RestrictionFactory(object):
     def __init__(self):
         """
         Author: Bill Clark
-        Version = 0
-        LOL not actually done.
-        :return:
+        Version = 1.0
         """
         pass
 
-    def newLocationRestriction(self):
-        pass
+    def newCenterDistanceRestriction(self, center, distance, metric=0):
+        """
+        See CenterDistanceRestriction, this method returns a new instance of that object.
+        """
+        return CenterDistanceRestriction(center, distance, metric)
 
 
 # kinda really an interface
@@ -40,7 +41,7 @@ class Restriction(object):
         pass
 
 
-class LocationRadialRestriction(object):
+class CenterDistanceRestriction(object):
 
     def __init__(self, center, distance, metric=0):
         """
@@ -64,6 +65,12 @@ class LocationRadialRestriction(object):
         """
 
         for geometry in geometrics:
-            d = Utils.coordinateDistance(self.center, geometry.coordinates)
-            if d > self.distance:
-                geometry.remove = 1
+            if geometry.tag == "Point":
+                d = Utils.haversine(self.center, geometry.coordinates)
+                if d > self.distance:
+                    geometry.remove = 1
+            elif geometry.tag == "LineString":
+                print 'miss'
+            elif geometry.tag == "LinearRing":
+                print 'miss'
+

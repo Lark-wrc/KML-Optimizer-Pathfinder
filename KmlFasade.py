@@ -1,5 +1,5 @@
 from lxml import etree
-from RestrictionEngine import LocationRadialRestriction
+from RestrictionEngine import CenterDistanceRestriction
 from Geometrics import *
 import Utils
 
@@ -94,11 +94,12 @@ class KmlFasade(object):
         for element in self.geometrics:
             #element.coordinates = [0,1]
             element.applyEdits()
+        self.geometrics = [e for e in self.geometrics if not e.remove]
 
 if __name__ == '__main__':
     fasade = KmlFasade('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1.kml')
     fasade.loadPlacemarks()
-    z = LocationRadialRestriction([-99,40], 75)
+    z = CenterDistanceRestriction([-99.000000,40.000000], 75)
     fasade.placemarkToGeometrics()
     z.restrict(fasade.geometrics)
     fasade.fasadeUpdate()

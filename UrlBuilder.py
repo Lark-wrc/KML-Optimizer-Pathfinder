@@ -2,16 +2,19 @@ from urllib import urlretrieve
 
 class UrlBuilder(object):
 
-    def __init__(self):
+    def __init__(self, size):
         """
         Author: Bill Clark
-        Version = 1.0
+        Version = 2.0
         The UrlBuilder Class should be created anew for each url the user wants to build.
         Using the methods contained, the user may create a valid google maps static api url.
         Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
+        All inputs will be need to be converted to Lat Long, as all other files use Long Lat.
+        :param size: the size of the returned image in pixels. [0-640]x[0-640]
         """
 
         self.url = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.url += 'size='+size
 
     def addparam(self, feature, value):
         """
@@ -45,24 +48,41 @@ class UrlBuilder(object):
         self.url = curr
         return curr
 
-    def requiredparam(self, center, size, zoom):
+    def centerparams(self, center, zoom):
         """
         Author: Bill Clark
-        Version = 1.0
-        These are specific parameters that every static maps url must contain. They're pulled aside they can
-        all be hit in one method.
+        Version = 2.0
+        This is a shortcut method that adds the two values a url must contain to be valid, given the url
+        has no viewpoint, marker, or path. It adds center and zoom.
         :param center: The center point the map will display. latitude and longitude coordinates.
-        :param size: the size of the returned image in pixels. [0-640]x[0-640]
         :param zoom: How far zoomed in the map slice will be. [1-20]
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
         curr = self.url[:]
-        curr += 'center='+center
-        curr += '&&size='+size
+        curr += '&&center='+center
         curr += '&&zoom='+zoom
         self.url = curr
         return curr
+
+    def viewportparam(self, viewports):
+        """
+        Author: Bill Clark
+        Version: 1.0
+        Appends a viewport parameter. A viewport makes each point it is given visible on the map.
+        :param viewports: Locations in a list format. Each will be made visible.
+        :return: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = self.url[:]
+        curr += '&&visible='
+        for coordin in viewports:
+            curr += coordin + '|'
+        curr = curr[:-1]
+        self.url = curr
+        return curr
+
+
 
     def addmarkers(self, styles, locations):
         """
@@ -72,7 +92,7 @@ class UrlBuilder(object):
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: size | label | color
                         Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
-        :param locations: Locations in a list format. Each will be added to be marked. list of lat long coordinates.
+        :param locations: Locations in a list format. Each will be added to be marked. list of  coordinates.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
@@ -80,7 +100,7 @@ class UrlBuilder(object):
         curr += '&&markers='
 
         for key in styles:
-            curr += key + '=' + styles[key] + '|'
+            curr += key + ':' + styles[key] + '|'
 
         for coordin in locations:
             curr += coordin + '|'
@@ -97,7 +117,7 @@ class UrlBuilder(object):
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: weight | geodesic | color | fillcolor
                         Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
-        :param locations: Locations in a list format. Each will be added to be marked. list of lat long coordinates.
+        :param locations: Locations in a list format. Each will be added to be marked. list of  coordinates.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
@@ -111,7 +131,7 @@ class UrlBuilder(object):
         self.url = curr
         return curr
 
-    def download(self, path="C:\Users\Research\Desktop\\image.png"):
+    def download(self, path="C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\\image.png"):
         """
         Author: Bill Clark
         Version: 1.0
@@ -122,13 +142,14 @@ class UrlBuilder(object):
 
         return urlretrieve(self.url, path)
 
+
 if __name__ == "__main__":
-    url = UrlBuilder()
-    url.requiredparam('40.714728,-73.998672', '600x600', '17')
-    loc = ['40.714728,-73.998372', '40.715728,-73.999672', '40.715728,-73.998372']
+    url = UrlBuilder('600x600')
+    #url.centerparams('40.714728,-73.998672', '17')
+    loc = ['40.714728,-73.998372', '40.715728,-73.999672', '40.715728,-73.998372', '40.714728,-73.998372']
     locmini = {'40.714728,-73.998372', '40.715728,-73.999672'}
     url.addparam('scale', '2')
-    #url.addparams({'scale': '2', 'zoom': '17'})
     url.addmarkers({'color': 'red'}, loc)
-    print url.addpath({'weight':'5'}, loc)
+    #url.addpath({'weight':'1', 'fillcolor': 'yellow'}, loc)
+    print url.url
     url.download()
