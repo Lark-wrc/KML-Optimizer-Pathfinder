@@ -112,8 +112,6 @@ class LinearRing(GeometricObject):
 
     def __init__(self, element, tag, coordinates):
         super(LinearRing, self).__init__(element, tag, coordinates)
-        for child in self.element.getparent():
-            print child.tag
 
     def applyEdits(self):
         """
@@ -141,8 +139,6 @@ class LineString(GeometricObject):
 
     def __init__(self, element, tag, coordinates):
         super(LineString, self).__init__(element, tag, coordinates)
-        for child in self.element.getparent():
-            print child.tag
 
     def applyEdits(self):
         """

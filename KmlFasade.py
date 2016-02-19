@@ -1,6 +1,7 @@
 from lxml import etree
 from RestrictionEngine import CenterDistanceRestriction
 from Geometrics import *
+from pykml.factory import KML_ElementMaker as KML
 import Utils
 
 debug = 0
@@ -20,6 +21,7 @@ class KmlFasade(object):
         self.filepath = path
         self.placemarks = None
         self.geometrics = None
+        self.additionfolder = None
         self.kmlTree = etree.parse(path)
         self.kmlRoot = self.kmlTree.getroot()
 
@@ -39,7 +41,8 @@ class KmlFasade(object):
             f.close()
         else:
             f = open(path, 'w')
-            f.write(Utils.elementPrint(self.kmlRoot))
+            #f.write(Utils.elementPrint(self.kmlRoot))
+            self.kmlTree.write(f, pretty_print=True)
             f.close()
 
     #Returns a list of elements that contain geometric coordinates (Placemarks)
@@ -92,6 +95,7 @@ class KmlFasade(object):
         Author: Bill Clark
         Version = 1.0
         Runs the applyedit function on every geometric object contained in this objects geometric's list.
+        If the addition folder has been generated, This method will also add that folder to the file.
         """
 
         for element in self.geometrics:
@@ -99,11 +103,38 @@ class KmlFasade(object):
             element.applyEdits()
         self.geometrics = [e for e in self.geometrics if not e.remove]
 
+        if self.additionfolder is not None:
+            for x in self.kmlRoot.iter():
+                if x.tag == "Document":
+                    x.append(self.additionfolder)
+                    break
+
+    def createAdditionsFolder(self):
+        """
+        Initializes thr folder any additional points will be written to.
+        :return: Nothing.
+        """
+        fld = KML.Folder(KML.name("Additions"))
+        self.additionfolder = fld
+
+    def createAdditionPoint(self, name='Blank', coordin='0,0'):
+        pm1 = KML.Placemark(
+            KML.name(name),
+            KML.Point(
+                KML.coordinates(coordin)
+            )
+        )
+        self.additionfolder.append(pm1)
+
+
 if __name__ == '__main__':
     fasade = KmlFasade('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1.kml')
     fasade.loadPlacemarks()
     z = CenterDistanceRestriction([-99.000000,40.000000], 75)
     fasade.placemarkToGeometrics()
     z.restrict(fasade.geometrics)
+    fasade.createAdditionsFolder()
+    fasade.createAdditionPoint(coordin="-100.000000,40.00000")
     fasade.fasadeUpdate()
     fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')
+

@@ -71,10 +71,11 @@ class CenterDistanceRestriction(object):
             elif geometry.tag == "LineString":
                 for coordin in geometry.coordinates:
                     d = Utils.haversine(self.center, coordin)
-                    if d < self.distance:
+                    if d <= self.distance:
                         pass
                     else:
                         geometry.remove = 1
+                        break
             elif geometry.tag == "LinearRing":
                 for coordin in geometry.coordinates:
                     d = Utils.haversine(self.center, coordin)
