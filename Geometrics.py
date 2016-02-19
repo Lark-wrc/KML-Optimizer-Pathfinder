@@ -63,7 +63,7 @@ class GeometricObject(object):
         ret = ""
         for y in self.coordinates:
             ret += ','.join([str(x)for x in y]) + "|"
-        return ret
+        return ret[:-1]
 
     def coordinateStringList(self):
         """
@@ -188,5 +188,7 @@ class GeometricFactory(object):
             return Point(element, tag, coordinates)
         elif tag == 'LinearRing':
             return LinearRing(element, tag, coordinates)
+        elif tag == 'LineString':
+            return LineString(element, tag, coordinates)
         else:
             print 'derpy'
