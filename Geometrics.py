@@ -10,7 +10,7 @@ class GeometricObject(object):
         :return: This object as a string.
         """
 
-        return str(self.tag)+ ' ' +str(self.coordinates)+ " " + Utils.elementPrint(self.element)
+        return str(self.tag)+ ' ' +self.printCoordinates()+ " " + Utils.elementPrint(self.element)
 
     def __init__(self, element, tag, coordinates):
         """
@@ -30,9 +30,7 @@ class GeometricObject(object):
         self.coordinates = []
         for x in coordinates.split('\n'):
             s = x.split(',')
-
-            self.coordinates.append(float(s[0]))
-            self.coordinates.append(float(s[1]))
+            self.coordinates.append([float(s[0]), float(s[1])])
         #print self.coordinates
 
     def applyEdits(self):
@@ -41,9 +39,8 @@ class GeometricObject(object):
         Version = 2.0
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file.
-        This super method removes any geometric flagged for removal.
         """
-        self.element.find('coordinates').text = ','.join([str(x)for x in self.coordinates])
+        self.element.find('coordinates').text = '\n'.join([','.join([str(y) for y in x]) for x in self.coordinates])
 
     def switchCoordinates(self):
         """
@@ -51,21 +48,44 @@ class GeometricObject(object):
         as opposed to long lat as our files provide.
         :return: the tostring of the coordinate swap. This a side effect, useful for script building.
         """
-        self.coordinates[0], self.coordinates[1] = self.coordinates[1], self.coordinates[0]
+        for coordin in self.coordinates:
+            coordin[0], coordin[1] = coordin[1], coordin[0]
         return self.printCoordinates()
 
     def printCoordinates(self):
-        return ','.join([str(x)for x in self.coordinates])
+        """
+        Author: Bill Clark
+        Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
+        :return: String of the coordinates in the object.
+        """
+        if self.tag == "Point":
+            return ','.join([str(x) for x in self.coordinates[0]])
+        ret = ""
+        for y in self.coordinates:
+            ret += ','.join([str(x)for x in y]) + "|"
+        return ret
+
+    def coordinateStringList(self):
+        """
+        Author: Bill Clark
+        Takes the list of coordinates that is stored and converts the coordinates stored as int and makes them strings.
+        This is useful for the url builder, which functions off lists of coordinates.
+        :return: List of coordinates as strings.
+        """
+        ret = []
+        for y in self.coordinates:
+            ret.append(','.join([str(x)for x in y]))
+        return ret
 
 
 class Point(GeometricObject):
-    def __init__(self, element, tag, coordinates):
-        """
-        Author: Bill Clark
-        Version = 1.0
-        See Geometric Object. This class specifies rules for a point xml object.
-        """
+    """
+    Author: Bill Clark
+    Version = 1.0
+    See Geometric Object. This class specifies rules for a point xml object.
+    """
 
+    def __init__(self, element, tag, coordinates):
         super(Point, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
@@ -83,7 +103,6 @@ class Point(GeometricObject):
         super(Point,self).applyEdits()
 
 
-
 class LinearRing(GeometricObject):
     """
     Author: Bill Clark
@@ -93,8 +112,8 @@ class LinearRing(GeometricObject):
 
     def __init__(self, element, tag, coordinates):
         super(LinearRing, self).__init__(element, tag, coordinates)
-        self.remove = 1
-        print self.coordinates
+        for child in self.element.getparent():
+            print child.tag
 
     def applyEdits(self):
         """
@@ -111,6 +130,35 @@ class LinearRing(GeometricObject):
                 y.remove(x)
                 return 0
         super(LinearRing,self).applyEdits()
+
+
+class LineString(GeometricObject):
+    """
+    Author: Bill Clark
+    Version = 1.0
+    See Geometric Object. This class specifies rules for a LineString xml object.
+    """
+
+    def __init__(self, element, tag, coordinates):
+        super(LineString, self).__init__(element, tag, coordinates)
+        for child in self.element.getparent():
+            print child.tag
+
+    def applyEdits(self):
+        """
+        Author: Bill Clark
+        Version = 2.0
+        See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
+        which may have been changed, back to the file. This method also overrides the super's functionality to
+        remove the object from the xml if the remove flag is set.
+        """
+
+        if self.remove:
+                x = self.element.getparent()
+                y = x.getparent()
+                y.remove(x)
+                return 0
+        super(LineString,self).applyEdits()
 
 
 class GeometricFactory(object):

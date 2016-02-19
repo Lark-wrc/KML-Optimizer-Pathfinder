@@ -83,7 +83,6 @@ class UrlBuilder(object):
         return curr
 
 
-
     def addmarkers(self, styles, locations):
         """
         Author: Bill Clark
@@ -117,7 +116,7 @@ class UrlBuilder(object):
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: weight | geodesic | color | fillcolor
                         Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
-        :param locations: Locations in a list format. Each will be added to be marked. list of  coordinates.
+        :param locations: Locations in a list format. Each will be added to be marked. list of coordinates.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 

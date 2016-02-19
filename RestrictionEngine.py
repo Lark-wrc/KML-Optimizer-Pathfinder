@@ -1,4 +1,3 @@
-import json
 import Utils
 
 
@@ -66,11 +65,21 @@ class CenterDistanceRestriction(object):
 
         for geometry in geometrics:
             if geometry.tag == "Point":
-                d = Utils.haversine(self.center, geometry.coordinates)
+                d = Utils.haversine(self.center, geometry.coordinates[0])
                 if d > self.distance:
                     geometry.remove = 1
             elif geometry.tag == "LineString":
-                print 'miss'
+                for coordin in geometry.coordinates:
+                    d = Utils.haversine(self.center, coordin)
+                    if d < self.distance:
+                        pass
+                    else:
+                        geometry.remove = 1
             elif geometry.tag == "LinearRing":
-                print 'miss'
-
+                for coordin in geometry.coordinates:
+                    d = Utils.haversine(self.center, coordin)
+                    if d <= self.distance:
+                        pass
+                    else:
+                        geometry.remove = 1
+                        break
