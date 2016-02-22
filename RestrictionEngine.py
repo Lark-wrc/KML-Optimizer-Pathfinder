@@ -39,8 +39,30 @@ class Restriction(object):
         """
         pass
 
+class SquareRestriction(Restriction):
+    def __init__(self, center, distance, metric=0):
+        """
+        Author: Bill Clark
+        Version = 1.1
+        A restriction that flags all points that are not with in distance x from a given center point to be removed.
+        :param center: the center point to draw distances from.
+        :param distance: the distance in the given metric that a point must be within from center.
+        :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).
+        """
 
-class CenterDistanceRestriction(object):
+        self.center = center
+        self.distance = distance
+
+    def restrict(self, geometrics):
+        """
+        Author: Bill Clark
+        Version = 1.0
+        :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+        """
+        pass
+
+
+class CenterDistanceRestriction(Restriction):
 
     def __init__(self, center, distance, metric=0):
         """
