@@ -70,6 +70,7 @@ class GeometricObject(object):
         Author: Bill Clark
         Takes the list of coordinates that is stored and converts the coordinates stored as int and makes them strings.
         This is useful for the url builder, which functions off lists of coordinates.
+        Depreciated Method. UrlBuilder can now support taking the raw printCoordinate Return.
         :return: List of coordinates as strings.
         """
         ret = []
