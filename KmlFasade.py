@@ -117,13 +117,18 @@ class KmlFasade(object):
         fld = KML.Folder(KML.name("Additions"))
         self.additionfolder = fld
 
-    def createAdditionPoint(self, name='Blank', coordin='0,0'):
-        pm1 = KML.Placemark(
-            KML.name(name),
-            KML.Point(
-                KML.coordinates(coordin)
-            )
-        )
+    def createAdditionalGeometry(self, type, name='blank', coordin='0,0'):
+        if type == "Point":
+            pm1 = KML.Placemark(KML.name(name),KML.Point(KML.coordinates(coordin)))
+
+        elif type == "LineString":
+            pm1 = KML.Placemark(KML.name(name),KML.LineString(KML.coordinates(coordin)))
+
+        elif type == "LinearRing":
+            pm1 = KML.Placemark(KML.name(name),KML.LinearRing(KML.coordinates(coordin)))
+        else:
+            print 'Derp.'
+
         self.additionfolder.append(pm1)
 
 
@@ -134,7 +139,7 @@ if __name__ == '__main__':
     fasade.placemarkToGeometrics()
     z.restrict(fasade.geometrics)
     fasade.createAdditionsFolder()
-    fasade.createAdditionPoint(coordin="-100.000000,40.00000")
+    fasade.createAdditionalGeometry("LinearRing", coordin="-100.000000,40.00000 -90.000000,30.00000 -100.000000,30.00000 -100.000000,40.00000")
     fasade.fasadeUpdate()
     fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')
 

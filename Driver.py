@@ -7,7 +7,7 @@ argzero = 'C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\a
 
 fasade = KmlFasade(argzero)
 fasade.placemarkToGeometrics()
-f = CenterDistanceRestriction([-103.528629, 41.260352], 1025.17)
+f = CenterDistanceRestriction([-103.528629, 41.260352], 600)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')
@@ -21,6 +21,7 @@ for element in fasade.geometrics:
 
 build = UrlBuilder('600x600')
 #build.viewportparam(markerlist)
-build.addmarkers({}, markerlist)
+build.centerparams('-103.528629,41.260352', '11')
+build.addmarkers({"color":"yellow"}, markerlist)
 build.addpath({"color":"red", "weight":'5'}, element.coordinateStringList())
 print build.url
