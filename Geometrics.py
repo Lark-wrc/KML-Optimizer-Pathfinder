@@ -65,18 +65,6 @@ class GeometricObject(object):
             ret += ','.join([str(x)for x in y]) + "|"
         return ret[:-1]
 
-    def coordinateStringList(self):
-        """
-        Author: Bill Clark
-        Takes the list of coordinates that is stored and converts the coordinates stored as int and makes them strings.
-        This is useful for the url builder, which functions off lists of coordinates.
-        :return: List of coordinates as strings.
-        """
-        ret = []
-        for y in self.coordinates:
-            ret.append(','.join([str(x)for x in y]))
-        return ret
-
 
 class Point(GeometricObject):
     """

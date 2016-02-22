@@ -76,8 +76,11 @@ class UrlBuilder(object):
 
         curr = self.url[:]
         curr += '&&visible='
-        for coordin in viewports:
-            curr += coordin + '|'
+        if type(viewports) is list:
+            for coordin in viewports:
+                curr += coordin + '|'
+        elif type(viewports) is str:
+            curr += (viewports)
         curr = curr[:-1]
         self.url = curr
         return curr
@@ -101,8 +104,11 @@ class UrlBuilder(object):
         for key in styles:
             curr += key + ':' + styles[key] + '|'
 
-        for coordin in locations:
-            curr += coordin + '|'
+        if type(locations) is list:
+            for coordin in locations:
+                curr += coordin + '|'
+        elif type(locations) is str:
+            curr += (locations)
 
         curr = curr[:-1]
         self.url = curr
@@ -124,8 +130,11 @@ class UrlBuilder(object):
         curr += '&&path='
         for key in styles:
             curr += key + ':' + styles[key] + '|'
-        for coordin in locations:
-            curr += coordin + '|'
+        if type(locations) is list:
+            for coordin in locations:
+                curr += coordin + '|'
+        elif type(locations) is str:
+            curr += (locations)
         curr = curr[:-1]
         self.url = curr
         return curr
