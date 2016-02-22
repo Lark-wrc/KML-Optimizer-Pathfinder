@@ -21,7 +21,7 @@ for element in fasade.geometrics:
 
 build = UrlBuilder('600x600')
 #build.viewportparam(markerlist)
-build.centerparams('-103.528629,41.260352', '11')
+#build.centerparams('-103.528629,41.260352', '11')
 build.addmarkers({"color":"yellow"}, markerlist)
-build.addpath({"color":"red", "weight":'5'}, element.coordinateStringList())
+build.addpath({"color":"red", "weight":'5'}, element.printCoordinates())
 print build.url
