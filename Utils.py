@@ -3,13 +3,14 @@ The Utility module contains individual methods that are useful to multiple other
 The value of having each of these pulled out is simply that they can be accessed from
 a variety of modules, preventing code repetition.
 """
-
-
+import math
 from lxml import etree
 from math import radians, sin, cos, sqrt, asin
 
+ZOOM_CONSTANT = 10 + math.log(45, 2)  # Final Variable, Do Not Modify
+
 debug = 0
-geometryTypes = ('Point', 'LineString','LinearRing', 'MultiGeometry') #Polygon is removed
+geometryTypes = ('Point', 'LineString','LinearRing', 'MultiGeometry')  # Polygon is removed
 
 def elementPrint(element, bool=0):
     """
@@ -32,11 +33,24 @@ def coordinateDistance(start, end):
     return sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))
 
 
+def zoom(width):
+    """
+    Author: Nick LaPosta
+    Version = 1.0
+    Determines the proper zoom level and filter range for the given frame size
+    :param width: The desired size in miles for the view port.
+    :return: A tuple of the zoom level and the filter range respectively
+    """
+    zoom_level = ZOOM_CONSTANT - math.log(width, 2)
+    filter_range = math.sqrt(width)
+    return zoom_level, filter_range
+
+
 def haversine(start, end, metric=0):
     """
-    Author: Nick Laposta, Bill Clark
+    Author: Nick LaPosta, Bill Clark
     Version = 1.0
-    Uses the mathmatical function of the same name to find the distance between two long lat coordinates.
+    Uses the mathematical function of the same name to find the distance between two long lat coordinates.
     :param start: The first coordinate, a long lat value pair in a list.
     :param end: The second coordinate, a long lat value pair in a list.
     :param metric: A boolean value to use the metric system or imperial system.
@@ -61,5 +75,3 @@ def haversine(start, end, metric=0):
     #  Returns distance in km
     #print start, end, r * c
     return r * c
-
-#haversine([39.706583333333334, 75.11438888888888], [39.71036111111111, 75.12022222222221])
