@@ -5,18 +5,24 @@ ZOOM_CONSTANT = 10 + log(45, 2)  # Final Variable, Do Not Modify
 
 class RestrictionFactory(object):
 
-    def __init__(self):
+    def __init__(self, metric=0):
         """
         Author: Bill Clark
         Version = 1.0
         """
-        pass
+        self.metric = metric
 
-    def newCenterDistanceRestriction(self, center, distance, metric=0):
+    def newCircleRadiusRestriction(self, center, distance):
         """
-        See CenterDistanceRestriction, this method returns a new instance of that object.
+        See CircleRadiusRestriction, this method returns a new instance of that object.
         """
-        return CenterDistanceRestriction(center, distance, metric)
+        return CircleRadiusRestriction(center, distance, self.metric)
+
+    def newSquareRestriction(self, center, distance):
+        """
+        See SquareRestriction, this method returns a new instance of that object.
+        """
+        return SquareRestriction(center, distance, self.metric)
 
 
 # kinda really an interface
@@ -88,23 +94,63 @@ class SquareRestriction(Restriction):
         Author: Bill Clark
         Version = 1.1
         A restriction that flags all points that are not with in distance x from a given center point to be removed.
+        This is done in a square pattern by using two points, the NW corner and the SW corner. 
         :param center: the center point to draw distances from.
         :param distance: the distance in the given metric that a point must be within from center.
         :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
         self.center = center
         self.distance = distance
+        if metric:
+            distance *= 0.62137
+        latDist = distance/69
+        lonDist = distance/(69.172)
+        self.NW = [center[0]-lonDist, center[1]+latDist]
+        self.SE = [center[0]+lonDist, center[1]-latDist]
 
     def restrict(self, geometrics):
         """
         Author: Bill Clark
-        Version = 1.0
+        This method restricts based off of the NW and SE values this object contains. It looks at each point
+        in a geometric and checks to see if it's contained by the lines drawn from NW and SE. If it's contained,
+        we know that the point is in our frame of mind.
         :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.
         """
-        pass
+        for geometry in geometrics:
+            if geometry.tag == "Point":
+                if not self.pointWithinDistance(geometry.coordinates[0]):
+                    geometry.remove = 1
+            elif geometry.tag == "LineString":
+                for coord in geometry.coordinates:
+                    if self.pointWithinDistance(coord):
+                        pass
+                    else:
+                        geometry.remove = 1
+                        break
+            elif geometry.tag == "LinearRing":
+                for coord in geometry.coordinates:
+                    #Calculate distance d
+                    if self.pointWithinDistance(coord):
+                        pass
+                    else:
+                        geometry.remove = 1
+                        break
+    def pointWithinDistance(self, coordinates):
+        """
+        Author Bill Clark
+        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+        restrict.
+        :param coordinates: List of coordinate values, long lat.
+        :return: True if the point is contained, false else.
+        """
+        if coordinates[0] >= self.NW[0] and coordinates[0] <= self.SE[0]:
+            if coordinates[1] <= self.NW[1] and coordinates[1] >= self.SE[1]:
+                return True
+        return False
 
 
-class CenterDistanceRestriction(Restriction):
+
+class CircleRadiusRestriction(Restriction):
 
     def __init__(self, center, distance, metric=0):
         """

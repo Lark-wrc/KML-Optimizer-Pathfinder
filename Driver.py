@@ -1,13 +1,14 @@
 from KmlFasade import KmlFasade
 from UrlBuilder import UrlBuilder
-from RestrictionEngine import CenterDistanceRestriction
+from RestrictionEngine import RestrictionFactory
 argzero = 'C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1.kml'
 
 #Create the KmlFasade
 
 fasade = KmlFasade(argzero)
 fasade.placemarkToGeometrics()
-f = CenterDistanceRestriction([-103.528629, 41.260352], 600)
+f = RestrictionFactory()
+f = f.newSquareRestriction([-103.528629, 41.260352], 5000)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')
