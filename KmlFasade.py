@@ -1,5 +1,5 @@
 from lxml import etree
-from RestrictionEngine import CenterDistanceRestriction
+from RestrictionEngine import SquareRestriction
 from Geometrics import *
 from pykml.factory import KML_ElementMaker as KML
 import Utils
