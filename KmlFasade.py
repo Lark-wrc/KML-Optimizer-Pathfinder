@@ -79,11 +79,16 @@ class KmlFasade(object):
 
         factory = GeometricFactory()
         ret = []
+        skip = 0
         for element in self.placemarks:
             for x in element.iter():
-                if x.tag in Utils.geometryTypes:
+                if x.tag == "Placemark": skip = 0
+                if x.tag in factory.geometryTypes and not skip:
                     z = factory.create(x)
-                    if z is not None: ret.append(z)
+                    if z is not None:
+                        ret.append(z)
+                        if z.tag == "Polygon": skip = 1
+
         self.geometrics = ret
         return ret
 

@@ -180,6 +180,7 @@ class GeometricFactory(object):
         Simple factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
+        self.geometryTypes = ('Point', 'LineString','LinearRing', 'Polygon')
         pass
 
     def createLiteral(self, element, tag, coordinates):
@@ -223,6 +224,12 @@ class GeometricFactory(object):
             else:
                 print 'derpy'
         elif element.tag == 'Polygon':
-            pass
+            for x in element.iter():
+                if x.tag in self.geometryTypes and x.tag != "Polygon":
+                    for child in range(len(x)):
+                        if x[child].tag == "coordinates":
+                            break
+                    return Polygon(x, element.tag, x[child].text)
+
         else:
             print 'bad news bears'
