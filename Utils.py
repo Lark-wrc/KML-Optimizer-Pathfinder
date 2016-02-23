@@ -7,7 +7,7 @@ import math
 from lxml import etree
 
 debug = 0
-geometryTypes = ('Point', 'LineString','LinearRing', 'MultiGeometry')  # Polygon is removed
+  # Polygon is removed
 
 def elementPrint(element, bool=0):
     """

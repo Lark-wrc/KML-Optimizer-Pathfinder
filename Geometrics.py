@@ -27,7 +27,7 @@ class GeometricObject(object):
         self.element = element
         self.tag = tag
         self.remove = 0
-        self.coordinates = []
+        self.coordinates = [] #Most definitely required.
         for x in coordinates.split('\n'):
             s = x.split(',')
             self.coordinates.append([float(s[0]), float(s[1])])
@@ -111,7 +111,7 @@ class LinearRing(GeometricObject):
         """
 
         if self.remove:
-                x = self.element.getparent().getparent().getparent()
+                x = self.element.getparent()
                 y = x.getparent()
                 y.remove(x)
                 return 0
@@ -144,6 +144,34 @@ class LineString(GeometricObject):
                 return 0
         super(LineString,self).applyEdits()
 
+class Polygon(GeometricObject):
+    """
+    Author: Bill Clark
+    Version = 1.0
+    See Geometric Object. This class specifies rules for a Polygon xml object. For reference,
+    It only contains the coordinates of the outer ring. Optional inner rings are ignored as a hollow iceberg
+    is still an iceberg.
+    """
+
+    def __init__(self, element, tag, coordinates):
+        super(Polygon, self).__init__(element, tag, coordinates)
+
+    def applyEdits(self):
+        """
+        Author: Bill Clark
+        Version = 2.0
+        See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
+        which may have been changed, back to the file. This method also overrides the super's functionality to
+        remove the object from the xml if the remove flag is set.
+        """
+
+        if self.remove:
+                x = self.element.getparent().getparent().getparent()
+                y = x.getparent()
+                y.remove(x)
+                return 0
+        super(Polygon,self).applyEdits()
+
 
 class GeometricFactory(object):
 
@@ -154,14 +182,16 @@ class GeometricFactory(object):
         Simple factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
+        self.geometryTypes = ('Point', 'LineString','LinearRing', 'Polygon')
         pass
 
-    def create(self, element, tag, coordinates):
+    def createLiteral(self, element, tag, coordinates):
         """
         Author: Bill Clark
         Version = 1.0
         Generates a new Geometric object based on what the extracted tag is. This is important as certain objects
-        require different functions to properly update changes.
+        require different functions to properly update changes. The literal means that this method takes the
+        values directly. The create method, in comparision, takes the top level element and finds the values itself.
         :param element: The element that is being wrapped.
         :param tag: The tag value, otherwise the name of the element.
         :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
@@ -176,3 +206,36 @@ class GeometricFactory(object):
             return LineString(element, tag, coordinates)
         else:
             print 'derpy'
+
+    def create(self, element):
+        """
+        Given an element, which is expected to have geometric data, create a geometric object for that data.
+        Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.
+        This method take the xml tag that starts a set of data, and processes until it has the required information
+        to make a new Geometric.
+        :param element: An xml tag that has coordinate data within it.
+        :return: The created Geometric Object.
+        """
+
+        if element.tag != "Polygon":
+            for child in range(len(element)):
+                if element[child].tag == "coordinates":
+                    break
+            if element.tag == 'Point':
+                return Point(element, element.tag, element[child].text)
+            elif element.tag == 'LinearRing':
+                return LinearRing(element, element.tag, element[child].text)
+            elif element.tag == 'LineString':
+                return LineString(element, element.tag, element[child].text)
+            else:
+                print 'derpy'
+        elif element.tag == 'Polygon':
+            for x in element.iter():
+                if x.tag in self.geometryTypes and x.tag != "Polygon":
+                    for child in range(len(x)):
+                        if x[child].tag == "coordinates":
+                            break
+                    return Polygon(x, element.tag, x[child].text)
+
+        else:
+            print 'bad news bears'
