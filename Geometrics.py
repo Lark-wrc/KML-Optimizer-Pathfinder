@@ -27,7 +27,7 @@ class GeometricObject(object):
         self.element = element
         self.tag = tag
         self.remove = 0
-        self.coordinates = []
+        self.coordinates = [] #Most definitely required.
         for x in coordinates.split('\n'):
             s = x.split(',')
             self.coordinates.append([float(s[0]), float(s[1])])
@@ -111,7 +111,7 @@ class LinearRing(GeometricObject):
         """
 
         if self.remove:
-                x = self.element.getparent().getparent().getparent()
+                x = self.element.getparent()
                 y = x.getparent()
                 y.remove(x)
                 return 0
@@ -144,6 +144,32 @@ class LineString(GeometricObject):
                 return 0
         super(LineString,self).applyEdits()
 
+class Polygon(GeometricObject):
+    """
+    Author: Bill Clark
+    Version = 1.0
+    See Geometric Object. This class specifies rules for a linearring xml object.
+    """
+
+    def __init__(self, element, tag, coordinates):
+        super(Polygon, self).__init__(element, tag, coordinates)
+
+    def applyEdits(self):
+        """
+        Author: Bill Clark
+        Version = 2.0
+        See geometric object. This calls the super applyEdits, as well as applies the pulled out coordinates,
+        which may have been changed, back to the file. This method also overrides the super's functionality to
+        remove the object from the xml if the remove flag is set.
+        """
+
+        if self.remove:
+                x = self.element.getparent().getparent().getparent()
+                y = x.getparent()
+                y.remove(x)
+                return 0
+        super(Polygon,self).applyEdits()
+
 
 class GeometricFactory(object):
 
@@ -156,7 +182,7 @@ class GeometricFactory(object):
         """
         pass
 
-    def create(self, element, tag, coordinates):
+    def createLiteral(self, element, tag, coordinates):
         """
         Author: Bill Clark
         Version = 1.0
@@ -176,3 +202,27 @@ class GeometricFactory(object):
             return LineString(element, tag, coordinates)
         else:
             print 'derpy'
+
+    def create(self, element):
+        """
+
+        :param element:
+        :return:
+        """
+
+        if element.tag != "Polygon":
+            for child in range(len(element)):
+                if element[child].tag == "coordinates":
+                    break
+            if element.tag == 'Point':
+                return Point(element, element.tag, element[child].text)
+            elif element.tag == 'LinearRing':
+                return LinearRing(element, element.tag, element[child].text)
+            elif element.tag == 'LineString':
+                return LineString(element, element.tag, element[child].text)
+            else:
+                print 'derpy'
+        elif element.tag == 'Polygon':
+            pass
+        else:
+            print 'bad news bears'

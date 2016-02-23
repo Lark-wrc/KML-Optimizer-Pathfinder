@@ -82,10 +82,7 @@ class KmlFasade(object):
         for element in self.placemarks:
             for x in element.iter():
                 if x.tag in Utils.geometryTypes:
-                    for child in range(len(x)):
-                        if x[child].tag == "coordinates":
-                            break
-                    z = factory.create(x, x.tag, x[child].text)
+                    z = factory.create(x)
                     if z is not None: ret.append(z)
         self.geometrics = ret
         return ret
