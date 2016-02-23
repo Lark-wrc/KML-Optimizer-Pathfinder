@@ -148,7 +148,9 @@ class Polygon(GeometricObject):
     """
     Author: Bill Clark
     Version = 1.0
-    See Geometric Object. This class specifies rules for a linearring xml object.
+    See Geometric Object. This class specifies rules for a Polygon xml object. For reference,
+    It only contains the coordinates of the outer ring. Optional inner rings are ignored as a hollow iceberg
+    is still an iceberg.
     """
 
     def __init__(self, element, tag, coordinates):
@@ -188,7 +190,8 @@ class GeometricFactory(object):
         Author: Bill Clark
         Version = 1.0
         Generates a new Geometric object based on what the extracted tag is. This is important as certain objects
-        require different functions to properly update changes.
+        require different functions to properly update changes. The literal means that this method takes the
+        values directly. The create method, in comparision, takes the top level element and finds the values itself.
         :param element: The element that is being wrapped.
         :param tag: The tag value, otherwise the name of the element.
         :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
@@ -206,9 +209,12 @@ class GeometricFactory(object):
 
     def create(self, element):
         """
-
-        :param element:
-        :return:
+        Given an element, which is expected to have geometric data, create a geometric object for that data.
+        Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.
+        This method take the xml tag that starts a set of data, and processes until it has the required information
+        to make a new Geometric.
+        :param element: An xml tag that has coordinate data within it.
+        :return: The created Geometric Object.
         """
 
         if element.tag != "Polygon":
