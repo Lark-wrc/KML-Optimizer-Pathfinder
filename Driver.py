@@ -8,7 +8,7 @@ argzero = 'C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\a
 fasade = KmlFasade(argzero)
 fasade.placemarkToGeometrics()
 f = RestrictionFactory()
-f = f.newSquareRestriction([-103.528629, 41.260352], 5000)
+f = f.newCircleRadiusRestriction([-103.528629, 41.260352], 5000)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')

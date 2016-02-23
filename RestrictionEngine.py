@@ -28,13 +28,14 @@ class RestrictionFactory(object):
 # kinda really an interface
 class Restriction(object):
 
-    def __init__(self):
+    def __init__(self, metric):
         """
         Author: Bill Clark
         Version = 1.0
         An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
         methods can be built into the restriction engines.
         """
+        self.metric = metric
         pass
 
     def restrict(self, geometrics):
@@ -47,7 +48,7 @@ class Restriction(object):
         """
         pass
 
-    def zoom(width):
+    def zoom(self, width):
         """
         Author: Nick LaPosta
         Version = 1.0
@@ -59,7 +60,7 @@ class Restriction(object):
         filter_range = sqrt(width)
         return zoom_level, filter_range
 
-    def haversine(start, end, metric=0):
+    def haversine(self, start, end):
         """
         Author: Nick LaPosta, Bill Clark
         Version = 1.0
@@ -73,7 +74,7 @@ class Restriction(object):
         start = [start[1], start[0]]
         end = [end[1], end[0]]
 
-        if metric:
+        if self.metric:
             r = 6371  # Earth radius in kilometers
         else:
             r = 3959  # Earth radius in miles
@@ -99,6 +100,7 @@ class SquareRestriction(Restriction):
         :param distance: the distance in the given metric that a point must be within from center.
         :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
+        super(SquareRestriction,self).__init__(metric)
         self.center = center
         self.distance = distance
         if metric:
@@ -162,6 +164,7 @@ class CircleRadiusRestriction(Restriction):
         :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
 
+        super(CircleRadiusRestriction,self).__init__(metric)
         self.center = center
         self.distance = distance
 
@@ -175,12 +178,12 @@ class CircleRadiusRestriction(Restriction):
 
         for geometry in geometrics:
             if geometry.tag == "Point":
-                d = Utils.haversine(self.center, geometry.coordinates[0])
+                d = self.haversine(self.center, geometry.coordinates[0])
                 if d > self.distance:
                     geometry.remove = 1
             elif geometry.tag == "LineString":
                 for coord in geometry.coordinates:
-                    d = Utils.haversine(self.center, coord)
+                    d = self.haversine(self.center, coord)
                     if d <= self.distance:
                         pass
                     else:
@@ -188,7 +191,7 @@ class CircleRadiusRestriction(Restriction):
                         break
             elif geometry.tag == "LinearRing":
                 for coord in geometry.coordinates:
-                    d = Utils.haversine(self.center, coord)
+                    d = self.haversine(self.center, coord)
                     if d <= self.distance:
                         pass
                     else:
