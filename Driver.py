@@ -18,7 +18,7 @@ fasade.rewrite('C:\Users\Research\Documents\KML Files\\advancedexample1copy.kml'
 
 build = UrlBuilder('600x600')
 #build.viewportparam(markerlist)
-build.centerparams('39.833851,-74.871826', '8')
+build.centerparams('39.833851,-74.871826', '7')
 
 markerlist = []
 for element in fasade.geometrics:
