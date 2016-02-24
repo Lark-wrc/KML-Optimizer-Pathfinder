@@ -150,6 +150,17 @@ class UrlBuilder(object):
 
         return urlretrieve(self.url, path)
 
+    def countUrl(self):
+        """
+
+        :return:
+        """
+        ret = 0
+        for character in self.url:
+            if character == "|": ret += 3
+            else: ret += 1
+        return ret
+
 
 if __name__ == "__main__":
     url = UrlBuilder('600x600')

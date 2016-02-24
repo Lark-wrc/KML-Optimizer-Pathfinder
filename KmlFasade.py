@@ -138,7 +138,7 @@ class KmlFasade(object):
 
 
 if __name__ == '__main__':
-    fasade = KmlFasade('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1.kml')
+    fasade = KmlFasade('C:\Users\Research\Documents\KML Files\\advancedexample1.kml')
     fasade.loadPlacemarks()
     z = CenterDistanceRestriction([-99.000000,40.000000], 75)
     fasade.placemarkToGeometrics()

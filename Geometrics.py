@@ -28,7 +28,7 @@ class GeometricObject(object):
         self.tag = tag
         self.remove = 0
         self.coordinates = [] #Most definitely required.
-        for x in coordinates.split('\n'):
+        for x in coordinates.split():
             s = x.split(',')
             self.coordinates.append([float(s[0]), float(s[1])])
         #print self.coordinates
@@ -166,7 +166,7 @@ class Polygon(GeometricObject):
         """
 
         if self.remove:
-                x = self.element.getparent().getparent().getparent()
+                x = self.element.getparent().getparent()
                 y = x.getparent()
                 y.remove(x)
                 return 0
