@@ -31,41 +31,7 @@ def mergeModeRGB(base, *images):
             360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
         newimage.show()
 
-    #newimage.show()
-    newimage.save("Outfile.png")
-
-
-def mergeModeP(base, *images):
-    diffnum = 27
-
-    baseimage = Image.open(base)
-    baseimage.save("Outfile.png")
-    newimage = Image.open("Outfile.png")
-
-    basedata = baseimage.load()
-
-    newdata = newimage.load()
-
-    for top in images:
-        topimage = Image.open(top)
-        topdata = topimage.load()
-        counter = 0
-
-
-        for x in range(baseimage.size[0]):
-            for y in range(baseimage.size[1]):
-                bpix = basedata[x,y]
-                tpix = topdata[x,y]
-                #print x, y, bpix, tpix, baseimage.mode
-                if abs(bpix-tpix) > diffnum:
-                    newdata[x,y] = tpix
-                    counter += 1
-
-        print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
-            360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
-        print ""
-        newimage.show()
-
+    print ""
     newimage.save("Outfile.png")
 
 
@@ -104,7 +70,7 @@ def convertPtoRGB(*images):
 
 if __name__ == "__main__":
     import os
-    os.chdir("C:\Users\Research\Documents")
+    os.chdir("C:\Users\Research\Documents\Maps Static Downloads")
     #mergeModeRGB("Input 1.png", "Input 2.png", "Input 3.png")
     print ""
     convertPtoRGB("Base.png", "Blue 1.png", "Blue 2.png")
