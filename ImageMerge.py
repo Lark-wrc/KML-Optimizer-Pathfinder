@@ -70,7 +70,7 @@ def convertPtoRGB(*images):
 
 if __name__ == "__main__":
     import os
-    os.chdir("C:\Users\Research\Documents\Maps Static Downloads")
+    os.chdir("Inputs\Static Maps")
     #mergeModeRGB("Input 1.png", "Input 2.png", "Input 3.png")
     print ""
     convertPtoRGB("Base.png", "Blue 1.png", "Blue 2.png")

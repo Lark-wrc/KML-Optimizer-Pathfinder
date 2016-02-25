@@ -139,7 +139,7 @@ class UrlBuilder(object):
         self.url = curr
         return curr
 
-    def download(self, path="C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\\image.png"):
+    def download(self, path="C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\image.png"):
         """
         Author: Bill Clark
         Version: 1.0

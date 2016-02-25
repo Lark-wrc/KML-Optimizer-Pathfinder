@@ -1,9 +1,9 @@
 from KmlFasade import KmlFasade
 from UrlBuilder import UrlBuilder
 from RestrictionEngine import RestrictionFactory
-argzero = 'C:\Users\Research\Documents\KML Files\\advancedexample1.kml'
-argtwo = 'C:\Users\Research\Documents\KML Files\\advancedexample2.kml'
-argone = 'C:\Users\Research\Documents\KML Files\us_states.kml'
+argzero = 'Inputs\KML Files\\advancedexample1.kml'
+argtwo = 'Inputs\KML Files\\advancedexample2.kml'
+argone = 'Inputs\KML Files\us_states.kml'
 
 #Create the KmlFasade
 
@@ -14,7 +14,7 @@ f = RestrictionFactory()
 f = f.newSquareRestriction([-74.871826, 39.833851], 500)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
-fasade.rewrite('C:\Users\Research\Documents\KML Files\\advancedexample1copy.kml')
+fasade.rewrite('Inputs\KML Files\\advancedexample1copy.kml')
 
 build = UrlBuilder('600x600')
 #build.viewportparam(markerlist)

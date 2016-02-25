@@ -138,13 +138,13 @@ class KmlFasade(object):
 
 
 if __name__ == '__main__':
-    fasade = KmlFasade('C:\Users\Research\Documents\KML Files\\advancedexample1.kml')
+    fasade = KmlFasade('Inputs\KML Files\\advancedexample1.kml')
     fasade.loadPlacemarks()
-    z = CenterDistanceRestriction([-99.000000,40.000000], 75)
+    z = SquareRestriction([-99.000000,40.000000], 75)
     fasade.placemarkToGeometrics()
     z.restrict(fasade.geometrics)
     fasade.createAdditionsFolder()
     fasade.createAdditionalGeometry("LinearRing", coordin="-100.000000,40.00000 -90.000000,30.00000 -100.000000,30.00000 -100.000000,40.00000")
     fasade.fasadeUpdate()
-    fasade.rewrite('C:\Users\Research\Documents\Code Repositories\javaapiforkml-master\\advancedexample1copy.kml')
+    fasade.rewrite('Inputs\KML Files\\advancedexample1copy.kml')
 
