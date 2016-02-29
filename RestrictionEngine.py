@@ -122,21 +122,15 @@ class SquareRestriction(Restriction):
             if geometry.tag == "Point":
                 if not self.pointWithinDistance(geometry.coordinates[0]):
                     geometry.remove = 1
-            elif geometry.tag == "LineString":
+            elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
                 for coord in geometry.coordinates:
                     if self.pointWithinDistance(coord):
                         pass
                     else:
                         geometry.remove = 1
                         break
-            elif geometry.tag == "LinearRing":
-                for coord in geometry.coordinates:
-                    #Calculate distance d
-                    if self.pointWithinDistance(coord):
-                        pass
-                    else:
-                        geometry.remove = 1
-                        break
+            else:
+                print "uh oh spagettios."
     def pointWithinDistance(self, coordinates):
         """
         Author Bill Clark
@@ -181,7 +175,7 @@ class CircleRadiusRestriction(Restriction):
                 d = self.haversine(self.center, geometry.coordinates[0])
                 if d > self.distance:
                     geometry.remove = 1
-            elif geometry.tag == "LineString":
+            elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
                 for coord in geometry.coordinates:
                     d = self.haversine(self.center, coord)
                     if d <= self.distance:
@@ -189,11 +183,5 @@ class CircleRadiusRestriction(Restriction):
                     else:
                         geometry.remove = 1
                         break
-            elif geometry.tag == "LinearRing":
-                for coord in geometry.coordinates:
-                    d = self.haversine(self.center, coord)
-                    if d <= self.distance:
-                        pass
-                    else:
-                        geometry.remove = 1
-                        break
+            else:
+                print "Are you sure that was a good idea?"
