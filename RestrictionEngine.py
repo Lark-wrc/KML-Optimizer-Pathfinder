@@ -131,14 +131,6 @@ class SquareRestriction(Restriction):
                     else:
                         geometry.remove = 1
                         break
-            elif geometry.tag == "LinearRing":
-                for coord in geometry.coordinates:
-                    # Calculate distance
-                    if self.pointWithinDistance(coord):
-                        pass
-                    else:
-                        geometry.remove = 1
-                        break
             else:
                 print "uh oh spagettios."
 
