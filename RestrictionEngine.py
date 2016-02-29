@@ -1,7 +1,8 @@
 from math import radians, sin, cos, asin, sqrt, log
-import Utils
+import State
 
 ZOOM_CONSTANT = 10 + log(45, 2)  # Final Variable, Do Not Modify
+
 
 class RestrictionFactory(object):
 
@@ -90,11 +91,12 @@ class Restriction(object):
 
 
 class SquareRestriction(Restriction):
+
     def __init__(self, center, distance, metric=0):
         """
         Author: Bill Clark
         Version = 1.1
-        A restriction that flags all points that are not with in distance x from a given center point to be removed.
+        A restriction that flags all points that are not within distance x from a given center point to be removed.
         This is done in a square pattern by using two points, the NW corner and the SW corner. 
         :param center: the center point to draw distances from.
         :param distance: the distance in the given metric that a point must be within from center.
@@ -131,15 +133,16 @@ class SquareRestriction(Restriction):
                         break
             elif geometry.tag == "LinearRing":
                 for coord in geometry.coordinates:
-                    #Calculate distance d
+                    # Calculate distance
                     if self.pointWithinDistance(coord):
                         pass
                     else:
                         geometry.remove = 1
                         break
+
     def pointWithinDistance(self, coordinates):
         """
-        Author Bill Clark
+        Author: Bill Clark
         Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
         restrict.
         :param coordinates: List of coordinate values, long lat.
@@ -150,6 +153,33 @@ class SquareRestriction(Restriction):
                 return True
         return False
 
+
+    def intersect(self, start, end):
+        """
+        Author: Nick LaPosta
+        Version = 1.0
+        A function for determining the possible intersection of the segment between two points and the region
+        Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called
+        :param start: List containing longitude and latitude of start point of segment
+        :param end: List containing longitude and latitude of end point of segment
+        :return: If the segment created by start and end intersects this region then return True, else return False
+        """
+        State.init_state(self.NW, self.SE)
+        start_state = State(start[0], start[1])
+        end_state = State(end[0], end[1])
+        if cmp(start_state, end_state):
+            # Check if line intersects
+            if start_state.in_region() or end_state.in_region():
+                return True
+            else:
+                line_slope = (start[1] - end[1]) / (start[0] - end[0])
+                (min_slope, max_slope) = start_state.get_slope()
+                if line_slope < min_slope or line_slope > max_slope:
+                    return False
+                else:
+                    return True
+        else:
+            return False
 
 
 class CircleRadiusRestriction(Restriction):
