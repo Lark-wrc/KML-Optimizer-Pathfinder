@@ -27,9 +27,11 @@ for element in fasade.geometrics:
     if element.tag == "Point":
         markerlist.append(element.printCoordinates())
     if element.tag == "Polygon":
-        build.addpath({"color":"red", "weight":'5'}, element.printCoordinates())
+        markerlist = element.coordinatesAsList()
+        #build.addpath({"color":"red", "weight":'5'}, element.coordinatesAsList())
     if element.tag == "LineString":
-        build.addpath({"color":"blue", "weight":'5'}, element.printCoordinates())
+        build.addpath({"color":"blue", "weight":'5'}, element.coordinatesAsList())
 
-#build.addmarkers({"color":"yellow"}, markerlist)
-print build.url
+build.addmarkers({"color":"yellow"}, markerlist)
+print build.urllist, len(build.urllist), build.url
+build.download()

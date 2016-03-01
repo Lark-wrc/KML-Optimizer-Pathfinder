@@ -65,6 +65,19 @@ class GeometricObject(object):
             ret += ','.join([str(x)for x in y]) + "|"
         return ret[:-1]
 
+    def coordinatesAsList(self):
+        """
+        Author: Bill Clark
+        Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
+        :return: String of the coordinates in the object.
+        """
+        if self.tag == "Point":
+            return [','.join([str(x) for x in self.coordinates[0]])]
+        ret = []
+        for y in self.coordinates:
+            ret.append(','.join([str(x)for x in y]))
+        return ret
+
 
 class Point(GeometricObject):
     """

@@ -14,10 +14,10 @@ class UrlBuilder(object):
         """
 
         self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.urlbase += 'size='+size
         self.url = self.urlbase
-        self.url += 'size='+size
         self.urllist = []
-        self.limit = 50 #Proper limit is 2048, buffer of 48.
+        self.limit = 2000 #Proper limit is 2048, buffer of 48.
 
     def addparam(self, feature, value):
         """
@@ -34,8 +34,8 @@ class UrlBuilder(object):
         curr += '&&' + feature + '='
         curr += value
 
-        self.retireUrl(self.url, self.countUrl(curr))
-        self.url += curr
+        self.urlbase += curr
+        self.url = self.urlbase
         return self.url
 
     def addparams(self, dict):
@@ -51,8 +51,8 @@ class UrlBuilder(object):
         for key in dict:
             curr += '&&' + key + '=' + dict[key]
 
-        self.retireUrl(self.url, self.countUrl(curr))
-        self.url += curr
+        self.urlbase += curr
+        self.url = self.urlbase
         return self.url
 
     def centerparams(self, center, zoom):
@@ -66,7 +66,7 @@ class UrlBuilder(object):
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
-        if len(self.urlbase) > 47:
+        if len(self.urlbase) > 59:
             return 0
         curr = ""
         curr += '&&center='+center
@@ -88,14 +88,19 @@ class UrlBuilder(object):
         curr += '&&visible='
         if type(viewports) is list:
             for coordin in viewports:
-                curr += coordin + '|'
+                curr += coordin
                 if self.retireUrl(curr):
-                    curr += '&&visible=' + coordin + '|'
+                    curr = self.url + '&&visible='
+                    curr += coordin + '|'
+                else:
+                    curr += '|'
             curr = curr[:-1]
         elif type(viewports) is str:
             curr += (viewports)
+
         self.url = curr
-        return curr
+        self.retireUrl(self.url)
+        return self.url
 
     def addmarkers(self, styles, locations):
         """
@@ -117,12 +122,20 @@ class UrlBuilder(object):
 
         if type(locations) is list:
             for coordin in locations:
-                curr += coordin + '|'
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + '&&markers='
+                    for key in styles:
+                        curr += key + ':' + styles[key] + '|'
+                    curr += coordin + '|'
+                else:
+                    curr += '|'
+            curr = curr[:-1]
         elif type(locations) is str:
             curr += (locations)
 
-        curr = curr[:-1]
         self.url = curr
+        self.retireUrl(self.url)
         return curr
 
     def addpath(self, styles, locations):
@@ -139,18 +152,29 @@ class UrlBuilder(object):
 
         curr = self.url[:]
         curr += '&&path='
+
         for key in styles:
             curr += key + ':' + styles[key] + '|'
+
         if type(locations) is list:
             for coordin in locations:
-                curr += coordin + '|'
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + "&&path="
+                    for key in styles:
+                        curr += key + ':' + styles[key] + '|'
+                    curr += coordin + '|'
+                else:
+                    curr += "|"
+            curr = curr[:-1]
         elif type(locations) is str:
             curr += (locations)
-        curr = curr[:-1]
+
         self.url = curr
+        self.retireUrl(self.url)
         return curr
 
-    def download(self, path="C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\image.png"):
+    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\image{}.png'):
         """
         Author: Bill Clark
         Version: 1.0
@@ -159,7 +183,11 @@ class UrlBuilder(object):
         :return: the download function returns the saved path and response data, which is returned.
         """
 
-        return urlretrieve(self.url, path)
+        count = 0
+        for url in self.urllist:
+            urlretrieve(url, path.format(repr(count)))
+            count+=1
+        urlretrieve(self.url, path.format('0'))
 
     def countUrl(self, url):
         """
@@ -195,5 +223,5 @@ if __name__ == "__main__":
     url.addparam('scale', '2')
     url.addmarkers({'color': 'red'}, loc)
     #url.addpath({'weight':'1', 'fillcolor': 'yellow'}, loc)
-    print url.url
+    print url.urllist
     url.download()
