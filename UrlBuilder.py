@@ -13,8 +13,11 @@ class UrlBuilder(object):
         :param size: the size of the returned image in pixels. [0-640]x[0-640]
         """
 
-        self.url = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.url = self.urlbase
         self.url += 'size='+size
+        self.urllist = []
+        self.limit = 50 #Proper limit is 2048, buffer of 48.
 
     def addparam(self, feature, value):
         """
@@ -27,11 +30,13 @@ class UrlBuilder(object):
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
-        curr = self.url[:]
+        curr = ""
         curr += '&&' + feature + '='
         curr += value
-        self.url = curr
-        return curr
+
+        self.retireUrl(self.url, self.countUrl(curr))
+        self.url += curr
+        return self.url
 
     def addparams(self, dict):
         """
@@ -42,11 +47,13 @@ class UrlBuilder(object):
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
-        curr = self.url[:]
+        curr = ""
         for key in dict:
             curr += '&&' + key + '=' + dict[key]
-        self.url = curr
-        return curr
+
+        self.retireUrl(self.url, self.countUrl(curr))
+        self.url += curr
+        return self.url
 
     def centerparams(self, center, zoom):
         """
@@ -59,11 +66,14 @@ class UrlBuilder(object):
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
-        curr = self.url[:]
+        if len(self.urlbase) > 47:
+            return 0
+        curr = ""
         curr += '&&center='+center
         curr += '&&zoom='+zoom
-        self.url = curr
-        return curr
+        self.urlbase += curr
+        self.url = self.urlbase
+        return self.url
 
     def viewportparam(self, viewports):
         """
@@ -79,12 +89,13 @@ class UrlBuilder(object):
         if type(viewports) is list:
             for coordin in viewports:
                 curr += coordin + '|'
+                if self.retireUrl(curr):
+                    curr += '&&visible=' + coordin + '|'
+            curr = curr[:-1]
         elif type(viewports) is str:
             curr += (viewports)
-        curr = curr[:-1]
         self.url = curr
         return curr
-
 
     def addmarkers(self, styles, locations):
         """
@@ -150,21 +161,35 @@ class UrlBuilder(object):
 
         return urlretrieve(self.url, path)
 
-    def countUrl(self):
+    def countUrl(self, url):
         """
 
         :return:
         """
         ret = 0
-        for character in self.url:
+        for character in url:
             if character == "|": ret += 3
             else: ret += 1
         return ret
 
+    def retireUrl(self, url, offset=0):
+        """
+
+        :param url:
+        :return:
+        """
+        count = self.countUrl(url)+offset
+        if count >= self.limit:
+            self.urllist.append(url)
+            self.url = self.urlbase[:]
+            return 1
+        else:
+            return 0
+
 
 if __name__ == "__main__":
     url = UrlBuilder('600x600')
-    #url.centerparams('40.714728,-73.998672', '17')
+    url.centerparams('40.714728,-73.998672', '17')
     loc = ['40.714728,-73.998372', '40.715728,-73.999672', '40.715728,-73.998372', '40.714728,-73.998372']
     locmini = {'40.714728,-73.998372', '40.715728,-73.999672'}
     url.addparam('scale', '2')
