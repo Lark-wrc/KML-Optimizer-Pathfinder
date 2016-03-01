@@ -4,15 +4,7 @@ global lat_min
 global lat_max
 
 global NE, SE, NW, SW
-NE = (lon_max, lat_max)
-SE = (lon_max, lat_min)
-NW = (lon_min, lat_max)
-SW = (lon_min, lat_min)
-
 global corner_points
-corner_points = [[[NE, SW]], [[NW, SW]], [[NW, SE]], [[NW, NE]],
-                 [(0, 0), (0, 0)],
-                 [[SW, SE]], [[NW, SE]], [[NE, SE]], [[NE, SW]]]
 
 
 class State:
@@ -106,3 +98,17 @@ def init_state(northwest, southeast):
     global lat_max
     (lon_min, lat_max) = northwest
     (lon_max, lat_min) = southeast
+
+    global NE
+    global SE
+    global NW
+    global SW
+    NE = (lon_max, lat_max)
+    SE = (lon_max, lat_min)
+    NW = (lon_min, lat_max)
+    SW = (lon_min, lat_min)
+
+    global corner_points
+    corner_points = [[[NE, SW]], [[NW, SW]], [[NW, SE]], [[NW, NE]],
+                     [(0, 0), (0, 0)],
+                     [[SW, SE]], [[NW, SE]], [[NE, SE]], [[NE, SW]]]
