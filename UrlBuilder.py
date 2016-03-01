@@ -214,6 +214,14 @@ class UrlBuilder(object):
         else:
             return 0
 
+    def printUrls(self):
+        """
+
+        :return:
+        """
+        for url in self.urllist:
+            print url
+        print self.url
 
 if __name__ == "__main__":
     url = UrlBuilder('600x600')
