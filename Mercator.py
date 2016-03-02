@@ -31,6 +31,8 @@ class GeoLatLng:
         self.lat = lt
         self.lng = ln
 
+    def __repr__(self):
+        return repr(self.lat) + "," + repr(self.lng)
 
 class MercatorProjection:
     def __init__(self):
