@@ -2,7 +2,7 @@ from urllib import urlretrieve
 
 class UrlBuilder(object):
 
-    def __init__(self, size):
+    def __init__(self, height, width=0):
         """
         Author: Bill Clark
         Version = 2.0
@@ -10,11 +10,12 @@ class UrlBuilder(object):
         Using the methods contained, the user may create a valid google maps static api url.
         Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
         All inputs will be need to be converted to Lat Long, as all other files use Long Lat.
-        :param size: the size of the returned image in pixels. [0-640]x[0-640]
+        :param height: the vertical size of the returned image in pixels. [0-640]
+        :param width: default to zero if a square image is desired. Otherwise, the horizontal size of the returned image in pixels. [0-640]
         """
 
         self.url = 'https://maps.googleapis.com/maps/api/staticmap?'
-        self.url += 'size='+size
+        self.url += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
 
     def addparam(self, feature, value):
         """
