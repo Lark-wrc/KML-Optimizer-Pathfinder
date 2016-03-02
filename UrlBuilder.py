@@ -1,4 +1,6 @@
 from urllib import urlretrieve
+from time import sleep
+from random import uniform
 
 class UrlBuilder(object):
 
@@ -180,7 +182,7 @@ class UrlBuilder(object):
         self.retireUrl(self.url)
         return curr
 
-    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\{} {}.png', prefix='image'):
+    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
         """
         Author: Bill Clark
         Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
@@ -197,6 +199,7 @@ class UrlBuilder(object):
         for url in self.urllist:
             ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
             count+=1
+            sleep(uniform(0,1))
         ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
         return ret
 
