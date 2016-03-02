@@ -46,7 +46,7 @@ def mergeModeRGB(outfile, base, *images):
         if debug: newimage.show()
 
     print ""
-    if debug: newimage.save(outfile)
+    newimage.save(outfile)
 
 
 def blkDiff(base, images, outfile="DifferenceFile.png"):
