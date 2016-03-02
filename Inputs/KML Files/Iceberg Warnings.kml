@@ -1,0 +1,1433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+<name>NAVAREA IV 71/16 1/28/2016</name>
+   <Style id="normal_NavWarnL">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+       <LineStyle>
+           <color>ff0000ff</color>
+           <width>3</width>
+       </LineStyle>
+   </Style>
+   <StyleMap id="NavWarnL">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnL</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnL</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnL">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffe500ff</color>
+           <width>5</width>
+       </LineStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnP">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnP">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnP</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnP</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnP">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnR">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnR">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnR</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnR</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnR">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnC">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnC">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnC</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnC</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnC">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+   <Style id="normal_NavWarnL_Env">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+       <LineStyle>
+           <color>ff00ffff</color>
+           <width>3</width>
+       </LineStyle>
+   </Style>
+   <StyleMap id="NavWarnL_Env">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnL_Env</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnL_Env</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnL_Env">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffe500ff</color>
+           <width>5</width>
+       </LineStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnP_Env">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnP_Env">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnP_Env</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnP_Env</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnP_Env">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnR_Env">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnR_Env">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnR_Env</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnR_Env</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnR_Env">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnC_Env">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnC_Env">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnC_Env</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnC_Env</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnC_Env">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+   <Style id="normal_NavWarnL_AtN">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffdc30dc</color>
+           <width>3</width>
+       </LineStyle>
+   </Style>
+   <StyleMap id="NavWarnL_AtN">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnL_AtN</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnL_AtN</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnL_AtN">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffe500ff</color>
+           <width>5</width>
+       </LineStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnP_AtN">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnP_AtN">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnP_AtN</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnP_AtN</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnP_AtN">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnR_AtN">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnR_AtN">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnR_AtN</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnR_AtN</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnR_AtN">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnC_AtN">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnC_AtN">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnC_AtN</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnC_AtN</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnC_AtN">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+   <Style id="normal_NavWarnL_Gen">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffffffff</color>
+           <width>3</width>
+       </LineStyle>
+   </Style>
+   <StyleMap id="NavWarnL_Gen">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnL_Gen</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnL_Gen</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnL_Gen">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffe500ff</color>
+           <width>5</width>
+       </LineStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnP_Gen">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnP_Gen">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnP_Gen</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnP_Gen</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnP_Gen">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnR_Gen">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnR_Gen">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnR_Gen</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnR_Gen</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnR_Gen">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnC_Gen">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnC_Gen">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnC_Gen</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnC_Gen</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnC_Gen">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+   <Style id="normal_NavWarnL_SaR">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+       <LineStyle>
+           <color>ff0daeff</color>
+           <width>3</width>
+       </LineStyle>
+   </Style>
+   <StyleMap id="NavWarnL_SaR">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnL_SaR</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnL_SaR</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnL_SaR">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffe500ff</color>
+           <width>5</width>
+       </LineStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnP_SaR">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnP_SaR">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnP_SaR</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnP_SaR</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnP_SaR">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnR_SaR">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnR_SaR">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnR_SaR</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnR_SaR</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnR_SaR">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnC_SaR">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnC_SaR">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnC_SaR</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnC_SaR</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnC_SaR">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+   <Style id="normal_NavWarnL_Sur">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffffff0d</color>
+           <width>3</width>
+       </LineStyle>
+   </Style>
+   <StyleMap id="NavWarnL_Sur">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnL_Sur</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnL_Sur</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnL_Sur">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffe500ff</color>
+           <width>5</width>
+       </LineStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnP_Sur">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnP_Sur">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnP_Sur</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnP_Sur</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnP_Sur">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnR_Sur">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnR_Sur">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnR_Sur</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnR_Sur</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnR_Sur">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnC_Sur">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnC_Sur">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnC_Sur</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnC_Sur</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnC_Sur">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+   <Style id="normal_NavWarnL_MOp">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+       <LineStyle>
+           <color>ff00ffff</color>
+           <width>3</width>
+       </LineStyle>
+   </Style>
+   <StyleMap id="NavWarnL_MOp">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnL_MOp</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnL_MOp</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnL_MOp">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+       <LineStyle>
+           <color>ffe500ff</color>
+           <width>5</width>
+       </LineStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnP_MOp">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnP_MOp">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnP_MOp</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnP_MOp</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnP_MOp">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriS4.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnR_MOp">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnR_MOp">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnR_MOp</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnR_MOp</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnR_MOp">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSR.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+
+
+   <Style id="normal_NavWarnC_MOp">
+       <IconStyle>
+           <scale>0.8</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <scale>0</scale>
+       </LabelStyle>
+   </Style>
+   <StyleMap id="NavWarnC_MOp">
+       <Pair>
+           <key>normal</key>
+           <styleUrl>#normal_NavWarnC_MOp</styleUrl>
+       </Pair>
+       <Pair>
+           <key>highlight</key>
+           <styleUrl>#highlight_NavWarnC_MOp</styleUrl>
+       </Pair>
+   </StyleMap>
+   <Style id="highlight_NavWarnC_MOp">
+       <BalloonStyle>
+           <bgColor>#ffffff</bgColor>
+           <text><![CDATA[
+           <b><font color="#CC0000" size="+2">$[name]</font></b>
+           <br/><br/>
+           $[description]<br><br>Please direct any questions or comments pertaining to these warnings to <a  href="mailto:NAVSAFETY@NGA.MIL">NAVSAFETY@NGA.MIL</a>]]></text>
+       </BalloonStyle>
+       <IconStyle>
+           <scale>1.1</scale>
+           <Icon>
+               <href>TriSC.png</href>
+           </Icon>
+       </IconStyle>
+       <LabelStyle>
+           <color>ffe500ff</color>
+       </LabelStyle>
+   </Style>
+   <Folder>
+      <name>Read Me</name>
+      <Snippet>Click to view</Snippet>
+      <description><![CDATA[
+      <big><big><b>Broadcast Warnings</b></big></big><br><br>
+      In support of the Global Maritime Distress and Safety System (GMDSS), Broadcast Warnings are promulgated by the <a  href = "http://www.nga.mil/portal/site/maritime/?epi_baseMenuID=e106a3b5e50edce1fec24fd73927a759&amp;epi_menuID=e106a3b5e50edce1fec24fd73927a759&amp;epi_menuItemID=89e3197d46842c1e36890127d32020a0" > Worldwide Navigational Warnings Service (WWNWS)</a> to provide rapid dissemination of information critical to navigation and the safety of life at sea. <br>
+      <br>
+      Navigational Warnings are issued regularly and contain information about persons in distress, or objects and events that pose an immediate hazard to navigation. The FIVE types of Navigational Warnings - NAVAREA IV, HYDROLANT, HYDROARC, NAVAREA XII, and HYDROPAC - are categorized by their location.<br>
+      <br>
+      Arctic Maritime Safety Information (AMSI) Warnings are issued for the Arctic region not covered by HYDROLANT and HYDROPAC messages.<br>
+      <br>
+      Special Warnings and MARAD Advisories are issued infrequently and contain information about potential hazards caused by the global political climate.<br>
+      <br>
+      The Daily Memorandum is issued each weekday and contains a summary of all Broadcast Warnings and Special Warnings promulgated during the past 24-72 hours. The <a  href="http://www.nga.mil/MSISiteContent/StaticFiles/MISC/warn/dm_a.html">Atlantic  Edition</a> contains HYDROLANT and NAVAREA IV Warnings while the <a  href = "http://www.nga.mil/MSISiteContent/StaticFiles/MISC/warn/dm_p.html" > Pacific Edition</a> is comprised of HYDROPAC and NAVAREA XII Warnings. Both editions include Special Warnings issued during the same period. <br>
+      <br>
+      
+      
+      ]]></description>
+    </Folder>
+   
+   
+   <Folder>
+        <name>NAVAREA</name>
+    <Folder>        <name>NAVAREA IV 71/16</name>        <Snippet maxLines="2">282138Z JAN 16</Snippet>        <description>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING 
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, 
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN
+   51-38N 056-37W AND 51-24N 056-26W.
+3. SEA ICE LIMIT ALONG TRACKLINES:
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, 
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, 
+      60-55N 058-00W, 62-05N 057-25W.
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, 
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, 
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, 
+      45-55N 061-55W.
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, 
+      47-35N 061-25W.
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. 
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR 
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE 
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD 
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION
+   OR USING INMARSAT CODE 42.
+5. CANCEL THIS MSG 300001Z JAN 16.//</description>            <Placemark>                <name>NAVAREA IV 71/16 [1 of 6]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.</B><br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.<br>
+3. SEA ICE LIMIT ALONG TRACKLINES:<br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.<br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.<br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.<br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. <br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.<br>
+5. CANCEL THIS MSG 300001Z JAN 16.//<br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnL</styleUrl>                <MultiGeometry>                    <Point>                        <coordinates>-52.916667,47.000000,0</coordinates>                    </Point>                    <LineString>                        <tesselate>1</tesselate>                        <coordinates>-52.916667,47.000000,0 -48.000000,45.250000,0 -43.000000,45.250000,0 -43.000000,46.500000,0 -45.250000,49.750000,0 -58.500000,60.000000,0</coordinates>                    </LineString>                </MultiGeometry>            </Placemark>            <Placemark>                <name>NAVAREA IV 71/16 [2 of 6]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.<B><br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.</B><br>
+3. SEA ICE LIMIT ALONG TRACKLINES:<br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.<br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.<br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.<br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. <br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.<br>
+5. CANCEL THIS MSG 300001Z JAN 16.//<br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnL</styleUrl>                <MultiGeometry>                    <Point>                        <coordinates>-56.616667,51.633334,0</coordinates>                    </Point>                    <LineString>                        <tesselate>1</tesselate>                        <coordinates>-56.616667,51.633334,0 -56.433334,51.400000,0</coordinates>                    </LineString>                </MultiGeometry>            </Placemark>            <Placemark>                <name>NAVAREA IV 71/16 [3 of 6]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.<br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.<B><br>
+3. SEA ICE LIMIT ALONG TRACKLINES:</B><B><br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.</B><br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.<br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.<br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. <br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.<br>
+5. CANCEL THIS MSG 300001Z JAN 16.//<br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnL</styleUrl>                <MultiGeometry>                    <Point>                        <coordinates>-53.083334,48.666667,0</coordinates>                    </Point>                    <LineString>                        <tesselate>1</tesselate>                        <coordinates>-53.083334,48.666667,0 -51.583334,49.333334,0 -51.583334,54.500000,0 -56.250000,56.166667,0 -58.250000,58.000000,0 -58.416667,60.500000,0 -58.000000,60.916667,0 -57.416667,62.083334,0</coordinates>                    </LineString>                </MultiGeometry>            </Placemark>            <Placemark>                <name>NAVAREA IV 71/16 [4 of 6]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.<br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.<B><br>
+3. SEA ICE LIMIT ALONG TRACKLINES:</B><br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.<B><br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.</B><br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.<br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. <br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.<br>
+5. CANCEL THIS MSG 300001Z JAN 16.//<br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnL</styleUrl>                <MultiGeometry>                    <Point>                        <coordinates>-59.416667,47.916667,0</coordinates>                    </Point>                    <LineString>                        <tesselate>1</tesselate>                        <coordinates>-59.416667,47.916667,0 -59.583334,48.416667,0 -58.000000,50.416667,0 -58.916667,49.833334,0 -61.583334,49.833334,0 -61.333334,48.916667,0 -63.000000,48.666667,0 -63.500000,46.916667,0 -61.666667,46.500000,0 -61.916667,45.916667,0</coordinates>                    </LineString>                </MultiGeometry>            </Placemark>            <Placemark>                <name>NAVAREA IV 71/16 [5 of 6]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.<br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.<B><br>
+3. SEA ICE LIMIT ALONG TRACKLINES:</B><br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.<br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.<B><br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.</B><br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. <br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.<br>
+5. CANCEL THIS MSG 300001Z JAN 16.//<br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnL</styleUrl>                <MultiGeometry>                    <Point>                        <coordinates>-62.000000,47.166667,0</coordinates>                    </Point>                    <LineString>                        <tesselate>1</tesselate>                        <coordinates>-62.000000,47.166667,0 -61.583334,46.916667,0 -61.166667,47.500000,0 -61.416667,47.583334,0</coordinates>                    </LineString>                </MultiGeometry>            </Placemark>            <Placemark>                <name>NAVAREA IV 71/16 [6 of 6]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.<br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.<B><br>
+3. SEA ICE LIMIT ALONG TRACKLINES:</B><br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.<br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.<br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.<B><br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W.</B> <br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.<br>
+5. CANCEL THIS MSG 300001Z JAN 16.//<br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnL</styleUrl>                <MultiGeometry>                    <Point>                        <coordinates>-65.000000,45.083334,0</coordinates>                    </Point>                    <LineString>                        <tesselate>1</tesselate>                        <coordinates>-65.000000,45.083334,0 -65.500000,45.333334,0</coordinates>                    </LineString>                </MultiGeometry>            </Placemark>            
+			<Placemark>                <name>NAVAREA IV 71/16 [c1 of c2]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.<br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.<br>
+3. SEA ICE LIMIT ALONG TRACKLINES:<br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.<br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.<br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.<br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. <B><br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.</B><br>
+5. CANCEL THIS MSG 300001Z JAN 16.//<br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnC</styleUrl>            </Placemark>            <Placemark>                <name>NAVAREA IV 71/16 [c2 of c2]</name>                <description><![CDATA[<B>NORTH AMERICAN ICE SERVICE (NAIS) ICEBERG BULLETIN.</B><br>
+1. 290001Z JAN ICEBERG LIMIT ALONG TRACKLINE JOINING <br>
+   47-00N 052-55W, 45-15N 048-00W, 45-15N 043-00W, <br>
+   46-30N 043-00W, 49-45N 045-15W, 60-00N 058-30W.<br>
+2. WESTERN ICEBERG LIMIT ALONG TRACKLINE BETWEEN<br>
+   51-38N 056-37W AND 51-24N 056-26W.<br>
+3. SEA ICE LIMIT ALONG TRACKLINES:<br>
+   A. JOINING 48-40N 053-05W, 49-20N 051-35W, 54-30N 051-35W, <br>
+      56-10N 056-15W, 58-00N 058-15W, 60-30N 058-25W, <br>
+      60-55N 058-00W, 62-05N 057-25W.<br>
+   B. JOINING 47-55N 059-25W, 48-25N 059-35W, 50-25N 058-00W, <br>
+      49-50N 058-55W, 49-50N 061-35W, 48-55N 061-20W, <br>
+      48-40N 063-00W, 46-55N 063-30W, 46-30N 061-40W, <br>
+      45-55N 061-55W.<br>
+   C. JOINING 47-10N 062-00W, 46-55N 061-35W, 47-30N 061-10W, <br>
+      47-35N 061-25W.<br>
+   D. BETWEEN 45-05N 065-00W AND 45-20N 065-30W. <br>
+4. REPORT POSITION AND TIME OF ANY ICEBERGS OR <br>
+   STATIONARY RADAR TARGETS THAT MAY LIKELY BE <br>
+   ICEBERGS TO THE NEAREST CANADIAN COAST GUARD <br>
+   MARINE COMMUNICATIONS AND TRAFFIC SERVICE STATION<br>
+   OR USING INMARSAT CODE 42.<B><br>
+5. CANCEL THIS MSG 300001Z JAN 16.//</B><br><br>Authority: NAIS 281845Z JAN 16.<br><br>Date: 282138Z JAN 16<br>Cancel: 30000100 Jan 16]]></description>                <styleUrl>#NavWarnC</styleUrl>            </Placemark>        </Folder>
+    </Folder>
+  
+  
+   <Folder>
+      <name>Overlays</name>
+      <ScreenOverlay>
+         <name>NGA Logo</name>
+         <Icon><href>nga_seal.png</href></Icon>
+         <overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+         <screenXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+         <rotationXY x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+         <size x="-1" y="-1" xunits="pixels" yunits="pixels"/>
+      </ScreenOverlay>
+   </Folder>
+</Document>
+</kml>

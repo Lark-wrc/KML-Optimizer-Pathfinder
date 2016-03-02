@@ -7,7 +7,6 @@ import math
 from lxml import etree
 
 debug = 0
-  # Polygon is removed
 
 def elementPrint(element, bool=0):
     """
@@ -23,8 +22,3 @@ def elementPrint(element, bool=0):
         return etree.tostring(element, pretty_print=False)
     else:
         return etree.tostring(element, pretty_print=True)
-
-
-def coordinateDistance(start, end):
-    #print start, end, sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))
-    return math.sqrt(((end[0]-start[0])**2)+((end[1]-start[1])**2))

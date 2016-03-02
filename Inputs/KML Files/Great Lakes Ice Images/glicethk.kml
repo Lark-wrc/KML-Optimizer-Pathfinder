@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+<LookAt>
+   <longitude>-84.2</longitude>
+   <latitude>45.18</latitude>
+   <range>1245000.</range>
+   <tilt>0</tilt>
+   <heading>0</heading>
+</LookAt>
+
+<Folder>
+<name>GLCFS Nowcast Surface Ice Thickness</name>
+<description><![CDATA[GLCFS Great Lakes Nowcast<br>
+Ice Thickness (cm)<br>
+Simulation ending at:<br>&nbsp; &nbsp; Jan 29, 2016, 18:00 GMT<br>
+NOAA/GLERL<br>
+http://www.glerl.noaa.gov/res/glcfs/]]></description>
+<Snippet>Jan 29, 2016, 18:00 GMT</Snippet>
+<LookAt>
+   <longitude>-84.2</longitude>
+   <latitude>45.18</latitude>
+   <range>1245000.</range>
+   <tilt>0</tilt>
+   <heading>0</heading>
+</LookAt>
+<open>0</open>
+
+<ScreenOverlay>  
+<name>Ice Thickness Legend</name>   
+<visibility>1</visibility> 
+<Icon>
+   <href>icethkbar.png</href>
+</Icon>  
+<overlayXY x="0" y="1" xunits="fraction" yunits="fraction" />  
+<screenXY x="0.42" y="0.92" xunits="fraction" yunits="fraction" />  
+<rotationXY x="0" y="0" xunits="fraction" yunits="fraction" />  
+<size x="0" y="0" xunits="fraction" yunits="fraction" />  
+</ScreenOverlay>
+
+
+<GroundOverlay>
+<name>Lake Superior</name>
+<visibility>1</visibility>
+<drawOrder>5</drawOrder>
+<Icon>
+<href>sicethk6.png</href>
+</Icon>
+<LatLonBox>
+<north>49.0853</north>
+<south>46.2000</south>
+<east>-83.8750</east>
+<west>-92.2000</west>
+<rotation>0</rotation>
+</LatLonBox>
+</GroundOverlay>
+<GroundOverlay>
+<name>Lake Michigan</name>
+<visibility>1</visibility>
+<drawOrder>5</drawOrder>
+<Icon>
+<href>micethk6.png</href>
+</Icon>
+<LatLonBox>
+<north>46.8500</north>
+<south>41.3000</south>
+<east>-84.5625</east>
+<west>-88.1000</west>
+<rotation>0</rotation>
+</LatLonBox>
+</GroundOverlay>
+<GroundOverlay>
+<name>Lake Huron</name>
+<visibility>1</visibility>
+<drawOrder>5</drawOrder>
+<Icon>
+<href>hicethk6.png</href>
+</Icon>
+<LatLonBox>
+<north>46.4875</north>
+<south>42.7000</south>
+<east>-79.3500</east>
+<west>-84.9000</west>
+<rotation>0</rotation>
+</LatLonBox>
+</GroundOverlay>
+<GroundOverlay>
+<name>Lake Erie</name>
+<visibility>1</visibility>
+<drawOrder>5</drawOrder>
+<Icon>
+<href>eicethk6.png</href>
+</Icon>
+<LatLonBox>
+<north>43.1417</north>
+<south>41.2000</south>
+<east>-78.1500</east>
+<west>-83.7000</west>
+<rotation>0</rotation>
+</LatLonBox>
+</GroundOverlay>
+<GroundOverlay>
+<name>Lake Ontario</name>
+<visibility>1</visibility>
+<drawOrder>5</drawOrder>
+<Icon>
+<href>oicethk6.png</href>
+</Icon>
+<LatLonBox>
+<north>44.3592</north>
+<south>43.0000</south>
+<east>-75.8375</east>
+<west>-80.0000</west>
+<rotation>0</rotation>
+</LatLonBox>
+</GroundOverlay>
+
+</Folder>
+</Document>
+
+</kml>
