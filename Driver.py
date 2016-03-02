@@ -1,6 +1,8 @@
 from KmlFasade import KmlFasade
 from UrlBuilder import UrlBuilder
 from RestrictionEngine import RestrictionFactory
+import ImageMerge
+import Image
 argzero = 'Inputs\KML Files\\advancedexample1.kml'
 argtwo = 'Inputs\KML Files\\advancedexample2.kml'
 argone = 'Inputs\KML Files\us_states.kml'
@@ -15,6 +17,8 @@ f = f.newSquareRestriction([-74.871826, 39.833851], 1000)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('Inputs\KML Files\\advancedexample1copy.kml')
+
+#Build the Url
 
 build = UrlBuilder('600x600')
 #build.viewportparam(markerlist)
@@ -34,10 +38,10 @@ for element in fasade.geometrics:
 
 build.addmarkers({"color":"blue"}, markerlist)
 build.printUrls()
-images = build.download()
 
-import ImageMerge
-import Image
+#Merge the Url Images
+
+images = build.download()
 
 images = ImageMerge.convertPtoRGB(*images)
 ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)

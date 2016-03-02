@@ -41,12 +41,12 @@ def mergeModeRGB(outfile, base, *images):
                     newdata[x,y] = tpix
                     counter += 1
 
-        print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
+        if debug: print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
             360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
         if debug: newimage.show()
 
     print ""
-    newimage.save(outfile)
+    if debug: newimage.save(outfile)
 
 
 def blkDiff(base, images, outfile="DifferenceFile.png"):
@@ -79,11 +79,11 @@ def blkDiff(base, images, outfile="DifferenceFile.png"):
                 newdata[x,y] = (0,0,0,255)
                 counter += 1
 
-    print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
+    if debug: print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
         360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
     if debug: newimage.show()
 
-    print ""
+    if debug: print ""
     newimage.save(outfile)
 
 def convertPtoRGB(*images):

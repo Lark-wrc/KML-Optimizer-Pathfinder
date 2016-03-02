@@ -17,6 +17,7 @@ class UrlBuilder(object):
         self.url = self.urlbase
         self.urllist = []
         self.limit = 2000 #Proper limit is 2048, buffer of 48. Url can only be that many characters.
+        self.debug = 0
 
     def addparam(self, feature, value):
         """

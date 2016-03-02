@@ -25,11 +25,12 @@ class GeometricObject(object):
         self.element = element
         self.tag = tag
         self.remove = 0
+        self.debug = 0
         self.coordinates = [] #Most definitely required.
         for x in coordinates.split():
             s = x.split(',')
             self.coordinates.append([float(s[0]), float(s[1])])
-        #print self.coordinates
+        if self.debug: print self.coordinates
 
     def applyEdits(self):
         """

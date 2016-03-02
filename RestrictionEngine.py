@@ -37,6 +37,7 @@ class Restriction(object):
         methods can be built into the restriction engines.
         """
         self.metric = metric
+        self.debug = 0
         pass
 
     def restrict(self, geometrics):
