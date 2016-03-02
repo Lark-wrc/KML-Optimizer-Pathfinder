@@ -7,7 +7,6 @@ import math
 from lxml import etree
 
 debug = 0
-  # Polygon is removed
 
 def elementPrint(element, bool=0):
     """

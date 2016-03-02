@@ -5,11 +5,10 @@ class UrlBuilder(object):
     def __init__(self, size):
         """
         Author: Bill Clark
-        Version = 2.0
         The UrlBuilder Class should be created anew for each url the user wants to build.
         Using the methods contained, the user may create a valid google maps static api url.
         Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
-        All inputs will be need to be converted to Lat Long, as all other files use Long Lat.
+        All inputs will be need to be converted to Long Lat, as all other files use Lat Long.
         :param size: the size of the returned image in pixels. [0-640]x[0-640]
         """
 
@@ -17,14 +16,13 @@ class UrlBuilder(object):
         self.urlbase += 'size='+size
         self.url = self.urlbase
         self.urllist = []
-        self.limit = 2000 #Proper limit is 2048, buffer of 48.
+        self.limit = 2000 #Proper limit is 2048, buffer of 48. Url can only be that many characters.
 
     def addparam(self, feature, value):
         """
         Author: Bill Clark
-        Version = 1.0
-        Appends the given parameter to the static maps url.
-        :param feature: The name of the parameter. Valid: scale | maptype | format | region?
+        Appends the given parameter to the static maps url. This applies to all urls in a split scenerio.
+        :param feature: The name of the parameter. Valid: scale | maptype | format
         :param value: the value of the parameter. Valid: 1,2,4 | roadmap, satellite, hybrid, terrain |
                                                                 png, jpg, png32, gif, jpg-baseline
         :return: the url with the given parameter appended to it. Also updates saved url.
@@ -41,8 +39,7 @@ class UrlBuilder(object):
     def addparams(self, dict):
         """
         Author: Bill Clark
-        Version = 1.0
-        Allows for a list of parameters to be added to the static map.
+        Allows for a list of parameters to be added to the static map. This is applied to all urls in a split scenerio.
         :param dict: a dictionary of features:values from the addparam method.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
@@ -58,9 +55,9 @@ class UrlBuilder(object):
     def centerparams(self, center, zoom):
         """
         Author: Bill Clark
-        Version = 2.0
-        This is a shortcut method that adds the two values a url must contain to be valid, given the url
-        has no viewpoint, marker, or path. It adds center and zoom.
+        This method adds two parameters to the url that are required for a consistent image. In order to merge
+        images, these parameters are required to keep the image displaying the same area. In a split scenerio,
+        these are applied to each url. Multiple calls are unnecessary.
         :param center: The center point the map will display. latitude and longitude coordinates.
         :param zoom: How far zoomed in the map slice will be. [1-20]
         :return: the url with the given parameter appended to it. Also updates saved url.
@@ -78,8 +75,10 @@ class UrlBuilder(object):
     def viewportparam(self, viewports):
         """
         Author: Bill Clark
-        Version: 1.0
-        Appends a viewport parameter. A viewport makes each point it is given visible on the map.
+        Appends a viewport parameter. A viewport makes each point it is given visible on the map. If the parameters
+        are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+        the url will be split. If the locations are provided as a solid string, the url will only be checked after
+        everything is appended. (This could cause data loss.)
         :param viewports: Locations in a list format. Each will be made visible.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
@@ -105,8 +104,10 @@ class UrlBuilder(object):
     def addmarkers(self, styles, locations):
         """
         Author: Bill Clark
-        Version = 2.0
-        Adds the marker list to the url. Each point will have the supplied style settings.
+        Adds the locations listed as markers to the url. Each point will have the supplied style settings. If the
+        parameters are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+        the url will be split. If the locations are provided as a solid string, the url will only be checked after
+        everything is appended. (This could cause data loss.)
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: size | label | color
                         Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
@@ -141,8 +142,12 @@ class UrlBuilder(object):
     def addpath(self, styles, locations):
         """
         Author: Bill Clark
-        Version = 2.0
-        Adds the path list to the url. The lines drawn and area filled will have the style setting specified.
+        Adds the path listed to the url. The lines drawn and area filled will have the style setting specified.
+        If the url is split, filling with not work, and can possibly break the url. Filled areas are expected to
+        with in a single url by google maps static.
+        If the parameters are provided as a list, when a coordinate is added and the length is pushed over the
+        character limit, the url will be split. If the locations are provided as a solid string, the url will only be
+        checked after everything is appended. (This could cause data loss.)
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: weight | geodesic | color | fillcolor
                         Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
@@ -177,10 +182,12 @@ class UrlBuilder(object):
     def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\{} {}.png', prefix='image'):
         """
         Author: Bill Clark
-        Version: 1.0
-        Takes a parameter path and downloads the generated url to that path.
+        Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
+        the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
+        because mulitple urls may be downloaded.
         :param path: a file path to save the generated image to.
-        :return: the download function returns the saved path and response data, which is returned.
+        :param prefix: The prefix to the count in the file name. Defaults to image.
+        :return: A list of the file locations for the downloaded files.
         """
 
         ret = []
@@ -194,8 +201,12 @@ class UrlBuilder(object):
 
     def countUrl(self, url):
         """
-
-        :return:
+        Author: Bill Clark
+        This method counts the characters in the given url. Of note, This does not use internal values, unlike most
+         methods in the class. This method is neccessary because | characters count as 3 when actually read by static
+         maps.
+        :param url: The url to be counted.
+        :return: returns the number of characters in the url.
         """
         ret = 0
         for character in url:
@@ -205,8 +216,14 @@ class UrlBuilder(object):
 
     def retireUrl(self, url, offset=0):
         """
-
-        :param url:
+        Author: Bill Clark
+        This method is used to split urls that have hit the size limit. It uses side effects to great effect.
+        This method actually checks the url (and an optional offset) against the limit, and if the number is greater
+        than or equal to the limit, returns true. When it does return true, it adds the current url to the url list
+        and provides a new url copied from the urlbase saved in the object. This is how all parameters are kept the
+        same across splits, parameters update the base url and not the actual current url. (technically they do update
+        both, but you get the idea.) The method returns false if the url is shorter than the limit.
+        :param url: The url to check the length of.
         :return:
         """
         count = self.countUrl(url)+offset
@@ -219,8 +236,9 @@ class UrlBuilder(object):
 
     def printUrls(self):
         """
-
-        :return:
+        Author: Bill Clark
+        This method prints all the urls contained in the object in a readable manner. As readable as lines of character
+        length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
         """
         print "Base Url: " + self.urlbase
         for url in self.urllist:
@@ -229,8 +247,9 @@ class UrlBuilder(object):
 
     def __str__(self):
         """
-
-        :return:
+        Author: Bill Clark
+        Simple override so that printing the object prints the url's it has with in it.
+        :return: ToString of the url's contained in the object.
         """
         ret = ""
         ret += self.urlbase + '\n'
