@@ -1,5 +1,6 @@
 from __future__ import division
 import math
+
 MERCATOR_RANGE = 256
 
 
@@ -19,61 +20,52 @@ def radians_to_degrees(rad):
     return rad / (math.pi / 180)
 
 
-class GPoint:
-
+class GeoPoint:
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
 
 
-class GLatLng:
-
+class GeoLatLng:
     def __init__(self, lt, ln):
         self.lat = lt
         self.lng = ln
 
 
 class MercatorProjection:
-
     def __init__(self):
-        self.pixelOrigin_ = GPoint(MERCATOR_RANGE / 2, MERCATOR_RANGE / 2)
+        self.pixelOrigin_ = GeoPoint(MERCATOR_RANGE / 2, MERCATOR_RANGE / 2)
         self.pixelsPerLonDegree_ = MERCATOR_RANGE / 360
         self.pixelsPerLonRadian_ = MERCATOR_RANGE / (2 * math.pi)
 
-    def fromLatLngToPoint(self, lat_lng, opt_point=None):
-        point = opt_point if opt_point is not None else GPoint(0, 0)
+    def from_lat_lng_to_point(self, lat_lng, opt_point=None):
+        point = opt_point if opt_point is not None else GeoPoint(0, 0)
         origin = self.pixelOrigin_
         point.x = origin.x + lat_lng.lng * self.pixelsPerLonDegree_
-        # NOTE(appleton): Truncating to 0.9999 effectively limits latitude to
+        # NOTE: Truncating to 0.9999 effectively limits latitude to
         # 89.189.  This is about a third of a tile past the edge of the world tile.
-        siny = bound(math.sin(degrees_to_radians(lat_lng.lat)), -0.9999, 0.9999)
-        point.y = origin.y + 0.5 * math.log((1 + siny) / (1 - siny)) * -self.pixelsPerLonRadian_
+        sin_y = bound(math.sin(degrees_to_radians(lat_lng.lat)), -0.9999, 0.9999)
+        point.y = origin.y + 0.5 * math.log((1 + sin_y) / (1 - sin_y)) * -self.pixelsPerLonRadian_
         return point
 
-    def fromPointToLatLng(self, point):
+    def from_point_to_lat_lng(self, point):
         origin = self.pixelOrigin_
         lng = (point.x - origin.x) / self.pixelsPerLonDegree_
-        latRadians = (point.y - origin.y) / -self.pixelsPerLonRadian_
-        lat = radians_to_degrees(2 * math.atan(math.exp(latRadians)) - math.pi / 2)
-        return GLatLng(lat, lng)
-
-# pixelCoordinate = worldCoordinate * pow(2,zoomLevel)
+        lat_radians = (point.y - origin.y) / -self.pixelsPerLonRadian_
+        lat = radians_to_degrees(2 * math.atan(math.exp(lat_radians)) - math.pi / 2)
+        return GeoLatLng(lat, lng)
 
 
-def getCorners(center, zoom, mapWidth, mapHeight):
-    scale = 2**zoom
-    proj = MercatorProjection()
+def get_corners(center, zoom, map_width, map_height):
+    scale = 2 ** zoom
+    projection = MercatorProjection()
 
-    centerPx = proj.fromLatLngToPoint(center)
+    center_pixel = projection.from_lat_lng_to_point(center)
 
-    SWPoint = GPoint(centerPx.x-(mapWidth/2)/scale, centerPx.y+(mapHeight/2)/scale)
-    SWLatLon = proj.fromPointToLatLng(SWPoint)
+    sw_point = GeoPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+    sw_lat_lon = projection.from_point_to_lat_lng(sw_point)
 
-    NEPoint = GPoint(centerPx.x+(mapWidth/2)/scale, centerPx.y-(mapHeight/2)/scale)
-    NELatLon = proj.fromPointToLatLng(NEPoint)
-    return {
-        'N': NELatLon.lat,
-        'E': NELatLon.lng,
-        'S': SWLatLon.lat,
-        'W': SWLatLon.lng,
-    }
+    ne_point = GeoPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+    ne_lat_lon = projection.from_point_to_lat_lng(ne_point)
+
+    return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng)
