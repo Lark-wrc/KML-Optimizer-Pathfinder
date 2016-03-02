@@ -64,10 +64,17 @@ def get_corners(center, zoom, map_width, map_height):
 
     center_pixel = projection.from_lat_lng_to_point(center)
 
-    sw_point = GeoPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
-    sw_lat_lon = projection.from_point_to_lat_lng(sw_point)
-
     ne_point = GeoPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
     ne_lat_lon = projection.from_point_to_lat_lng(ne_point)
 
-    return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng)
+    nw_point = GeoPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+    nw_lat_lon = projection.from_point_to_lat_lng(nw_point)
+
+    se_point = GeoPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+    se_lat_lon = projection.from_point_to_lat_lng(se_point)
+
+    sw_point = GeoPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+    sw_lat_lon = projection.from_point_to_lat_lng(sw_point)
+
+    return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng,
+                NE=ne_lat_lon, NW=nw_lat_lon, SE=se_lat_lon, SW=sw_lat_lon)
