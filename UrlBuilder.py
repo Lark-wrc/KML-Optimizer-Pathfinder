@@ -4,12 +4,10 @@ class UrlBuilder(object):
 
     def __init__(self, height, width=0):
         """
-        Author: Bill Clark
-        Version = 2.0
-        The UrlBuilder Class should be created anew for each url the user wants to build.
+        Author: Bill Clark, Nick LaPosta
+        The UrlBuilder Class should be recreated for each url the user wants to build.
         Using the methods contained, the user may create a valid google maps static api url.
-        Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
-        All inputs will be need to be converted to Lat Long, as all other files use Long Lat.
+        Input is not checked, and ALL INPUTS SHOULD BE NUMERIC.
         :param height: the vertical size of the returned image in pixels. [0-640]
         :param width: default to zero if a square image is desired. Otherwise, the horizontal size of the returned image in pixels. [0-640]
         """
@@ -49,20 +47,19 @@ class UrlBuilder(object):
         self.url = curr
         return curr
 
-    def centerparams(self, center, zoom):
+    def centerparams(self, center_point, zoom):
         """
-        Author: Bill Clark
-        Version = 2.0
+        Author: Bill Clark, Nick LaPosta
         This is a shortcut method that adds the two values a url must contain to be valid, given the url
         has no viewpoint, marker, or path. It adds center and zoom.
-        :param center: The center point the map will display. latitude and longitude coordinates.
+        :param center: The center point the map will display. GeoLatLng object
         :param zoom: How far zoomed in the map slice will be. [1-20]
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
         curr = self.url[:]
-        curr += '&&center='+center
-        curr += '&&zoom='+zoom
+        curr += '&&center='+repr(center_point)
+        curr += '&&zoom='+repr(zoom)
         self.url = curr
         return curr
 
