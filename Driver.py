@@ -11,7 +11,7 @@ fasade = KmlFasade(argzero)
 fasade.placemarkToGeometrics()
 f = RestrictionFactory()
 #f = f.newSquareRestriction([-103.528629, 41.260352], 2000)
-f = f.newSquareRestriction([-74.871826, 39.833851], 500)
+f = f.newSquareRestriction([-74.871826, 39.833851], 1000)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('Inputs\KML Files\\advancedexample1copy.kml')
@@ -32,6 +32,14 @@ for element in fasade.geometrics:
     if element.tag == "LineString":
         build.addpath({"color":"blue", "weight":'5'}, element.coordinatesAsList())
 
-build.addmarkers({"color":"yellow"}, markerlist)
+build.addmarkers({"color":"blue"}, markerlist)
 build.printUrls()
-build.download()
+images = build.download()
+
+import ImageMerge
+import Image
+
+images = ImageMerge.convertPtoRGB(*images)
+ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)
+im = Image.open('Inputs\Static Maps\Outfile.png')
+im.show()

@@ -174,7 +174,7 @@ class UrlBuilder(object):
         self.retireUrl(self.url)
         return curr
 
-    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\image{}.png'):
+    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\{} {}.png', prefix='image'):
         """
         Author: Bill Clark
         Version: 1.0
@@ -183,11 +183,14 @@ class UrlBuilder(object):
         :return: the download function returns the saved path and response data, which is returned.
         """
 
-        count = 0
+        ret = []
+        count = 1
+        ret.append(urlretrieve(self.urlbase, path.format(prefix, '0'))[0])
         for url in self.urllist:
-            urlretrieve(url, path.format(repr(count)))
+            ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
             count+=1
-        urlretrieve(self.url, path.format('0'))
+        ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
+        return ret
 
     def countUrl(self, url):
         """
@@ -219,17 +222,30 @@ class UrlBuilder(object):
 
         :return:
         """
+        print "Base Url: " + self.urlbase
         for url in self.urllist:
             print url
         print self.url
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        ret = ""
+        ret += self.urlbase + '\n'
+        for url in self.urllist:
+            ret += url + '\n'
+        ret += self.url
+        return ret
 
 if __name__ == "__main__":
     url = UrlBuilder('600x600')
     url.centerparams('40.714728,-73.998672', '17')
     loc = ['40.714728,-73.998372', '40.715728,-73.999672', '40.715728,-73.998372', '40.714728,-73.998372']
-    locmini = {'40.714728,-73.998372', '40.715728,-73.999672'}
+    #locmini = {'40.714728,-73.998372', '40.715728,-73.999672'}
     url.addparam('scale', '2')
     url.addmarkers({'color': 'red'}, loc)
-    #url.addpath({'weight':'1', 'fillcolor': 'yellow'}, loc)
-    print url.urllist
+    url.addpath({'weight':'1', 'fillcolor': 'yellow'}, loc)
+    url.printUrls()
     url.download()

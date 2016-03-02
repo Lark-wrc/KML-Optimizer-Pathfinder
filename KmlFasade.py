@@ -140,7 +140,8 @@ class KmlFasade(object):
 if __name__ == '__main__':
     fasade = KmlFasade('Inputs\KML Files\\advancedexample1.kml')
     fasade.loadPlacemarks()
-    z = SquareRestriction([-99.000000,40.000000], 75)
+    z = SquareRestriction([-99.000000,40.000000], 1000)
+    #z = SquareRestriction([-59.961617,-13.273476], 1000)
     fasade.placemarkToGeometrics()
     z.restrict(fasade.geometrics)
     fasade.createAdditionsFolder()
