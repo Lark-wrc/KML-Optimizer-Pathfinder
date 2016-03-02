@@ -29,7 +29,16 @@ class GeoPoint:
 class GeoLatLng:
     def __init__(self, lt, ln):
         self.lat = lt
-        self.lng = ln
+        if ln < 0:
+            if -ln / 180 >= 1:
+                self.lng = 180 - -ln % 180
+            else:
+                self.lng = -(-ln % 180)
+        else:
+            if ln / 180 >= 1:
+                self.lng = 180 - ln % 180
+            else:
+                self.lng = ln
 
     def __repr__(self):
         return repr(self.lat) + "," + repr(self.lng)
@@ -64,15 +73,19 @@ def get_corners(center, zoom, map_width, map_height):
 
     center_pixel = projection.from_lat_lng_to_point(center)
 
+    # Create Latitude and Longitude for the North East point of the image
     ne_point = GeoPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
     ne_lat_lon = projection.from_point_to_lat_lng(ne_point)
 
+    # Create Latitude and Longitude for the North West point of the image
     nw_point = GeoPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
     nw_lat_lon = projection.from_point_to_lat_lng(nw_point)
 
+    # Create Latitude and Longitude for the South East point of the image
     se_point = GeoPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
     se_lat_lon = projection.from_point_to_lat_lng(se_point)
 
+    # Create Latitude and Longitude for the South West point of the image
     sw_point = GeoPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
     sw_lat_lon = projection.from_point_to_lat_lng(sw_point)
 
