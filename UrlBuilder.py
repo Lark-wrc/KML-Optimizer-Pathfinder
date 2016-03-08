@@ -199,15 +199,40 @@ class UrlBuilder(object):
         for url in self.urllist:
             ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
             count+=1
-            sleep(uniform(0,1))
+            sleep(.5)
         ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
         return ret
+
+    def downloadGenerator(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
+        """
+        Author: Bill Clark
+        Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
+        the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
+        because mulitple urls may be downloaded. This is a python generator, it can be treated as an iterable
+        object and it will yield a url in every iteration, until no more exist. The generator does not return the
+        base url, as the base url is needed in every iteration.
+        :param path: a file path to save the generated image to.
+        :param prefix: The prefix to the count in the file name. Defaults to image.
+        :return: A list of the file locations for the downloaded files.
+        """
+
+        count = 1
+        #yield urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+        for url in self.urllist:
+            yield urlretrieve(url, path.format(prefix, repr(count)))[0]
+            count+=1
+            sleep(.5)
+        yield urlretrieve(self.url, path.format(prefix, repr(count)))[0]
+
+    def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
+        return urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+
 
     def countUrl(self, url):
         """
         Author: Bill Clark
         This method counts the characters in the given url. Of note, This does not use internal values, unlike most
-         methods in the class. This method is neccessary because | characters count as 3 when actually read by static
+         methods in the class. This method is necessary because | characters count as 3 when actually read by static
          maps.
         :param url: The url to be counted.
         :return: returns the number of characters in the url.
