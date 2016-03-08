@@ -1,6 +1,7 @@
 from __future__ import division
 import math
 
+# Google Maps full Earth image is 256x256 pixels
 MERCATOR_RANGE = 256
 
 
@@ -13,20 +14,41 @@ def bound(value, opt_min, opt_max):
 
 
 def degrees_to_radians(deg):
+    """
+    Author: Nick LaPosta
+    Converts degrees to radians
+    :param deg: Angle in degrees
+    :return: Angle in radians
+    """
     return deg * (math.pi / 180)
 
 
 def radians_to_degrees(rad):
+    """
+    Author: Nick LaPosta
+    Converts radians to degrees
+    :param rad: Angle in radians
+    :return: Angle in degrees
+    """
     return rad / (math.pi / 180)
 
 
 class GeoPoint:
+    """
+    Author: Nick LaPosta
+    Container for the location of a pixel on a Mercator map projection
+    """
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
 
 
 class GeoLatLng:
+    """
+    Author: Nick LaPosta
+    Container for the lat/lon coordinate for a point on a Mercator map projection.
+    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
+    """
     def __init__(self, lt, ln):
         self.lat = lt
         if ln < 0:
@@ -44,12 +66,30 @@ class GeoLatLng:
         return repr(self.lat) + "," + repr(self.lng)
 
 class MercatorProjection:
+    """
+    Author: Nick LaPosta
+    Contains conversion functions to convert a GeoPoint to a GeoLatLng and back using a center pixel of a Mercator map
+    projection.
+    """
+
     def __init__(self):
+        """
+        Author: Nick LaPosta
+        Creates a pixel coordinate for the center point of the map that every pixel coordinate will be relative to as
+        well as the ratio of longitude degrees/radians to pixels
+        """
         self.pixelOrigin_ = GeoPoint(MERCATOR_RANGE / 2, MERCATOR_RANGE / 2)
         self.pixelsPerLonDegree_ = MERCATOR_RANGE / 360
         self.pixelsPerLonRadian_ = MERCATOR_RANGE / (2 * math.pi)
 
     def from_lat_lng_to_point(self, lat_lng, opt_point=None):
+        """
+        Author: Nick LaPosta
+        Converts a GeoLatLng object into a GeoPoint object
+        :param lat_lng: The GeoLatLng object that will be converted into a GeoPoint object
+        :param opt_point: The GeoPoint that will contain the converted GeoLatLng. Default creates a new GeoPoint
+        :return: A GeoPoint that refers to the same location on the map by pixel rather than by latitude and longitude
+        """
         point = opt_point if opt_point is not None else GeoPoint(0, 0)
         origin = self.pixelOrigin_
         point.x = origin.x + lat_lng.lng * self.pixelsPerLonDegree_
@@ -60,6 +100,12 @@ class MercatorProjection:
         return point
 
     def from_point_to_lat_lng(self, point):
+        """
+        Author: Nick LaPosta
+        Converts a GeoPoint object into a GeoPoint object
+        :param point: The GeoPoint object that will be converted into a GeoLatLng object
+        :return: A GeoLatLng that refers to the same location on the map by latitude and longitude rather than by pixel
+        """
         origin = self.pixelOrigin_
         lng = (point.x - origin.x) / self.pixelsPerLonDegree_
         lat_radians = (point.y - origin.y) / -self.pixelsPerLonRadian_
@@ -68,6 +114,16 @@ class MercatorProjection:
 
 
 def get_corners(center, zoom, map_width, map_height):
+    """
+    Author: Nick LaPosta
+    This function returns a dict of all of the corner points and the four cardinal direction limits of the image that
+    will be downloaded from the Google Maps API
+    :param center: The center GeoLatLng object that the URL will use as the center
+    :param zoom: The zoom level that the UrlBuilder will use to generate the image
+    :param map_width: The pixel width of the image to be downloaded
+    :param map_height: The pixel height of the image to be downloaded
+    :return: A dict of all of the corner points and the four cardinal direction limits of the image
+    """
     scale = 2 ** zoom
     projection = MercatorProjection()
 
