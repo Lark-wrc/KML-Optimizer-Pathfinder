@@ -5,7 +5,7 @@ diffnum = 50
 
 def mergeModeRGB(outfile, base, *images):
     """
-    This merges a list of images, with layers of paths and markers, on top of a plan base image. It will then
+    This merges a list of images, with layers of paths and markers, on top of a plain base image. It will then
     output the merged image to the outfile provided. This method only works with images encoded in RGB color,
     which is expected of it's inputs. The method works by creating a new file for the changes, and opening the base
     and a layer. Each pixel in the base is compared with the layer, if they're different enough the layer pixel is
@@ -21,10 +21,10 @@ def mergeModeRGB(outfile, base, *images):
 
     baseimage = Image.open(base)
     baseimage.save(outfile)
-    newimage = Image.open(outfile)
+    layeringimage = Image.open(outfile)
 
     basedata = baseimage.load()
-    newdata = newimage.load()
+    layeringdata = layeringimage.load()
 
     for top in images:
         topimage = Image.open(top)
@@ -38,15 +38,15 @@ def mergeModeRGB(outfile, base, *images):
                 tpix = topdata[x,y]
                 #print x, y, bpix, tpix, baseimage.mode, baseimage.format
                 if abs(bpix[0] - tpix[0]) > diffnum or abs(bpix[1] - tpix[1]) > diffnum or abs(bpix[2] - tpix[2]) > diffnum:
-                    newdata[x,y] = tpix
+                    layeringdata[x,y] = tpix
                     counter += 1
 
         if debug: print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
             360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
-        if debug: newimage.show()
+        if debug: layeringimage.show()
 
     print ""
-    if debug: newimage.save(outfile)
+    layeringimage.save(outfile)
 
 
 def blkDiff(base, images, outfile="DifferenceFile.png"):
@@ -61,11 +61,11 @@ def blkDiff(base, images, outfile="DifferenceFile.png"):
     """
     baseimage = Image.open(base)
     baseimage.save(outfile)
-    newimage = Image.open(outfile)
+    layeringimage = Image.open(outfile)
 
     basedata = baseimage.load()
 
-    newdata = newimage.load()
+    layeringdata = layeringimage.load()
 
     topimage = Image.open(images)
     topdata = topimage.load()
@@ -76,15 +76,15 @@ def blkDiff(base, images, outfile="DifferenceFile.png"):
             bpix = basedata[x,y]
             tpix = topdata[x,y]
             if abs(bpix[0] - tpix[0]) > diffnum or abs(bpix[1] - tpix[1]) > diffnum or abs(bpix[2] - tpix[2]) > diffnum:
-                newdata[x,y] = (0,0,0,255)
+                layeringdata[x,y] = (0,0,0,255)
                 counter += 1
 
     if debug: print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
         360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
-    if debug: newimage.show()
+    if debug: layeringimage.show()
 
     if debug: print ""
-    newimage.save(outfile)
+    layeringimage.save(outfile)
 
 def convertPtoRGB(*images):
     """
@@ -101,6 +101,48 @@ def convertPtoRGB(*images):
         ret.append(image[:-4]+'.con'+image[-4:])
         im.save(image[:-4]+'.con'+image[-4:])
     return ret
+
+class MergeGenerator(object):
+    
+    def __init__(self, outfile, base):
+        base = convertPtoRGB(base)[0]
+        baseimage = Image.open(base)
+        baseimage.save(outfile)
+        self.outfile = outfile
+        self.base = base
+
+    def add(self, new):
+        """
+        :param outfile: The file address to save the output file to.
+        :param base: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why
+                        the center and zoom are REQUIRED. Those parameters being the same will line up the unchanged pixels
+                        correctly so that only the edited pixels pick up as different.
+        :param images: Any number of image urls that are layers of the base image. Same center and zoom are a must.
+        """
+    
+        baseimage = Image.open(self.base)
+        trackedimage = Image.open(self.outfile)
+        layeringimage = Image.open(new)
+    
+        basedata = baseimage.load()
+        trackeddata = trackedimage.load()
+        layeringdata = layeringimage.load()
+        
+        counter = 0
+        for x in range(baseimage.size[0]):
+            for y in range(baseimage.size[1]):
+                bpix = basedata[x,y]
+                tpix = layeringdata[x,y]
+                if abs(bpix[0] - tpix[0]) > diffnum or abs(bpix[1] - tpix[1]) > diffnum or abs(bpix[2] - tpix[2]) > diffnum:
+                    trackeddata[x,y] = tpix
+                    counter += 1
+
+        if debug: print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
+            360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
+        if debug: trackedimage.show()
+    
+        trackedimage.save(self.outfile)
+        
 
 if __name__ == "__main__":
     import os

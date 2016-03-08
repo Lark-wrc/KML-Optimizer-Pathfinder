@@ -25,7 +25,7 @@ class KmlFasade(object):
         self.kmlRoot = self.kmlTree.getroot()
 
 
-    def rewrite(self, path=self.filepath):
+    def rewrite(self, path=None):
         """
         Author: Bill Clark
         Writes the stored file object back to the orginal file or a provided path. Basically combines a few lxml methods
@@ -33,10 +33,16 @@ class KmlFasade(object):
         :param path: The path to write to, otherwise it will use the original write path.
         """
 
-        f = open(path, 'w')
-        #f.write(Utils.elementPrint(self.kmlRoot))
-        self.kmlTree.write(f, pretty_print=True)
-        f.close()
+        if path == None:
+            f = open(self.filepath, 'w')
+            #f.write(Utils.elementPrint(self.kmlRoot))
+            self.kmlTree.write(f, pretty_print=True)
+            f.close()
+        else:
+            f = open(path, 'w')
+            #f.write(Utils.elementPrint(self.kmlRoot))
+            self.kmlTree.write(f, pretty_print=True)
+            f.close()
 
     def loadPlacemarks(self):
         """

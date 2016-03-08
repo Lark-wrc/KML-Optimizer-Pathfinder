@@ -13,10 +13,10 @@ fasade = KmlFasade(argzero)
 fasade.placemarkToGeometrics()
 f = RestrictionFactory()
 #f = f.newSquareRestriction([-103.528629, 41.260352], 2000)
-f = f.newSquareRestriction([-74.871826, 39.833851], 1000)
+f = f.newSquareRestriction([-74.871826, 39.833851], 200)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
-fasade.rewrite('Inputs\KML Files\\advancedexample1copy.kml')
+fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
 
 #Build the Url
 
@@ -39,11 +39,20 @@ for element in fasade.geometrics:
 build.addmarkers({"color":"blue"}, markerlist)
 build.printUrls()
 
+print "Number of urls: ", len(build.urllist) + 2
+
 #Merge the Url Images
 
-images = build.download()
+# images = build.download()
+# print "Downloaded."
+#
+# images = ImageMerge.convertPtoRGB(*images)
+# ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)
 
-images = ImageMerge.convertPtoRGB(*images)
-ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)
+ImageMerge.debug = 0
+layers = ImageMerge.MergeGenerator('Inputs\Static Maps\Outfile.png', build.downloadBase())
+for img in build.downloadGenerator():
+    im = ImageMerge.convertPtoRGB(img)[0]
+    layers.add(im)
 im = Image.open('Inputs\Static Maps\Outfile.png')
 im.show()
