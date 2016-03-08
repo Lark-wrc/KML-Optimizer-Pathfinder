@@ -1,4 +1,6 @@
 from urllib import urlretrieve
+from Mercator import GeoLatLng
+
 
 class UrlBuilder(object):
 
@@ -65,34 +67,31 @@ class UrlBuilder(object):
 
     def viewportparam(self, viewports):
         """
-        Author: Bill Clark
-        Version: 1.0
+        Author: Bill Clark, Nick LaPosta
         Appends a viewport parameter. A viewport makes each point it is given visible on the map.
-        :param viewports: Locations in a list format. Each will be made visible.
+        :param viewports: Locations in a list format. Each will be made visible. list of GeoLatLng objects
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
         curr = self.url[:]
         curr += '&&visible='
+
         if type(viewports) is list:
-            for coordin in viewports:
-                curr += coordin + '|'
-        elif type(viewports) is str:
-            curr += (viewports)
+            for coordinate in viewports:
+                curr += repr(coordinate) + '|'
+
         curr = curr[:-1]
         self.url = curr
         return curr
 
-
     def addmarkers(self, styles, locations):
         """
-        Author: Bill Clark
-        Version = 2.0
+        Author: Bill Clark, Nick LaPosta
         Adds the marker list to the url. Each point will have the supplied style settings.
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: size | label | color
                         Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
-        :param locations: Locations in a list format. Each will be added to be marked. list of  coordinates.
+        :param locations: Locations in a list format. Each will be added to be marked. list of GeoLatLng objects.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
@@ -103,10 +102,8 @@ class UrlBuilder(object):
             curr += key + ':' + styles[key] + '|'
 
         if type(locations) is list:
-            for coordin in locations:
-                curr += coordin + '|'
-        elif type(locations) is str:
-            curr += (locations)
+            for coordinate in locations:
+                curr += repr(coordinate) + '|'
 
         curr = curr[:-1]
         self.url = curr
@@ -114,25 +111,25 @@ class UrlBuilder(object):
 
     def addpath(self, styles, locations):
         """
-        Author: Bill Clark
-        Version = 2.0
+        Author: Bill Clark, Nick LaPosta
         Adds the path list to the url. The lines drawn and area filled will have the style setting specified.
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: weight | geodesic | color | fillcolor
                         Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
-        :param locations: Locations in a list format. Each will be added to be marked. list of coordinates.
+        :param locations: Locations in a list format. Each will be added to be marked. list of GeoLatLng objects.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
         curr = self.url[:]
         curr += '&&path='
+
         for key in styles:
             curr += key + ':' + styles[key] + '|'
+
         if type(locations) is list:
-            for coordin in locations:
-                curr += coordin + '|'
-        elif type(locations) is str:
-            curr += (locations)
+            for coordinate in locations:
+                curr += repr(coordinate) + '|'
+
         curr = curr[:-1]
         self.url = curr
         return curr
@@ -150,12 +147,12 @@ class UrlBuilder(object):
 
 
 if __name__ == "__main__":
-    url = UrlBuilder('600x600')
-    #url.centerparams('40.714728,-73.998672', '17')
-    loc = ['40.714728,-73.998372', '40.715728,-73.999672', '40.715728,-73.998372', '40.714728,-73.998372']
-    locmini = {'40.714728,-73.998372', '40.715728,-73.999672'}
+    url = UrlBuilder(600)
+    # url.centerparams('40.714728,-73.998672', '17')
+    loc = [GeoLatLng(40.714728,-73.998372), GeoLatLng(40.715728,-73.999672), GeoLatLng(40.715728,-73.998372), GeoLatLng(40.714728,-73.998372)]
+    locmini = {GeoLatLng(40.714728,-73.998372), GeoLatLng(40.715728,-73.999672)}
     url.addparam('scale', '2')
     url.addmarkers({'color': 'red'}, loc)
-    #url.addpath({'weight':'1', 'fillcolor': 'yellow'}, loc)
+    # url.addpath({'weight':'1', 'fillcolor': 'yellow'}, loc)
     print url.url
     url.download()
