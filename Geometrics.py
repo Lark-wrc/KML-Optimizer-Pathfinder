@@ -4,22 +4,28 @@ class GeometricObject(object):
 
     def __str__(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         Overrides the tostring method of a geometic object.
-        :return: This object as a string.
+
+        `return`: This object as a string.
         """
 
         return str(self.tag)+ ' ' +self.printCoordinates()+ " " + Utils.elementPrint(self.element)
 
     def __init__(self, element, tag, coordinates):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
         This class makes it easier to access the values in the xml element and provides a quick method of
         replacing or removing them.
-        :param element: The element that is being wrapped.
-        :param tag: The tag value, otherwise the type of the element.
-        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
+
+        `element`: The element that is being wrapped.
+
+        `tag`: The tag value, otherwise the type of the element.
+
+        `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.
         """
 
         self.element = element
@@ -34,7 +40,8 @@ class GeometricObject(object):
 
     def applyEdits(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file object.
         """
@@ -44,7 +51,8 @@ class GeometricObject(object):
         """
         Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
         as opposed to lat long as our files provide. This modifies the file in place.
-        :return: the tostring of the coordinate swap. This a side effect, useful for script building.
+
+        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
         """
         for coordin in self.coordinates:
             coordin[0], coordin[1] = coordin[1], coordin[0]
@@ -52,9 +60,11 @@ class GeometricObject(object):
 
     def printCoordinates(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
-        :return: String of the coordinates in the object.
+
+        `return`: String of the coordinates in the object.
         """
         if self.tag == "Point":
             return ','.join([str(x) for x in self.coordinates[0]])
@@ -65,10 +75,12 @@ class GeometricObject(object):
 
     def coordinatesAsListStrings(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
         to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.
-        :return: The coordinates as Strings, placed in a list.
+
+        `return`: The coordinates as Strings, placed in a list.
         """
         if self.tag == "Point":
             return [','.join([str(x) for x in self.coordinates[0]])]
@@ -80,7 +92,8 @@ class GeometricObject(object):
 
 class Point(GeometricObject):
     """
-    Author: Bill Clark
+    `Author`: Bill Clark
+
     See Geometric Object. This class specifies rules for a point xml object.
     """
 
@@ -89,7 +102,8 @@ class Point(GeometricObject):
 
     def applyEdits(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         See geometric object. This calls the super applyEdits, and if the removal flag has been set for this
         point, the point will be removed from the file. This removal is done from the Placemark containing the point.
         """
@@ -103,7 +117,8 @@ class Point(GeometricObject):
 
 class LinearRing(GeometricObject):
     """
-    Author: Bill Clark
+    `Author`: Bill Clark
+
     See Geometric Object. This class specifies rules for a linearring xml object.
     """
 
@@ -112,7 +127,8 @@ class LinearRing(GeometricObject):
 
     def applyEdits(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
         removal. This is done from the placemark above the LinearRing.
         """
@@ -127,7 +143,8 @@ class LinearRing(GeometricObject):
 
 class LineString(GeometricObject):
     """
-    Author: Bill Clark
+    `Author`: Bill Clark
+
     See Geometric Object. This class specifies rules for a LineString xml object.
     """
 
@@ -136,7 +153,8 @@ class LineString(GeometricObject):
 
     def applyEdits(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
         removal. This is done from the placemark above the LineString.
         """
@@ -150,8 +168,8 @@ class LineString(GeometricObject):
 
 class Polygon(GeometricObject):
     """
-    Author: Bill Clark
-    Version = 1.0
+    `Author`: Bill Clark
+
     See Geometric Object. This class specifies rules for a Polygon xml object. For reference,
     It only contains the coordinates of the outer ring. Optional inner rings are ignored as a hollow iceberg
     is still an iceberg.
@@ -162,8 +180,8 @@ class Polygon(GeometricObject):
 
     def applyEdits(self):
         """
-        Author: Bill Clark
-        Version = 2.0
+        `Author`: Bill Clark
+
         See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for
         removal. This is done from the placemark above the Polygon.
         """
@@ -180,7 +198,8 @@ class GeometricFactory(object):
 
     def __init__(self):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         Simple factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
@@ -189,16 +208,17 @@ class GeometricFactory(object):
 
     def createLiteral(self, element, tag, coordinates):
         """
-        Author: Bill Clark
-        Author: Bill Clark
-        Version = 1.0
+        `Author`: Bill Clark
+
         Generates a new Geometric object based on what the extracted tag is. This is important as certain xml objects
         require different functions to properly update changes. The literal means that this method takes the
         values directly. The create method, in comparision, takes the top level element and finds the values itself.
-        :param element: The element that is being wrapped.
-        :param tag: The tag value, otherwise the name of the element.
-        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
-        :return:
+
+        `element`: The element that is being wrapped.
+
+        `tag`: The tag value, otherwise the name of the element.
+
+        `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.
         """
 
         if tag == 'Point':
@@ -212,13 +232,16 @@ class GeometricFactory(object):
 
     def create(self, element):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         Given an element, which is expected to have geometric data, create a geometric object for that data.
         Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.
         This method take the xml tag that starts a set of data, and processes until it has the required information
         to make a new Geometric.
-        :param element: An xml tag that has coordinate data within it.
-        :return: The created Geometric Object.
+
+        `element`: An xml tag that has coordinate data within it.
+
+        `return`: The created Geometric Object.
         """
 
         if element.tag != "Polygon":

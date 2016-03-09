@@ -11,11 +11,13 @@ class State:
 
     def __init__(self, lon, lat):
         """
-        Author: Nick LaPosta
-        Version = 1.0
+        `Author`: Nick LaPosta
+
         A state class that represents the location of a point relative to the region
-        :param lon: The longitude value of the point
-        :param lat: The latitude value of the point
+
+        `lon`: The longitude value of the point
+
+        `lat`: The latitude value of the point
         """
         self.longitude = lon
         self.latitude = lat
@@ -35,10 +37,11 @@ class State:
 
     def get_slope(self):
         """
-        Author: Nick LaPosta
-        Version = 1.0
+        `Author`: Nick LaPosta
+
         Returns the slopes that should be used for the intersection calculation.
-        :return: A tuple of the slopes of the two comparison lines sorted in ascending order
+
+        `return`: A tuple of the slopes of the two comparison lines sorted in ascending order
         """
         points = corner_points[self.lon * 3 + self.lat]
         first_slope = float(self.latitude - points[0][1]) / float(self.longitude - points[0][0])
@@ -50,19 +53,21 @@ class State:
 
     def in_region(self):
         """
-        Author: Nick LaPosta
-        Version = 1.0
-        :return: A boolean value of the state's presence in the region
+        `Author`: Nick LaPosta
+
+        `return`: A boolean value of the state's presence in the region
         """
         return self.lon == 1 and self.lat == 1
 
     def __cmp__(self, other):
         """
-        Author: Nick LaPosta
-        Version = 1.0
+        `Author`: Nick LaPosta
+
         Compares the two states and returns True if a line between them could possibly intersect the region
-        :param other: The second State to compare to this one
-        :return: A boolean value representing possible intersection with region
+
+        `other`: The second State to compare to this one
+
+        `return`: A boolean value representing possible intersection with region
         """
         if self.lon == other.lon:  # Checks all possibilities where the lon states are the same
             if self.lon != 1:      # All states where both points are on the same side of the region
@@ -86,11 +91,13 @@ class State:
 
 def init_state(northwest, southeast):
     """
-    Author: Nick LaPosta
-    Version = 1.0
+    `Author`: Nick LaPosta
+
     Initializes the global fields that is shared by all instances of State
-    :param northwest: Top left coordinate list
-    :param southeast: Bottom right coordinate list
+
+    `northwest`: Top left coordinate list
+
+    `southeast`: Bottom right coordinate list
     """
     global lon_min
     global lon_max

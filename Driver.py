@@ -46,12 +46,14 @@ print "Number of urls: ", len(build.urllist) + 2
 #Merge the Url Images
 
 #merges by downloading everything and merging everything.
+
 images = build.download()
 print "Downloaded."
 images = ImageMerge.convertPtoRGB(*images)
 ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)
 
 #merges by downloading, merging, and repeating till none are left.
+
 # ImageMerge.debug = 0
 #
 # layers = ImageMerge.MergeGenerator('Inputs\Static Maps\Outfile.png', build.downloadBase())

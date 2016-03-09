@@ -1141,22 +1141,28 @@ table {
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Overrides the tostring method of a geometic object.</span>
-<span class="sd">        :return: This object as a string.</span>
+
+<span class="sd">        `return`: This object as a string.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span><span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">Utils</span><span class="o">.</span><span class="n">elementPrint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.</span>
 <span class="sd">        This class makes it easier to access the values in the xml element and provides a quick method of</span>
 <span class="sd">        replacing or removing them.</span>
-<span class="sd">        :param element: The element that is being wrapped.</span>
-<span class="sd">        :param tag: The tag value, otherwise the type of the element.</span>
-<span class="sd">        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
+
+<span class="sd">        `element`: The element that is being wrapped.</span>
+
+<span class="sd">        `tag`: The tag value, otherwise the type of the element.</span>
+
+<span class="sd">        `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">element</span>
@@ -1171,7 +1177,8 @@ table {
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">        made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1181,7 +1188,8 @@ table {
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat</span>
 <span class="sd">        as opposed to lat long as our files provide. This modifies the file in place.</span>
-<span class="sd">        :return: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
+
+<span class="sd">        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
             <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1189,9 +1197,11 @@ table {
 
     <span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</span>
-<span class="sd">        :return: String of the coordinates in the object.</span>
+
+<span class="sd">        `return`: String of the coordinates in the object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -1202,10 +1212,12 @@ table {
 
     <span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted</span>
 <span class="sd">        to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</span>
-<span class="sd">        :return: The coordinates as Strings, placed in a list.</span>
+
+<span class="sd">        `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
@@ -1217,7 +1229,8 @@ table {
 
 <span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a point xml object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1226,7 +1239,8 @@ table {
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits, and if the removal flag has been set for this</span>
 <span class="sd">        point, the point will be removed from the file. This removal is done from the Placemark containing the point.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1240,7 +1254,8 @@ table {
 
 <span class="k">class</span> <span class="nc">LinearRing</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a linearring xml object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1249,7 +1264,8 @@ table {
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">        removal. This is done from the placemark above the LinearRing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1264,7 +1280,8 @@ table {
 
 <span class="k">class</span> <span class="nc">LineString</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a LineString xml object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1273,7 +1290,8 @@ table {
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">        removal. This is done from the placemark above the LineString.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1287,8 +1305,8 @@ table {
 
 <span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a Polygon xml object. For reference,</span>
 <span class="sd">    It only contains the coordinates of the outer ring. Optional inner rings are ignored as a hollow iceberg</span>
 <span class="sd">    is still an iceberg.</span>
@@ -1299,8 +1317,8 @@ table {
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
-<span class="sd">        Version = 2.0</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for</span>
 <span class="sd">        removal. This is done from the placemark above the Polygon.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1317,7 +1335,8 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Simple factory object to produce geometric objects. Can be extended to do input checking and other</span>
 <span class="sd">        such utility functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1326,15 +1345,17 @@ table {
 
     <span class="k">def</span> <span class="nf">createLiteral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Generates a new Geometric object based on what the extracted tag is. This is important as certain xml objects</span>
 <span class="sd">        require different functions to properly update changes. The literal means that this method takes the</span>
 <span class="sd">        values directly. The create method, in comparision, takes the top level element and finds the values itself.</span>
-<span class="sd">        :param element: The element that is being wrapped.</span>
-<span class="sd">        :param tag: The tag value, otherwise the name of the element.</span>
-<span class="sd">        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
-<span class="sd">        :return:</span>
+
+<span class="sd">        `element`: The element that is being wrapped.</span>
+
+<span class="sd">        `tag`: The tag value, otherwise the name of the element.</span>
+
+<span class="sd">        `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;Point&#39;</span><span class="p">:</span>
@@ -1348,12 +1369,16 @@ table {
 
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Given an element, which is expected to have geometric data, create a geometric object for that data.</span>
 <span class="sd">        Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.</span>
 <span class="sd">        This method take the xml tag that starts a set of data, and processes until it has the required information</span>
 <span class="sd">        to make a new Geometric.</span>
-<span class="sd">        :param element: An xml tag that has coordinate data within it.</span>
-<span class="sd">        :return: The created Geometric Object.</span>
+
+<span class="sd">        `element`: An xml tag that has coordinate data within it.</span>
+
+<span class="sd">        `return`: The created Geometric Object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
@@ -1400,7 +1425,8 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Simple factory object to produce geometric objects. Can be extended to do input checking and other</span>
 <span class="sd">        such utility functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1409,15 +1435,17 @@ table {
 
     <span class="k">def</span> <span class="nf">createLiteral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Generates a new Geometric object based on what the extracted tag is. This is important as certain xml objects</span>
 <span class="sd">        require different functions to properly update changes. The literal means that this method takes the</span>
 <span class="sd">        values directly. The create method, in comparision, takes the top level element and finds the values itself.</span>
-<span class="sd">        :param element: The element that is being wrapped.</span>
-<span class="sd">        :param tag: The tag value, otherwise the name of the element.</span>
-<span class="sd">        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
-<span class="sd">        :return:</span>
+
+<span class="sd">        `element`: The element that is being wrapped.</span>
+
+<span class="sd">        `tag`: The tag value, otherwise the name of the element.</span>
+
+<span class="sd">        `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;Point&#39;</span><span class="p">:</span>
@@ -1431,12 +1459,16 @@ table {
 
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Given an element, which is expected to have geometric data, create a geometric object for that data.</span>
 <span class="sd">        Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.</span>
 <span class="sd">        This method take the xml tag that starts a set of data, and processes until it has the required information</span>
 <span class="sd">        to make a new Geometric.</span>
-<span class="sd">        :param element: An xml tag that has coordinate data within it.</span>
-<span class="sd">        :return: The created Geometric Object.</span>
+
+<span class="sd">        `element`: An xml tag that has coordinate data within it.</span>
+
+<span class="sd">        `return`: The created Geometric Object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
@@ -1494,15 +1526,15 @@ table {
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Simple factory object to produce geometric objects. Can be extended to do input checking and other
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Simple factory object to produce geometric objects. Can be extended to do input checking and other
 such utility functions.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricFactory.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricFactory.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Simple factory object to produce geometric objects. Can be extended to do input checking and other</span>
 <span class="sd">    such utility functions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1524,23 +1556,25 @@ such utility functions.</p></div>
 
     
   
-    <div class="desc"><p>Given an element, which is expected to have geometric data, create a geometric object for that data.
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Given an element, which is expected to have geometric data, create a geometric object for that data.
 Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.
 This method take the xml tag that starts a set of data, and processes until it has the required information
-to make a new Geometric.
-:param element: An xml tag that has coordinate data within it.
-:return: The created Geometric Object.</p></div>
+to make a new Geometric.</p>
+<p><code>element</code>: An xml tag that has coordinate data within it.</p>
+<p><code>return</code>: The created Geometric Object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricFactory.create', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricFactory.create" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Given an element, which is expected to have geometric data, create a geometric object for that data.</span>
 <span class="sd">    Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.</span>
 <span class="sd">    This method take the xml tag that starts a set of data, and processes until it has the required information</span>
 <span class="sd">    to make a new Geometric.</span>
-<span class="sd">    :param element: An xml tag that has coordinate data within it.</span>
-<span class="sd">    :return: The created Geometric Object.</span>
+<span class="sd">    `element`: An xml tag that has coordinate data within it.</span>
+<span class="sd">    `return`: The created Geometric Object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)):</span>
@@ -1579,29 +1613,25 @@ to make a new Geometric.
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Version = 1.0
-Generates a new Geometric object based on what the extracted tag is. This is important as certain xml objects
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Generates a new Geometric object based on what the extracted tag is. This is important as certain xml objects
 require different functions to properly update changes. The literal means that this method takes the
-values directly. The create method, in comparision, takes the top level element and finds the values itself.
-:param element: The element that is being wrapped.
-:param tag: The tag value, otherwise the name of the element.
-:param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.
-:return:</p></div>
+values directly. The create method, in comparision, takes the top level element and finds the values itself.</p>
+<p><code>element</code>: The element that is being wrapped.</p>
+<p><code>tag</code>: The tag value, otherwise the name of the element.</p>
+<p><code>coordinates</code>: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricFactory.createLiteral', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricFactory.createLiteral" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">createLiteral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Generates a new Geometric object based on what the extracted tag is. This is important as certain xml objects</span>
 <span class="sd">    require different functions to properly update changes. The literal means that this method takes the</span>
 <span class="sd">    values directly. The create method, in comparision, takes the top level element and finds the values itself.</span>
-<span class="sd">    :param element: The element that is being wrapped.</span>
-<span class="sd">    :param tag: The tag value, otherwise the name of the element.</span>
-<span class="sd">    :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
-<span class="sd">    :return:</span>
+<span class="sd">    `element`: The element that is being wrapped.</span>
+<span class="sd">    `tag`: The tag value, otherwise the name of the element.</span>
+<span class="sd">    `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;Point&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Point</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">)</span>
@@ -1632,22 +1662,28 @@ values directly. The create method, in comparision, takes the top level element 
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Overrides the tostring method of a geometic object.</span>
-<span class="sd">        :return: This object as a string.</span>
+
+<span class="sd">        `return`: This object as a string.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span><span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">Utils</span><span class="o">.</span><span class="n">elementPrint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.</span>
 <span class="sd">        This class makes it easier to access the values in the xml element and provides a quick method of</span>
 <span class="sd">        replacing or removing them.</span>
-<span class="sd">        :param element: The element that is being wrapped.</span>
-<span class="sd">        :param tag: The tag value, otherwise the type of the element.</span>
-<span class="sd">        :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
+
+<span class="sd">        `element`: The element that is being wrapped.</span>
+
+<span class="sd">        `tag`: The tag value, otherwise the type of the element.</span>
+
+<span class="sd">        `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">element</span>
@@ -1662,7 +1698,8 @@ values directly. The create method, in comparision, takes the top level element 
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">        made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1672,7 +1709,8 @@ values directly. The create method, in comparision, takes the top level element 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat</span>
 <span class="sd">        as opposed to lat long as our files provide. This modifies the file in place.</span>
-<span class="sd">        :return: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
+
+<span class="sd">        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
             <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1680,9 +1718,11 @@ values directly. The create method, in comparision, takes the top level element 
 
     <span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</span>
-<span class="sd">        :return: String of the coordinates in the object.</span>
+
+<span class="sd">        `return`: String of the coordinates in the object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -1693,10 +1733,12 @@ values directly. The create method, in comparision, takes the top level element 
 
     <span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted</span>
 <span class="sd">        to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</span>
-<span class="sd">        :return: The coordinates as Strings, placed in a list.</span>
+
+<span class="sd">        `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
@@ -1777,25 +1819,25 @@ values directly. The create method, in comparision, takes the top level element 
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
 This class makes it easier to access the values in the xml element and provides a quick method of
-replacing or removing them.
-:param element: The element that is being wrapped.
-:param tag: The tag value, otherwise the type of the element.
-:param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
+replacing or removing them.</p>
+<p><code>element</code>: The element that is being wrapped.</p>
+<p><code>tag</code>: The tag value, otherwise the type of the element.</p>
+<p><code>coordinates</code>: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.</span>
 <span class="sd">    This class makes it easier to access the values in the xml element and provides a quick method of</span>
 <span class="sd">    replacing or removing them.</span>
-<span class="sd">    :param element: The element that is being wrapped.</span>
-<span class="sd">    :param tag: The tag value, otherwise the type of the element.</span>
-<span class="sd">    :param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
+<span class="sd">    `element`: The element that is being wrapped.</span>
+<span class="sd">    `tag`: The tag value, otherwise the type of the element.</span>
+<span class="sd">    `coordinates`: the coordinate values for the tag, pulled out of the xml for easy of access.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">element</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="n">tag</span>
@@ -1822,15 +1864,15 @@ replacing or removing them.
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-This is the super method for all applyEdit methods. This method and it's children are used to take the changes
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This is the super method for all applyEdit methods. This method and it's children are used to take the changes
 made to the pulled out xml values and apply them back to the file object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.applyEdits', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.applyEdits" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">    made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1851,19 +1893,19 @@ made to the pulled out xml values and apply them back to the file object.</p></d
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
-to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.
-:return: The coordinates as Strings, placed in a list.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
+to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</p>
+<p><code>return</code>: The coordinates as Strings, placed in a list.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.coordinatesAsListStrings', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.coordinatesAsListStrings" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted</span>
 <span class="sd">    to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</span>
-<span class="sd">    :return: The coordinates as Strings, placed in a list.</span>
+<span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
@@ -1887,17 +1929,17 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
-:return: String of the coordinates in the object.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</p>
+<p><code>return</code>: String of the coordinates in the object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.printCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.printCoordinates" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</span>
-<span class="sd">    :return: String of the coordinates in the object.</span>
+<span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -1922,8 +1964,8 @@ Makes a string out of the coordinates contained in the object. Multiple coordina
     
   
     <div class="desc"><p>Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-as opposed to lat long as our files provide. This modifies the file in place.
-:return: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
+as opposed to lat long as our files provide. This modifies the file in place.</p>
+<p><code>return</code>: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.switchCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.GeometricObject.switchCoordinates" class="source">
@@ -1931,7 +1973,7 @@ as opposed to lat long as our files provide. This modifies the file in place.
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat</span>
 <span class="sd">    as opposed to lat long as our files provide. This modifies the file in place.</span>
-<span class="sd">    :return: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
+<span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
         <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1950,14 +1992,15 @@ as opposed to lat long as our files provide. This modifies the file in place.
       <p id="KML-Optimizer-Pathfinder.Geometrics.LineString" class="name">class <span class="ident">LineString</span></p>
       
   
-    <div class="desc"><p>Author: Bill Clark
-See Geometric Object. This class specifies rules for a LineString xml object.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See Geometric Object. This class specifies rules for a LineString xml object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LineString', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LineString" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LineString</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a LineString xml object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1966,7 +2009,8 @@ See Geometric Object. This class specifies rules for a LineString xml object.</p
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">        removal. This is done from the placemark above the LineString.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2075,13 +2119,13 @@ See Geometric Object. This class specifies rules for a LineString xml object.</p
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
 This class makes it easier to access the values in the xml element and provides a quick method of
-replacing or removing them.
-:param element: The element that is being wrapped.
-:param tag: The tag value, otherwise the type of the element.
-:param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
+replacing or removing them.</p>
+<p><code>element</code>: The element that is being wrapped.</p>
+<p><code>tag</code>: The tag value, otherwise the type of the element.</p>
+<p><code>coordinates</code>: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LineString.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LineString.__init__" class="source">
@@ -2107,15 +2151,15 @@ replacing or removing them.
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
 removal. This is done from the placemark above the LineString.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LineString.applyEdits', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LineString.applyEdits" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">    removal. This is done from the placemark above the LineString.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2145,19 +2189,19 @@ removal. This is done from the placemark above the LineString.</p></div>
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
-to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.
-:return: The coordinates as Strings, placed in a list.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
+to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</p>
+<p><code>return</code>: The coordinates as Strings, placed in a list.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LineString.coordinatesAsListStrings', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LineString.coordinatesAsListStrings" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted</span>
 <span class="sd">    to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</span>
-<span class="sd">    :return: The coordinates as Strings, placed in a list.</span>
+<span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
@@ -2185,17 +2229,17 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
-:return: String of the coordinates in the object.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</p>
+<p><code>return</code>: String of the coordinates in the object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LineString.printCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LineString.printCoordinates" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</span>
-<span class="sd">    :return: String of the coordinates in the object.</span>
+<span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -2224,8 +2268,8 @@ Makes a string out of the coordinates contained in the object. Multiple coordina
     
   
     <div class="desc inherited"><p>Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-as opposed to lat long as our files provide. This modifies the file in place.
-:return: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
+as opposed to lat long as our files provide. This modifies the file in place.</p>
+<p><code>return</code>: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LineString.switchCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LineString.switchCoordinates" class="source">
@@ -2233,7 +2277,7 @@ as opposed to lat long as our files provide. This modifies the file in place.
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat</span>
 <span class="sd">    as opposed to lat long as our files provide. This modifies the file in place.</span>
-<span class="sd">    :return: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
+<span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
         <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -2252,14 +2296,15 @@ as opposed to lat long as our files provide. This modifies the file in place.
       <p id="KML-Optimizer-Pathfinder.Geometrics.LinearRing" class="name">class <span class="ident">LinearRing</span></p>
       
   
-    <div class="desc"><p>Author: Bill Clark
-See Geometric Object. This class specifies rules for a linearring xml object.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See Geometric Object. This class specifies rules for a linearring xml object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LinearRing', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LinearRing" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LinearRing</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a linearring xml object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2268,7 +2313,8 @@ See Geometric Object. This class specifies rules for a linearring xml object.</p
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">        removal. This is done from the placemark above the LinearRing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2377,13 +2423,13 @@ See Geometric Object. This class specifies rules for a linearring xml object.</p
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
 This class makes it easier to access the values in the xml element and provides a quick method of
-replacing or removing them.
-:param element: The element that is being wrapped.
-:param tag: The tag value, otherwise the type of the element.
-:param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
+replacing or removing them.</p>
+<p><code>element</code>: The element that is being wrapped.</p>
+<p><code>tag</code>: The tag value, otherwise the type of the element.</p>
+<p><code>coordinates</code>: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.__init__" class="source">
@@ -2409,15 +2455,15 @@ replacing or removing them.
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
 removal. This is done from the placemark above the LinearRing.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.applyEdits', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.applyEdits" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">    removal. This is done from the placemark above the LinearRing.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2447,19 +2493,19 @@ removal. This is done from the placemark above the LinearRing.</p></div>
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
-to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.
-:return: The coordinates as Strings, placed in a list.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
+to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</p>
+<p><code>return</code>: The coordinates as Strings, placed in a list.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.coordinatesAsListStrings', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.coordinatesAsListStrings" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted</span>
 <span class="sd">    to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</span>
-<span class="sd">    :return: The coordinates as Strings, placed in a list.</span>
+<span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
@@ -2487,17 +2533,17 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
-:return: String of the coordinates in the object.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</p>
+<p><code>return</code>: String of the coordinates in the object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.printCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.printCoordinates" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</span>
-<span class="sd">    :return: String of the coordinates in the object.</span>
+<span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -2526,8 +2572,8 @@ Makes a string out of the coordinates contained in the object. Multiple coordina
     
   
     <div class="desc inherited"><p>Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-as opposed to lat long as our files provide. This modifies the file in place.
-:return: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
+as opposed to lat long as our files provide. This modifies the file in place.</p>
+<p><code>return</code>: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.switchCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.LinearRing.switchCoordinates" class="source">
@@ -2535,7 +2581,7 @@ as opposed to lat long as our files provide. This modifies the file in place.
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat</span>
 <span class="sd">    as opposed to lat long as our files provide. This modifies the file in place.</span>
-<span class="sd">    :return: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
+<span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
         <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -2554,14 +2600,15 @@ as opposed to lat long as our files provide. This modifies the file in place.
       <p id="KML-Optimizer-Pathfinder.Geometrics.Point" class="name">class <span class="ident">Point</span></p>
       
   
-    <div class="desc"><p>Author: Bill Clark
-See Geometric Object. This class specifies rules for a point xml object.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See Geometric Object. This class specifies rules for a point xml object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Point', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Point" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a point xml object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2570,7 +2617,8 @@ See Geometric Object. This class specifies rules for a point xml object.</p></di
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits, and if the removal flag has been set for this</span>
 <span class="sd">        point, the point will be removed from the file. This removal is done from the Placemark containing the point.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2678,13 +2726,13 @@ See Geometric Object. This class specifies rules for a point xml object.</p></di
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
 This class makes it easier to access the values in the xml element and provides a quick method of
-replacing or removing them.
-:param element: The element that is being wrapped.
-:param tag: The tag value, otherwise the type of the element.
-:param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
+replacing or removing them.</p>
+<p><code>element</code>: The element that is being wrapped.</p>
+<p><code>tag</code>: The tag value, otherwise the type of the element.</p>
+<p><code>coordinates</code>: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Point.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Point.__init__" class="source">
@@ -2710,15 +2758,15 @@ replacing or removing them.
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-See geometric object. This calls the super applyEdits, and if the removal flag has been set for this
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See geometric object. This calls the super applyEdits, and if the removal flag has been set for this
 point, the point will be removed from the file. This removal is done from the Placemark containing the point.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Point.applyEdits', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Point.applyEdits" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    See geometric object. This calls the super applyEdits, and if the removal flag has been set for this</span>
 <span class="sd">    point, the point will be removed from the file. This removal is done from the Placemark containing the point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2747,19 +2795,19 @@ point, the point will be removed from the file. This removal is done from the Pl
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
-to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.
-:return: The coordinates as Strings, placed in a list.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
+to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</p>
+<p><code>return</code>: The coordinates as Strings, placed in a list.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Point.coordinatesAsListStrings', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Point.coordinatesAsListStrings" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted</span>
 <span class="sd">    to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</span>
-<span class="sd">    :return: The coordinates as Strings, placed in a list.</span>
+<span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
@@ -2787,17 +2835,17 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
-:return: String of the coordinates in the object.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</p>
+<p><code>return</code>: String of the coordinates in the object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Point.printCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Point.printCoordinates" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</span>
-<span class="sd">    :return: String of the coordinates in the object.</span>
+<span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -2826,8 +2874,8 @@ Makes a string out of the coordinates contained in the object. Multiple coordina
     
   
     <div class="desc inherited"><p>Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-as opposed to lat long as our files provide. This modifies the file in place.
-:return: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
+as opposed to lat long as our files provide. This modifies the file in place.</p>
+<p><code>return</code>: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Point.switchCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Point.switchCoordinates" class="source">
@@ -2835,7 +2883,7 @@ as opposed to lat long as our files provide. This modifies the file in place.
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat</span>
 <span class="sd">    as opposed to lat long as our files provide. This modifies the file in place.</span>
-<span class="sd">    :return: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
+<span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
         <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -2854,9 +2902,8 @@ as opposed to lat long as our files provide. This modifies the file in place.
       <p id="KML-Optimizer-Pathfinder.Geometrics.Polygon" class="name">class <span class="ident">Polygon</span></p>
       
   
-    <div class="desc"><p>Author: Bill Clark
-Version = 1.0
-See Geometric Object. This class specifies rules for a Polygon xml object. For reference,
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See Geometric Object. This class specifies rules for a Polygon xml object. For reference,
 It only contains the coordinates of the outer ring. Optional inner rings are ignored as a hollow iceberg
 is still an iceberg.</p></div>
   <div class="source_cont">
@@ -2864,8 +2911,8 @@ is still an iceberg.</p></div>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Polygon" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    See Geometric Object. This class specifies rules for a Polygon xml object. For reference,</span>
 <span class="sd">    It only contains the coordinates of the outer ring. Optional inner rings are ignored as a hollow iceberg</span>
 <span class="sd">    is still an iceberg.</span>
@@ -2876,8 +2923,8 @@ is still an iceberg.</p></div>
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
-<span class="sd">        Version = 2.0</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for</span>
 <span class="sd">        removal. This is done from the placemark above the Polygon.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2986,13 +3033,13 @@ is still an iceberg.</p></div>
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Creates a geometic object, which is a wrapper for an xml element that contains geometric coordinates.
 This class makes it easier to access the values in the xml element and provides a quick method of
-replacing or removing them.
-:param element: The element that is being wrapped.
-:param tag: The tag value, otherwise the type of the element.
-:param coordinates: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
+replacing or removing them.</p>
+<p><code>element</code>: The element that is being wrapped.</p>
+<p><code>tag</code>: The tag value, otherwise the type of the element.</p>
+<p><code>coordinates</code>: the coordinate values for the tag, pulled out of the xml for easy of access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Polygon.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Polygon.__init__" class="source">
@@ -3018,17 +3065,15 @@ replacing or removing them.
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Version = 2.0
-See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for
 removal. This is done from the placemark above the Polygon.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Polygon.applyEdits', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Polygon.applyEdits" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
-<span class="sd">    Version = 2.0</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for</span>
 <span class="sd">    removal. This is done from the placemark above the Polygon.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3058,19 +3103,19 @@ removal. This is done from the placemark above the Polygon.</p></div>
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
-to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.
-:return: The coordinates as Strings, placed in a list.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted
+to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</p>
+<p><code>return</code>: The coordinates as Strings, placed in a list.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Polygon.coordinatesAsListStrings', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Polygon.coordinatesAsListStrings" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Takes the coordinates contained in this object and returns them in a list, with each coordinate being converted</span>
 <span class="sd">    to a String. This method is used to provide to urlbuilder, as seperated points are easier to process.</span>
-<span class="sd">    :return: The coordinates as Strings, placed in a list.</span>
+<span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
@@ -3098,17 +3143,17 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 
     
   
-    <div class="desc inherited"><p>Author: Bill Clark
-Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
-:return: String of the coordinates in the object.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Bill Clark</p>
+<p>Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</p>
+<p><code>return</code>: String of the coordinates in the object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Polygon.printCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Polygon.printCoordinates" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.</span>
-<span class="sd">    :return: String of the coordinates in the object.</span>
+<span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -3137,8 +3182,8 @@ Makes a string out of the coordinates contained in the object. Multiple coordina
     
   
     <div class="desc inherited"><p>Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-as opposed to lat long as our files provide. This modifies the file in place.
-:return: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
+as opposed to lat long as our files provide. This modifies the file in place.</p>
+<p><code>return</code>: the tostring of the coordinate swap. This a side effect, useful for script building.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.Geometrics.Polygon.switchCoordinates', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.Geometrics.Polygon.switchCoordinates" class="source">
@@ -3146,7 +3191,7 @@ as opposed to lat long as our files provide. This modifies the file in place.
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat</span>
 <span class="sd">    as opposed to lat long as our files provide. This modifies the file in place.</span>
-<span class="sd">    :return: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
+<span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
         <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
