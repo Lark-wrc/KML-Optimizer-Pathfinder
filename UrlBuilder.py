@@ -71,6 +71,7 @@ class UrlBuilder(object):
         curr = ""
         curr += '&&center='+center
         curr += '&&zoom='+zoom
+        curr += '&&key=AIzaSyAdYQpSjMl5wE2GNIknG63nZpOcadeNhDc'
         self.urlbase += curr
         self.url = self.urlbase
         return self.url
@@ -206,14 +207,13 @@ class UrlBuilder(object):
     def downloadGenerator(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
         """
         Author: Bill Clark
-        Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
-        the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
-        because mulitple urls may be downloaded. This is a python generator, it can be treated as an iterable
-        object and it will yield a url in every iteration, until no more exist. The generator does not return the
-        base url, as the base url is needed in every iteration.
+        This downloads urls in the same manner as the download method. However, this functions as a python
+        generator. In simple terms, the method can be iterated over like a collection. Each iteration will return
+        the file path of the download from the url. This can be used to download urls and run methods inbetween each.
+        Invented in order to increase the space between downloads to prevent google from blocking us.
         :param path: a file path to save the generated image to.
         :param prefix: The prefix to the count in the file name. Defaults to image.
-        :return: A list of the file locations for the downloaded files.
+        :return a url's saved location.
         """
 
         count = 1
@@ -225,8 +225,16 @@ class UrlBuilder(object):
         yield urlretrieve(self.url, path.format(prefix, repr(count)))[0]
 
     def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
-        return urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+        """
+        Author: Bill Clark
+        Downloads only the base url. The generator method does not download that url (better for automation), so this
+        method was a required addition.
+        :param path: a file path to save the generated image to.
+        :param prefix: The prefix to the count in the file name. Defaults to image.
+        :return the base url's saved location.
+        """
 
+        return urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
 
     def countUrl(self, url):
         """
@@ -237,6 +245,7 @@ class UrlBuilder(object):
         :param url: The url to be counted.
         :return: returns the number of characters in the url.
         """
+
         ret = 0
         for character in url:
             if character == "|": ret += 3

@@ -5,6 +5,7 @@ a variety of modules, preventing code repetition.
 """
 import math
 from lxml import etree
+import time
 
 debug = 0
 
@@ -22,3 +23,10 @@ def elementPrint(element, bool=0):
         return etree.tostring(element, pretty_print=False)
     else:
         return etree.tostring(element, pretty_print=True)
+
+def timeMethod(method, *parameters):
+    start = time.time()
+    ret = method(*parameters)
+    length = time.time() - start
+    print method, "took", length, "seconds to complete. "
+    return ret

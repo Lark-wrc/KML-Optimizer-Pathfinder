@@ -190,6 +190,7 @@ class GeometricFactory(object):
     def createLiteral(self, element, tag, coordinates):
         """
         Author: Bill Clark
+        Author: Bill Clark
         Version = 1.0
         Generates a new Geometric object based on what the extracted tag is. This is important as certain xml objects
         require different functions to properly update changes. The literal means that this method takes the
@@ -211,6 +212,7 @@ class GeometricFactory(object):
 
     def create(self, element):
         """
+        Author: Bill Clark
         Given an element, which is expected to have geometric data, create a geometric object for that data.
         Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.
         This method take the xml tag that starts a set of data, and processes until it has the required information

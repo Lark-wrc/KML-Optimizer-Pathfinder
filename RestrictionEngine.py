@@ -16,12 +16,14 @@ class RestrictionFactory(object):
 
     def newCircleRadiusRestriction(self, center, distance):
         """
+        Author: Bill Clark
         See CircleRadiusRestriction, this method returns a new instance of that object.
         """
         return CircleRadiusRestriction(center, distance, self.metric)
 
     def newSquareRestriction(self, center, distance):
         """
+        Author: Bill Clark
         See SquareRestriction, this method returns a new instance of that object.
         """
         return SquareRestriction(center, distance, self.metric)
@@ -147,7 +149,6 @@ class SquareRestriction(Restriction):
     def intersect(self, start, end):
         """
         Author: Nick LaPosta
-        Version = 1.0
         A function for determining the possible intersection of the segment between two points and the region
         Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called
         :param start: List containing longitude and latitude of start point of segment
@@ -190,7 +191,6 @@ class CircleRadiusRestriction(Restriction):
     def restrict(self, geometrics):
         """
         Author: Bill Clark
-        Version = 1.3
         Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.
         :param geometrics: A list of geometic objects.
         """
