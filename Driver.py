@@ -8,14 +8,15 @@ import time
 argzero = 'Inputs\KML Files\\advancedexample1.kml'
 argtwo = 'Inputs\KML Files\\advancedexample2.kml'
 argone = 'Inputs\KML Files\us_states.kml'
+argarctic = 'Inputs\KML FIles\\arctic lines jan 31.kml'
 
 #Create the KmlFasade
 
-fasade = KmlFasade(argone)
+fasade = KmlFasade(argarctic)
 fasade.placemarkToGeometrics()
 f = RestrictionFactory()
 #f = f.newSquareRestriction([-103.528629, 41.260352], 2000)
-f = f.newSquareRestriction([-73.871826, 39.833851], 4000)
+f = f.newSquareRestriction([-64.871826, 66.833851], 4000)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
@@ -24,7 +25,7 @@ fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
 
 build = UrlBuilder('600x600')
 #build.viewportparam(markerlist)
-build.centerparams('39.833851,-90.871826', '4')
+build.centerparams('-64.871826,66.833851', '4')
 
 markerlist = []
 for element in fasade.geometrics:

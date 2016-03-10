@@ -89,7 +89,6 @@ class GeometricObject(object):
             ret.append(','.join([str(x)for x in y]))
         return ret
 
-
 class Point(GeometricObject):
     """
     `Author`: Bill Clark
