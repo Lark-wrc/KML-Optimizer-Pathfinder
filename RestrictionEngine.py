@@ -9,7 +9,8 @@ class RestrictionFactory(object):
     def __init__(self, metric=0):
         """
         Author: Bill Clark
-        Version = 1.0
+        This method generates a new restriction. The factory makes sure that every restriction created works off
+        the same measurement scale, metric or imperial.
         """
         self.metric = metric
 
@@ -32,17 +33,16 @@ class Restriction(object):
     def __init__(self, metric):
         """
         Author: Bill Clark
-        Version = 1.0
         An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
         methods can be built into the restriction engines.
         """
         self.metric = metric
+        self.debug = 0
         pass
 
     def restrict(self, geometrics):
         """
         Author: Bill Clark
-        Version = 1.0
         The primary method for a restriction. The only method that *should* be called from outside the class.
         Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.
         :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.
@@ -52,7 +52,6 @@ class Restriction(object):
     def zoom(self, width):
         """
         Author: Nick LaPosta
-        Version = 1.0
         Determines the proper zoom level and filter range for the given frame size
         :param width: The desired size in miles for the view port.
         :return: A tuple of the zoom level and the filter range respectively
@@ -64,11 +63,9 @@ class Restriction(object):
     def haversine(self, start, end):
         """
         Author: Nick LaPosta, Bill Clark
-        Version = 1.0
         Uses the mathematical function of the same name to find the distance between two long lat coordinates.
-        :param start: The first coordinate, a long lat value pair in a list.
-        :param end: The second coordinate, a long lat value pair in a list.
-        :param metric: A boolean value to use the metric system or imperial system.
+        :param start: The first coordinate, a lat long value pair in a list.
+        :param end: The second coordinate, a lat long value pair in a list.
         :return: The distance in the given metric system.
         """
 
@@ -95,7 +92,6 @@ class SquareRestriction(Restriction):
     def __init__(self, center, distance, metric=0):
         """
         Author: Bill Clark
-        Version = 1.1
         A restriction that flags all points that are not within distance x from a given center point to be removed.
         This is done in a square pattern by using two points, the NW corner and the SW corner. 
         :param center: the center point to draw distances from.
@@ -176,13 +172,11 @@ class SquareRestriction(Restriction):
             return False
 
 
-
 class CircleRadiusRestriction(Restriction):
 
     def __init__(self, center, distance, metric=0):
         """
         Author: Bill Clark
-        Version = 1.1
         A restriction that flags all points that are not with in distance x from a given center point to be removed.
         :param center: the center point to draw distances from.
         :param distance: the distance in the given metric that a point must be within from center.
