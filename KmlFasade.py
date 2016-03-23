@@ -1,4 +1,4 @@
-from lxml import etree
+from lxml import etree, objectify
 from RestrictionEngine import SquareRestriction
 from Geometrics import *
 from pykml.factory import KML_ElementMaker as KML
