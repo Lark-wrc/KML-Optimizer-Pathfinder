@@ -1055,6 +1055,20 @@ table {
 
     </li>
 
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator">MergeGenerator</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.add">add</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
 
     </ul>
   </div>
@@ -1079,26 +1093,31 @@ table {
 
 <span class="k">def</span> <span class="nf">mergeModeRGB</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="o">*</span><span class="n">images</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This merges a list of images, with layers of paths and markers, on top of a plan base image. It will then</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
+<span class="sd">    This merges a list of images, with layers of paths and markers, on top of a plain base image. It will then</span>
 <span class="sd">    output the merged image to the outfile provided. This method only works with images encoded in RGB color,</span>
 <span class="sd">    which is expected of it&#39;s inputs. The method works by creating a new file for the changes, and opening the base</span>
 <span class="sd">    and a layer. Each pixel in the base is compared with the layer, if they&#39;re different enough the layer pixel is</span>
 <span class="sd">    placed over the original base image pixel that was contained in the new file. This is done for every pixel and</span>
 <span class="sd">    every layer. Debug information contains the ratio of different to not different pixels in percent form, as well</span>
 <span class="sd">    as a display of the output after each layer merge.</span>
-<span class="sd">    :param outfile: The file address to save the output file to.</span>
-<span class="sd">    :param base: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why</span>
+
+<span class="sd">    `outfile`: The file address to save the output file to.</span>
+
+<span class="sd">    `base`: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why</span>
 <span class="sd">                    the center and zoom are REQUIRED. Those parameters being the same will line up the unchanged pixels</span>
 <span class="sd">                    correctly so that only the edited pixels pick up as different.</span>
-<span class="sd">    :param images: Any number of image urls that are layers of the base image. Same center and zoom are a must.</span>
+
+<span class="sd">    `images`: Any number of image urls that are layers of the base image. Same center and zoom are a must.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
     <span class="n">baseimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
-    <span class="n">newimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 
     <span class="n">basedata</span> <span class="o">=</span> <span class="n">baseimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-    <span class="n">newdata</span> <span class="o">=</span> <span class="n">newimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">layeringdata</span> <span class="o">=</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">top</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
         <span class="n">topimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
@@ -1112,34 +1131,38 @@ table {
                 <span class="n">tpix</span> <span class="o">=</span> <span class="n">topdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
                 <span class="c1">#print x, y, bpix, tpix, baseimage.mode, baseimage.format</span>
                 <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span><span class="p">:</span>
-                    <span class="n">newdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tpix</span>
+                    <span class="n">layeringdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tpix</span>
                     <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;Different Pixels:&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">counter</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s2">&quot; Same Pixels:&quot;</span><span class="p">,</span> \
             <span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">(((</span><span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">)</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
-        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">newimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
     <span class="k">print</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">newimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">blkDiff</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">outfile</span><span class="o">=</span><span class="s2">&quot;DifferenceFile.png&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    This method will change the color of any pixel that is different between a base image and another provided</span>
 <span class="sd">    image. This works in the same way as mergeRGB, which does mean the inputs need to be RGB format. You can use this</span>
 <span class="sd">    to visually see the detected differences between two images.</span>
-<span class="sd">    :param base: The first image to compare. It does have to be at the same center and zoom as the below image.</span>
-<span class="sd">    :param images: the image to compare to base.</span>
-<span class="sd">    :param outfile: The file to write the color marked image to.</span>
-<span class="sd">    :return:</span>
+
+<span class="sd">    `base`: The first image to compare. It does have to be at the same center and zoom as the below image.</span>
+
+<span class="sd">    `images`: the image to compare to base.</span>
+
+<span class="sd">    `outfile`: The file to write the color marked image to.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
     <span class="n">baseimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
-    <span class="n">newimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 
     <span class="n">basedata</span> <span class="o">=</span> <span class="n">baseimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
-    <span class="n">newdata</span> <span class="o">=</span> <span class="n">newimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">layeringdata</span> <span class="o">=</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
     <span class="n">topimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
     <span class="n">topdata</span> <span class="o">=</span> <span class="n">topimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
@@ -1150,23 +1173,26 @@ table {
             <span class="n">bpix</span> <span class="o">=</span> <span class="n">basedata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
             <span class="n">tpix</span> <span class="o">=</span> <span class="n">topdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span><span class="p">:</span>
-                <span class="n">newdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span>
+                <span class="n">layeringdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span>
                 <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;Different Pixels:&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">counter</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s2">&quot; Same Pixels:&quot;</span><span class="p">,</span> \
         <span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">(((</span><span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">)</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
-    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">newimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">newimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">convertPtoRGB</span><span class="p">(</span><span class="o">*</span><span class="n">images</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    This method takes any number of images and converts the from P color mode to RGB mode. RGB is required by the</span>
 <span class="sd">    merge methods above. The files are saved to a different file, same prefix, but .con being placed at the end.</span>
-<span class="sd">    :param images: The images that need to be converted. They are expected to be in P color mode, though other modes</span>
+
+<span class="sd">    `images`: The images that need to be converted. They are expected to be in P color mode, though other modes</span>
 <span class="sd">            may convert cleanly.</span>
-<span class="sd">    :return: A list of the new file locations, since the file names have been changed.</span>
+<span class="sd">    `return`: A list of the new file locations, since the file names have been changed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
@@ -1175,6 +1201,71 @@ table {
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;.con&#39;</span><span class="o">+</span><span class="n">image</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:])</span>
         <span class="n">im</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">image</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;.con&#39;</span><span class="o">+</span><span class="n">image</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:])</span>
     <span class="k">return</span> <span class="n">ret</span>
+
+<span class="k">class</span> <span class="nc">MergeGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">base</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
+<span class="sd">        This class is basically the same method as mergemodeRGB. The add method is almost identical. The reason</span>
+<span class="sd">        for this class is that it allows for urls to be added incrementally with ease. Given an instance where you</span>
+<span class="sd">        want to merge urls to the same outfile based off the same base image, but don&#39;t have the urls all at once,</span>
+<span class="sd">        this method allows for any number of add calls to merge images to the output. This comes with over head,</span>
+<span class="sd">        saving the image to the outfile location after each individual merge, but certain situations really need this</span>
+<span class="sd">        kind of functionality.</span>
+
+<span class="sd">        `outfile`: The file to save to.</span>
+
+<span class="sd">        `base`: The base image to compare to for each merge. Each image merged must be the same center and zoom</span>
+<span class="sd">                        as this image, or else.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">base</span> <span class="o">=</span> <span class="n">convertPtoRGB</span><span class="p">(</span><span class="n">base</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">baseimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">outfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
+<span class="sd">        Given a new image, with layers of paths and markers, on top of a plain base image. It will then</span>
+<span class="sd">        output the merged image to the outfile provided. This method only works with images encoded in RGB color,</span>
+<span class="sd">        which is expected of it&#39;s inputs. The method works by opening the tracked changes file, and opening the base</span>
+<span class="sd">        and the new image. Each pixel in the base is compared with the new image, if they&#39;re different enough the new</span>
+<span class="sd">        pixel is placed over the original base image pixel that was contained in the tracked file. This is done for</span>
+<span class="sd">        every pixel. Debug information contains the ratio of different to not different pixels in percent form, as well</span>
+<span class="sd">        as a display of the output after each layer merge.</span>
+
+<span class="sd">        `new`: A image with the same center and zoom as the class baseimage, which has lines or markers on it. It</span>
+<span class="sd">                    will be merged with the tracked outfile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">trackedimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="n">layeringimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+    
+        <span class="n">basedata</span> <span class="o">=</span> <span class="n">baseimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">trackeddata</span> <span class="o">=</span> <span class="n">trackedimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">layeringdata</span> <span class="o">=</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">baseimage</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">baseimage</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">bpix</span> <span class="o">=</span> <span class="n">basedata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
+                <span class="n">tpix</span> <span class="o">=</span> <span class="n">layeringdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span><span class="p">:</span>
+                    <span class="n">trackeddata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tpix</span>
+                    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;Different Pixels:&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">counter</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s2">&quot; Same Pixels:&quot;</span><span class="p">,</span> \
+            <span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">(((</span><span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">)</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">trackedimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    
+        <span class="n">trackedimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">os</span>
@@ -1221,33 +1312,37 @@ table {
 
     
   
-    <div class="desc"><p>This method will change the color of any pixel that is different between a base image and another provided
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method will change the color of any pixel that is different between a base image and another provided
 image. This works in the same way as mergeRGB, which does mean the inputs need to be RGB format. You can use this
-to visually see the detected differences between two images.
-:param base: The first image to compare. It does have to be at the same center and zoom as the below image.
-:param images: the image to compare to base.
-:param outfile: The file to write the color marked image to.
-:return:</p></div>
+to visually see the detected differences between two images.</p>
+<p><code>base</code>: The first image to compare. It does have to be at the same center and zoom as the below image.</p>
+<p><code>images</code>: the image to compare to base.</p>
+<p><code>outfile</code>: The file to write the color marked image to.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.ImageMerge.blkDiff', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.ImageMerge.blkDiff" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">blkDiff</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">outfile</span><span class="o">=</span><span class="s2">&quot;DifferenceFile.png&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    This method will change the color of any pixel that is different between a base image and another provided</span>
 <span class="sd">    image. This works in the same way as mergeRGB, which does mean the inputs need to be RGB format. You can use this</span>
 <span class="sd">    to visually see the detected differences between two images.</span>
-<span class="sd">    :param base: The first image to compare. It does have to be at the same center and zoom as the below image.</span>
-<span class="sd">    :param images: the image to compare to base.</span>
-<span class="sd">    :param outfile: The file to write the color marked image to.</span>
-<span class="sd">    :return:</span>
+
+<span class="sd">    `base`: The first image to compare. It does have to be at the same center and zoom as the below image.</span>
+
+<span class="sd">    `images`: the image to compare to base.</span>
+
+<span class="sd">    `outfile`: The file to write the color marked image to.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
     <span class="n">baseimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
-    <span class="n">newimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 
     <span class="n">basedata</span> <span class="o">=</span> <span class="n">baseimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
-    <span class="n">newdata</span> <span class="o">=</span> <span class="n">newimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">layeringdata</span> <span class="o">=</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
     <span class="n">topimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
     <span class="n">topdata</span> <span class="o">=</span> <span class="n">topimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
@@ -1258,15 +1353,15 @@ to visually see the detected differences between two images.
             <span class="n">bpix</span> <span class="o">=</span> <span class="n">basedata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
             <span class="n">tpix</span> <span class="o">=</span> <span class="n">topdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span><span class="p">:</span>
-                <span class="n">newdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span>
+                <span class="n">layeringdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span>
                 <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;Different Pixels:&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">counter</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s2">&quot; Same Pixels:&quot;</span><span class="p">,</span> \
         <span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">(((</span><span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">)</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
-    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">newimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">newimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1283,21 +1378,25 @@ to visually see the detected differences between two images.
 
     
   
-    <div class="desc"><p>This method takes any number of images and converts the from P color mode to RGB mode. RGB is required by the
-merge methods above. The files are saved to a different file, same prefix, but .con being placed at the end.
-:param images: The images that need to be converted. They are expected to be in P color mode, though other modes
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method takes any number of images and converts the from P color mode to RGB mode. RGB is required by the
+merge methods above. The files are saved to a different file, same prefix, but .con being placed at the end.</p>
+<p><code>images</code>: The images that need to be converted. They are expected to be in P color mode, though other modes
         may convert cleanly.
-:return: A list of the new file locations, since the file names have been changed.</p></div>
+<code>return</code>: A list of the new file locations, since the file names have been changed.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.ImageMerge.convertPtoRGB', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.ImageMerge.convertPtoRGB" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">convertPtoRGB</span><span class="p">(</span><span class="o">*</span><span class="n">images</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
 <span class="sd">    This method takes any number of images and converts the from P color mode to RGB mode. RGB is required by the</span>
 <span class="sd">    merge methods above. The files are saved to a different file, same prefix, but .con being placed at the end.</span>
-<span class="sd">    :param images: The images that need to be converted. They are expected to be in P color mode, though other modes</span>
+
+<span class="sd">    `images`: The images that need to be converted. They are expected to be in P color mode, though other modes</span>
 <span class="sd">            may convert cleanly.</span>
-<span class="sd">    :return: A list of the new file locations, since the file names have been changed.</span>
+<span class="sd">    `return`: A list of the new file locations, since the file names have been changed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
@@ -1322,43 +1421,49 @@ merge methods above. The files are saved to a different file, same prefix, but .
 
     
   
-    <div class="desc"><p>This merges a list of images, with layers of paths and markers, on top of a plan base image. It will then
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This merges a list of images, with layers of paths and markers, on top of a plain base image. It will then
 output the merged image to the outfile provided. This method only works with images encoded in RGB color,
 which is expected of it's inputs. The method works by creating a new file for the changes, and opening the base
 and a layer. Each pixel in the base is compared with the layer, if they're different enough the layer pixel is
 placed over the original base image pixel that was contained in the new file. This is done for every pixel and
 every layer. Debug information contains the ratio of different to not different pixels in percent form, as well
-as a display of the output after each layer merge.
-:param outfile: The file address to save the output file to.
-:param base: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why
+as a display of the output after each layer merge.</p>
+<p><code>outfile</code>: The file address to save the output file to.</p>
+<p><code>base</code>: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why
                 the center and zoom are REQUIRED. Those parameters being the same will line up the unchanged pixels
-                correctly so that only the edited pixels pick up as different.
-:param images: Any number of image urls that are layers of the base image. Same center and zoom are a must.</p></div>
+                correctly so that only the edited pixels pick up as different.</p>
+<p><code>images</code>: Any number of image urls that are layers of the base image. Same center and zoom are a must.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.ImageMerge.mergeModeRGB', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.ImageMerge.mergeModeRGB" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">mergeModeRGB</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="o">*</span><span class="n">images</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This merges a list of images, with layers of paths and markers, on top of a plan base image. It will then</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
+<span class="sd">    This merges a list of images, with layers of paths and markers, on top of a plain base image. It will then</span>
 <span class="sd">    output the merged image to the outfile provided. This method only works with images encoded in RGB color,</span>
 <span class="sd">    which is expected of it&#39;s inputs. The method works by creating a new file for the changes, and opening the base</span>
 <span class="sd">    and a layer. Each pixel in the base is compared with the layer, if they&#39;re different enough the layer pixel is</span>
 <span class="sd">    placed over the original base image pixel that was contained in the new file. This is done for every pixel and</span>
 <span class="sd">    every layer. Debug information contains the ratio of different to not different pixels in percent form, as well</span>
 <span class="sd">    as a display of the output after each layer merge.</span>
-<span class="sd">    :param outfile: The file address to save the output file to.</span>
-<span class="sd">    :param base: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why</span>
+
+<span class="sd">    `outfile`: The file address to save the output file to.</span>
+
+<span class="sd">    `base`: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why</span>
 <span class="sd">                    the center and zoom are REQUIRED. Those parameters being the same will line up the unchanged pixels</span>
 <span class="sd">                    correctly so that only the edited pixels pick up as different.</span>
-<span class="sd">    :param images: Any number of image urls that are layers of the base image. Same center and zoom are a must.</span>
+
+<span class="sd">    `images`: Any number of image urls that are layers of the base image. Same center and zoom are a must.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
     <span class="n">baseimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
-    <span class="n">newimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 
     <span class="n">basedata</span> <span class="o">=</span> <span class="n">baseimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-    <span class="n">newdata</span> <span class="o">=</span> <span class="n">newimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">layeringdata</span> <span class="o">=</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">top</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
         <span class="n">topimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
@@ -1372,15 +1477,15 @@ as a display of the output after each layer merge.
                 <span class="n">tpix</span> <span class="o">=</span> <span class="n">topdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
                 <span class="c1">#print x, y, bpix, tpix, baseimage.mode, baseimage.format</span>
                 <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span><span class="p">:</span>
-                    <span class="n">newdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tpix</span>
+                    <span class="n">layeringdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tpix</span>
                     <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;Different Pixels:&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">counter</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s2">&quot; Same Pixels:&quot;</span><span class="p">,</span> \
             <span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">(((</span><span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">)</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
-        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">newimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
     <span class="k">print</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">newimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1389,6 +1494,225 @@ as a display of the output after each layer merge.
   </div>
   
 
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator" class="name">class <span class="ident">MergeGenerator</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">MergeGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">base</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
+<span class="sd">        This class is basically the same method as mergemodeRGB. The add method is almost identical. The reason</span>
+<span class="sd">        for this class is that it allows for urls to be added incrementally with ease. Given an instance where you</span>
+<span class="sd">        want to merge urls to the same outfile based off the same base image, but don&#39;t have the urls all at once,</span>
+<span class="sd">        this method allows for any number of add calls to merge images to the output. This comes with over head,</span>
+<span class="sd">        saving the image to the outfile location after each individual merge, but certain situations really need this</span>
+<span class="sd">        kind of functionality.</span>
+
+<span class="sd">        `outfile`: The file to save to.</span>
+
+<span class="sd">        `base`: The base image to compare to for each merge. Each image merged must be the same center and zoom</span>
+<span class="sd">                        as this image, or else.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">base</span> <span class="o">=</span> <span class="n">convertPtoRGB</span><span class="p">(</span><span class="n">base</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">baseimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">outfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
+<span class="sd">        Given a new image, with layers of paths and markers, on top of a plain base image. It will then</span>
+<span class="sd">        output the merged image to the outfile provided. This method only works with images encoded in RGB color,</span>
+<span class="sd">        which is expected of it&#39;s inputs. The method works by opening the tracked changes file, and opening the base</span>
+<span class="sd">        and the new image. Each pixel in the base is compared with the new image, if they&#39;re different enough the new</span>
+<span class="sd">        pixel is placed over the original base image pixel that was contained in the tracked file. This is done for</span>
+<span class="sd">        every pixel. Debug information contains the ratio of different to not different pixels in percent form, as well</span>
+<span class="sd">        as a display of the output after each layer merge.</span>
+
+<span class="sd">        `new`: A image with the same center and zoom as the class baseimage, which has lines or markers on it. It</span>
+<span class="sd">                    will be merged with the tracked outfile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">trackedimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="n">layeringimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+    
+        <span class="n">basedata</span> <span class="o">=</span> <span class="n">baseimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">trackeddata</span> <span class="o">=</span> <span class="n">trackedimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">layeringdata</span> <span class="o">=</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">baseimage</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">baseimage</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">bpix</span> <span class="o">=</span> <span class="n">basedata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
+                <span class="n">tpix</span> <span class="o">=</span> <span class="n">layeringdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span><span class="p">:</span>
+                    <span class="n">trackeddata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tpix</span>
+                    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;Different Pixels:&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">counter</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s2">&quot; Same Pixels:&quot;</span><span class="p">,</span> \
+            <span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">(((</span><span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">)</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">trackedimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    
+        <span class="n">trackedimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator">MergeGenerator</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.base" class="name">var <span class="ident">base</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.outfile" class="name">var <span class="ident">outfile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, outfile, base)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This class is basically the same method as mergemodeRGB. The add method is almost identical. The reason
+for this class is that it allows for urls to be added incrementally with ease. Given an instance where you
+want to merge urls to the same outfile based off the same base image, but don't have the urls all at once,
+this method allows for any number of add calls to merge images to the output. This comes with over head,
+saving the image to the outfile location after each individual merge, but certain situations really need this
+kind of functionality.</p>
+<p><code>outfile</code>: The file to save to.</p>
+<p><code>base</code>: The base image to compare to for each merge. Each image merged must be the same center and zoom
+                as this image, or else.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+<span class="sd">    This class is basically the same method as mergemodeRGB. The add method is almost identical. The reason</span>
+<span class="sd">    for this class is that it allows for urls to be added incrementally with ease. Given an instance where you</span>
+<span class="sd">    want to merge urls to the same outfile based off the same base image, but don&#39;t have the urls all at once,</span>
+<span class="sd">    this method allows for any number of add calls to merge images to the output. This comes with over head,</span>
+<span class="sd">    saving the image to the outfile location after each individual merge, but certain situations really need this</span>
+<span class="sd">    kind of functionality.</span>
+<span class="sd">    `outfile`: The file to save to.</span>
+<span class="sd">    `base`: The base image to compare to for each merge. Each image merged must be the same center and zoom</span>
+<span class="sd">                    as this image, or else.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">convertPtoRGB</span><span class="p">(</span><span class="n">base</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="n">baseimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">outfile</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.add">
+    <p>def <span class="ident">add</span>(</p><p>self, new)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Given a new image, with layers of paths and markers, on top of a plain base image. It will then
+output the merged image to the outfile provided. This method only works with images encoded in RGB color,
+which is expected of it's inputs. The method works by opening the tracked changes file, and opening the base
+and the new image. Each pixel in the base is compared with the new image, if they're different enough the new
+pixel is placed over the original base image pixel that was contained in the tracked file. This is done for
+every pixel. Debug information contains the ratio of different to not different pixels in percent form, as well
+as a display of the output after each layer merge.</p>
+<p><code>new</code>: A image with the same center and zoom as the class baseimage, which has lines or markers on it. It
+            will be merged with the tracked outfile.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.add', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.ImageMerge.MergeGenerator.add" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+<span class="sd">    Given a new image, with layers of paths and markers, on top of a plain base image. It will then</span>
+<span class="sd">    output the merged image to the outfile provided. This method only works with images encoded in RGB color,</span>
+<span class="sd">    which is expected of it&#39;s inputs. The method works by opening the tracked changes file, and opening the base</span>
+<span class="sd">    and the new image. Each pixel in the base is compared with the new image, if they&#39;re different enough the new</span>
+<span class="sd">    pixel is placed over the original base image pixel that was contained in the tracked file. This is done for</span>
+<span class="sd">    every pixel. Debug information contains the ratio of different to not different pixels in percent form, as well</span>
+<span class="sd">    as a display of the output after each layer merge.</span>
+<span class="sd">    `new`: A image with the same center and zoom as the class baseimage, which has lines or markers on it. It</span>
+<span class="sd">                will be merged with the tracked outfile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">baseimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+    <span class="n">trackedimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+    <span class="n">layeringimage</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+
+    <span class="n">basedata</span> <span class="o">=</span> <span class="n">baseimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">trackeddata</span> <span class="o">=</span> <span class="n">trackedimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="n">layeringdata</span> <span class="o">=</span> <span class="n">layeringimage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+    
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">baseimage</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">baseimage</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">bpix</span> <span class="o">=</span> <span class="n">basedata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
+            <span class="n">tpix</span> <span class="o">=</span> <span class="n">layeringdata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">bpix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">tpix</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">diffnum</span><span class="p">:</span>
+                <span class="n">trackeddata</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tpix</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="s2">&quot;Different Pixels:&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">counter</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s2">&quot; Same Pixels:&quot;</span><span class="p">,</span> \
+        <span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">round</span><span class="p">(((</span><span class="mi">360000</span><span class="o">-</span><span class="n">counter</span><span class="p">)</span><span class="o">/</span><span class="mf">360000.</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">trackedimage</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">trackedimage</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
 
   </section>
 

@@ -8,7 +8,8 @@ class RestrictionFactory(object):
 
     def __init__(self, metric=0):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         This method generates a new restriction. The factory makes sure that every restriction created works off
         the same measurement scale, metric or imperial.
         """
@@ -16,12 +17,16 @@ class RestrictionFactory(object):
 
     def newCircleRadiusRestriction(self, center, distance):
         """
+        `Author`: Bill Clark
+
         See CircleRadiusRestriction, this method returns a new instance of that object.
         """
         return CircleRadiusRestriction(center, distance, self.metric)
 
     def newSquareRestriction(self, center, distance):
         """
+        `Author`: Bill Clark
+
         See SquareRestriction, this method returns a new instance of that object.
         """
         return SquareRestriction(center, distance, self.metric)
@@ -32,7 +37,8 @@ class Restriction(object):
 
     def __init__(self, metric):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
         methods can be built into the restriction engines.
         """
@@ -42,19 +48,24 @@ class Restriction(object):
 
     def restrict(self, geometrics):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         The primary method for a restriction. The only method that *should* be called from outside the class.
         Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.
-        :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+
+        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
         """
         pass
 
     def zoom(self, width):
         """
-        Author: Nick LaPosta
+        `Author`: Nick LaPosta
+
         Determines the proper zoom level and filter range for the given frame size
-        :param width: The desired size in miles for the view port.
-        :return: A tuple of the zoom level and the filter range respectively
+
+        `width`: The desired size in miles for the view port.
+
+        `return`: A tuple of the zoom level and the filter range respectively
         """
         zoom_level = ZOOM_CONSTANT - log(width, 2)
         filter_range = sqrt(width)
@@ -62,11 +73,15 @@ class Restriction(object):
 
     def haversine(self, start, end):
         """
-        Author: Nick LaPosta, Bill Clark
+        `Author`: Nick LaPosta, Bill Clark
+
         Uses the mathematical function of the same name to find the distance between two long lat coordinates.
-        :param start: The first coordinate, a lat long value pair in a list.
-        :param end: The second coordinate, a lat long value pair in a list.
-        :return: The distance in the given metric system.
+
+        `start`: The first coordinate, a lat long value pair in a list.
+
+        `end`: The second coordinate, a lat long value pair in a list.
+
+        `return`: The distance in the given metric system.
         """
 
         start = [start[1], start[0]]
@@ -91,12 +106,16 @@ class SquareRestriction(Restriction):
 
     def __init__(self, center, distance, metric=0):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         A restriction that flags all points that are not within distance x from a given center point to be removed.
         This is done in a square pattern by using two points, the NW corner and the SW corner. 
-        :param center: the center point to draw distances from.
-        :param distance: the distance in the given metric that a point must be within from center.
-        :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).
+
+        `center`: the center point to draw distances from.
+
+        `distance`: the distance in the given metric that a point must be within from center.
+
+        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
         super(SquareRestriction,self).__init__(metric)
         self.center = center
@@ -110,11 +129,13 @@ class SquareRestriction(Restriction):
 
     def restrict(self, geometrics):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         This method restricts based off of the NW and SE values this object contains. It looks at each point
         in a geometric and checks to see if it's contained by the lines drawn from NW and SE. If it's contained,
         we know that the point is in our frame of mind.
-        :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+
+        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
         """
         for geometry in geometrics:
             if geometry.tag == "Point":
@@ -132,11 +153,14 @@ class SquareRestriction(Restriction):
 
     def pointWithinDistance(self, coordinates):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
         restrict.
-        :param coordinates: List of coordinate values, long lat.
-        :return: True if the point is contained, false else.
+
+        `coordinates`: List of coordinate values, long lat.
+
+        `return`: True if the point is contained, false else.
         """
         if coordinates[0] >= self.NW[0] and coordinates[0] <= self.SE[0]:
             if coordinates[1] <= self.NW[1] and coordinates[1] >= self.SE[1]:
@@ -146,13 +170,16 @@ class SquareRestriction(Restriction):
 
     def intersect(self, start, end):
         """
-        Author: Nick LaPosta
-        Version = 1.0
+        `Author`: Nick LaPosta
+
         A function for determining the possible intersection of the segment between two points and the region
         Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called
-        :param start: List containing longitude and latitude of start point of segment
-        :param end: List containing longitude and latitude of end point of segment
-        :return: If the segment created by start and end intersects this region then return True, else return False
+
+        `start`: List containing longitude and latitude of start point of segment
+
+        `end`: List containing longitude and latitude of end point of segment
+
+        `return`: If the segment created by start and end intersects this region then return True, else return False
         """
         State.init_state(self.NW, self.SE)
         start_state = State(start[0], start[1])
@@ -176,11 +203,15 @@ class CircleRadiusRestriction(Restriction):
 
     def __init__(self, center, distance, metric=0):
         """
-        Author: Bill Clark
+        `Author`: Bill Clark
+
         A restriction that flags all points that are not with in distance x from a given center point to be removed.
-        :param center: the center point to draw distances from.
-        :param distance: the distance in the given metric that a point must be within from center.
-        :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).
+
+        `center`: the center point to draw distances from.
+
+        `distance`: the distance in the given metric that a point must be within from center.
+
+        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
 
         super(CircleRadiusRestriction,self).__init__(metric)
@@ -189,10 +220,11 @@ class CircleRadiusRestriction(Restriction):
 
     def restrict(self, geometrics):
         """
-        Author: Bill Clark
-        Version = 1.3
+        `Author`: Bill Clark
+
         Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.
-        :param geometrics: A list of geometic objects.
+
+        `geometrics`: A list of geometic objects.
         """
 
         for geometry in geometrics:

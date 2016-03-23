@@ -1125,7 +1125,8 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        This method generates a new restriction. The factory makes sure that every restriction created works off</span>
 <span class="sd">        the same measurement scale, metric or imperial.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1133,12 +1134,16 @@ table {
 
     <span class="k">def</span> <span class="nf">newCircleRadiusRestriction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See CircleRadiusRestriction, this method returns a new instance of that object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">CircleRadiusRestriction</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">newSquareRestriction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See SquareRestriction, this method returns a new instance of that object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">SquareRestriction</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
@@ -1149,7 +1154,8 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        An &#39;interface&#39; (as interface as python gets) for new Restrictions. With it templating and the composite</span>
 <span class="sd">        methods can be built into the restriction engines.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1159,19 +1165,24 @@ table {
 
     <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        The primary method for a restriction. The only method that *should* be called from outside the class.</span>
 <span class="sd">        Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.</span>
-<span class="sd">        :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
+
+<span class="sd">        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        Determines the proper zoom level and filter range for the given frame size</span>
-<span class="sd">        :param width: The desired size in miles for the view port.</span>
-<span class="sd">        :return: A tuple of the zoom level and the filter range respectively</span>
+
+<span class="sd">        `width`: The desired size in miles for the view port.</span>
+
+<span class="sd">        `return`: A tuple of the zoom level and the filter range respectively</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">zoom_level</span> <span class="o">=</span> <span class="n">ZOOM_CONSTANT</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">filter_range</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
@@ -1179,11 +1190,15 @@ table {
 
     <span class="k">def</span> <span class="nf">haversine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta, Bill Clark</span>
+<span class="sd">        `Author`: Nick LaPosta, Bill Clark</span>
+
 <span class="sd">        Uses the mathematical function of the same name to find the distance between two long lat coordinates.</span>
-<span class="sd">        :param start: The first coordinate, a lat long value pair in a list.</span>
-<span class="sd">        :param end: The second coordinate, a lat long value pair in a list.</span>
-<span class="sd">        :return: The distance in the given metric system.</span>
+
+<span class="sd">        `start`: The first coordinate, a lat long value pair in a list.</span>
+
+<span class="sd">        `end`: The second coordinate, a lat long value pair in a list.</span>
+
+<span class="sd">        `return`: The distance in the given metric system.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
@@ -1208,12 +1223,16 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        A restriction that flags all points that are not within distance x from a given center point to be removed.</span>
 <span class="sd">        This is done in a square pattern by using two points, the NW corner and the SW corner. </span>
-<span class="sd">        :param center: the center point to draw distances from.</span>
-<span class="sd">        :param distance: the distance in the given metric that a point must be within from center.</span>
-<span class="sd">        :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
+
+<span class="sd">        `center`: the center point to draw distances from.</span>
+
+<span class="sd">        `distance`: the distance in the given metric that a point must be within from center.</span>
+
+<span class="sd">        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SquareRestriction</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
@@ -1227,11 +1246,13 @@ table {
 
     <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        This method restricts based off of the NW and SE values this object contains. It looks at each point</span>
 <span class="sd">        in a geometric and checks to see if it&#39;s contained by the lines drawn from NW and SE. If it&#39;s contained,</span>
 <span class="sd">        we know that the point is in our frame of mind.</span>
-<span class="sd">        :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
+
+<span class="sd">        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">geometry</span> <span class="ow">in</span> <span class="n">geometrics</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">geometry</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
@@ -1249,11 +1270,14 @@ table {
 
     <span class="k">def</span> <span class="nf">pointWithinDistance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to</span>
 <span class="sd">        restrict.</span>
-<span class="sd">        :param coordinates: List of coordinate values, long lat.</span>
-<span class="sd">        :return: True if the point is contained, false else.</span>
+
+<span class="sd">        `coordinates`: List of coordinate values, long lat.</span>
+
+<span class="sd">        `return`: True if the point is contained, false else.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
@@ -1263,13 +1287,16 @@ table {
 
     <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        A function for determining the possible intersection of the segment between two points and the region</span>
 <span class="sd">        Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called</span>
-<span class="sd">        :param start: List containing longitude and latitude of start point of segment</span>
-<span class="sd">        :param end: List containing longitude and latitude of end point of segment</span>
-<span class="sd">        :return: If the segment created by start and end intersects this region then return True, else return False</span>
+
+<span class="sd">        `start`: List containing longitude and latitude of start point of segment</span>
+
+<span class="sd">        `end`: List containing longitude and latitude of end point of segment</span>
+
+<span class="sd">        `return`: If the segment created by start and end intersects this region then return True, else return False</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">State</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">)</span>
         <span class="n">start_state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -1293,11 +1320,15 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        A restriction that flags all points that are not with in distance x from a given center point to be removed.</span>
-<span class="sd">        :param center: the center point to draw distances from.</span>
-<span class="sd">        :param distance: the distance in the given metric that a point must be within from center.</span>
-<span class="sd">        :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
+
+<span class="sd">        `center`: the center point to draw distances from.</span>
+
+<span class="sd">        `distance`: the distance in the given metric that a point must be within from center.</span>
+
+<span class="sd">        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">CircleRadiusRestriction</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
@@ -1306,10 +1337,11 @@ table {
 
     <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
-<span class="sd">        Version = 1.3</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.</span>
-<span class="sd">        :param geometrics: A list of geometic objects.</span>
+
+<span class="sd">        `geometrics`: A list of geometic objects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">geometry</span> <span class="ow">in</span> <span class="n">geometrics</span><span class="p">:</span>
@@ -1358,11 +1390,15 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        A restriction that flags all points that are not with in distance x from a given center point to be removed.</span>
-<span class="sd">        :param center: the center point to draw distances from.</span>
-<span class="sd">        :param distance: the distance in the given metric that a point must be within from center.</span>
-<span class="sd">        :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
+
+<span class="sd">        `center`: the center point to draw distances from.</span>
+
+<span class="sd">        `distance`: the distance in the given metric that a point must be within from center.</span>
+
+<span class="sd">        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">CircleRadiusRestriction</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
@@ -1371,10 +1407,11 @@ table {
 
     <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
-<span class="sd">        Version = 1.3</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.</span>
-<span class="sd">        :param geometrics: A list of geometic objects.</span>
+
+<span class="sd">        `geometrics`: A list of geometic objects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">geometry</span> <span class="ow">in</span> <span class="n">geometrics</span><span class="p">:</span>
@@ -1468,21 +1505,21 @@ table {
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-A restriction that flags all points that are not with in distance x from a given center point to be removed.
-:param center: the center point to draw distances from.
-:param distance: the distance in the given metric that a point must be within from center.
-:param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>A restriction that flags all points that are not with in distance x from a given center point to be removed.</p>
+<p><code>center</code>: the center point to draw distances from.</p>
+<p><code>distance</code>: the distance in the given metric that a point must be within from center.</p>
+<p><code>metric</code>: the measure of distance to be used. True is metric system, False is imperial (miles).</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    A restriction that flags all points that are not with in distance x from a given center point to be removed.</span>
-<span class="sd">    :param center: the center point to draw distances from.</span>
-<span class="sd">    :param distance: the distance in the given metric that a point must be within from center.</span>
-<span class="sd">    :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
+<span class="sd">    `center`: the center point to draw distances from.</span>
+<span class="sd">    `distance`: the distance in the given metric that a point must be within from center.</span>
+<span class="sd">    `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">CircleRadiusRestriction</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
@@ -1507,21 +1544,21 @@ A restriction that flags all points that are not with in distance x from a given
 
     
   
-    <div class="desc inherited"><p>Author: Nick LaPosta, Bill Clark
-Uses the mathematical function of the same name to find the distance between two long lat coordinates.
-:param start: The first coordinate, a lat long value pair in a list.
-:param end: The second coordinate, a lat long value pair in a list.
-:return: The distance in the given metric system.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Nick LaPosta, Bill Clark</p>
+<p>Uses the mathematical function of the same name to find the distance between two long lat coordinates.</p>
+<p><code>start</code>: The first coordinate, a lat long value pair in a list.</p>
+<p><code>end</code>: The second coordinate, a lat long value pair in a list.</p>
+<p><code>return</code>: The distance in the given metric system.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.haversine', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.haversine" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">haversine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta, Bill Clark</span>
+<span class="sd">    `Author`: Nick LaPosta, Bill Clark</span>
 <span class="sd">    Uses the mathematical function of the same name to find the distance between two long lat coordinates.</span>
-<span class="sd">    :param start: The first coordinate, a lat long value pair in a list.</span>
-<span class="sd">    :param end: The second coordinate, a lat long value pair in a list.</span>
-<span class="sd">    :return: The distance in the given metric system.</span>
+<span class="sd">    `start`: The first coordinate, a lat long value pair in a list.</span>
+<span class="sd">    `end`: The second coordinate, a lat long value pair in a list.</span>
+<span class="sd">    `return`: The distance in the given metric system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">end</span> <span class="o">=</span> <span class="p">[</span><span class="n">end</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
@@ -1556,19 +1593,17 @@ Uses the mathematical function of the same name to find the distance between two
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Version = 1.3
-Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.
-:param geometrics: A list of geometic objects.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.</p>
+<p><code>geometrics</code>: A list of geometic objects.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.restrict', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.restrict" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
-<span class="sd">    Version = 1.3</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.</span>
-<span class="sd">    :param geometrics: A list of geometic objects.</span>
+<span class="sd">    `geometrics`: A list of geometic objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">geometry</span> <span class="ow">in</span> <span class="n">geometrics</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">geometry</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
@@ -1605,19 +1640,19 @@ Looks at each geometric object in the list and, if it is not within distance of 
 
     
   
-    <div class="desc inherited"><p>Author: Nick LaPosta
-Determines the proper zoom level and filter range for the given frame size
-:param width: The desired size in miles for the view port.
-:return: A tuple of the zoom level and the filter range respectively</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Nick LaPosta</p>
+<p>Determines the proper zoom level and filter range for the given frame size</p>
+<p><code>width</code>: The desired size in miles for the view port.</p>
+<p><code>return</code>: A tuple of the zoom level and the filter range respectively</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.zoom', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.CircleRadiusRestriction.zoom" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
 <span class="sd">    Determines the proper zoom level and filter range for the given frame size</span>
-<span class="sd">    :param width: The desired size in miles for the view port.</span>
-<span class="sd">    :return: A tuple of the zoom level and the filter range respectively</span>
+<span class="sd">    `width`: The desired size in miles for the view port.</span>
+<span class="sd">    `return`: A tuple of the zoom level and the filter range respectively</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zoom_level</span> <span class="o">=</span> <span class="n">ZOOM_CONSTANT</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">filter_range</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
@@ -1643,7 +1678,8 @@ Determines the proper zoom level and filter range for the given frame size
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        An &#39;interface&#39; (as interface as python gets) for new Restrictions. With it templating and the composite</span>
 <span class="sd">        methods can be built into the restriction engines.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1653,19 +1689,24 @@ Determines the proper zoom level and filter range for the given frame size
 
     <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        The primary method for a restriction. The only method that *should* be called from outside the class.</span>
 <span class="sd">        Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.</span>
-<span class="sd">        :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
+
+<span class="sd">        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        Determines the proper zoom level and filter range for the given frame size</span>
-<span class="sd">        :param width: The desired size in miles for the view port.</span>
-<span class="sd">        :return: A tuple of the zoom level and the filter range respectively</span>
+
+<span class="sd">        `width`: The desired size in miles for the view port.</span>
+
+<span class="sd">        `return`: A tuple of the zoom level and the filter range respectively</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">zoom_level</span> <span class="o">=</span> <span class="n">ZOOM_CONSTANT</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">filter_range</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
@@ -1673,11 +1714,15 @@ Determines the proper zoom level and filter range for the given frame size
 
     <span class="k">def</span> <span class="nf">haversine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta, Bill Clark</span>
+<span class="sd">        `Author`: Nick LaPosta, Bill Clark</span>
+
 <span class="sd">        Uses the mathematical function of the same name to find the distance between two long lat coordinates.</span>
-<span class="sd">        :param start: The first coordinate, a lat long value pair in a list.</span>
-<span class="sd">        :param end: The second coordinate, a lat long value pair in a list.</span>
-<span class="sd">        :return: The distance in the given metric system.</span>
+
+<span class="sd">        `start`: The first coordinate, a lat long value pair in a list.</span>
+
+<span class="sd">        `end`: The second coordinate, a lat long value pair in a list.</span>
+
+<span class="sd">        `return`: The distance in the given metric system.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
@@ -1739,15 +1784,15 @@ Determines the proper zoom level and filter range for the given frame size
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
 methods can be built into the restriction engines.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    An &#39;interface&#39; (as interface as python gets) for new Restrictions. With it templating and the composite</span>
 <span class="sd">    methods can be built into the restriction engines.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1770,21 +1815,21 @@ methods can be built into the restriction engines.</p></div>
 
     
   
-    <div class="desc"><p>Author: Nick LaPosta, Bill Clark
-Uses the mathematical function of the same name to find the distance between two long lat coordinates.
-:param start: The first coordinate, a lat long value pair in a list.
-:param end: The second coordinate, a lat long value pair in a list.
-:return: The distance in the given metric system.</p></div>
+    <div class="desc"><p><code>Author</code>: Nick LaPosta, Bill Clark</p>
+<p>Uses the mathematical function of the same name to find the distance between two long lat coordinates.</p>
+<p><code>start</code>: The first coordinate, a lat long value pair in a list.</p>
+<p><code>end</code>: The second coordinate, a lat long value pair in a list.</p>
+<p><code>return</code>: The distance in the given metric system.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.haversine', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.haversine" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">haversine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta, Bill Clark</span>
+<span class="sd">    `Author`: Nick LaPosta, Bill Clark</span>
 <span class="sd">    Uses the mathematical function of the same name to find the distance between two long lat coordinates.</span>
-<span class="sd">    :param start: The first coordinate, a lat long value pair in a list.</span>
-<span class="sd">    :param end: The second coordinate, a lat long value pair in a list.</span>
-<span class="sd">    :return: The distance in the given metric system.</span>
+<span class="sd">    `start`: The first coordinate, a lat long value pair in a list.</span>
+<span class="sd">    `end`: The second coordinate, a lat long value pair in a list.</span>
+<span class="sd">    `return`: The distance in the given metric system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">end</span> <span class="o">=</span> <span class="p">[</span><span class="n">end</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
@@ -1815,19 +1860,19 @@ Uses the mathematical function of the same name to find the distance between two
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-The primary method for a restriction. The only method that <em>should</em> be called from outside the class.
-Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.
-:param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>The primary method for a restriction. The only method that <em>should</em> be called from outside the class.
+Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.</p>
+<p><code>geometrics</code>: A list of geometric objects, which wrap an xml coordinate tag for easy access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.restrict', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.restrict" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    The primary method for a restriction. The only method that *should* be called from outside the class.</span>
 <span class="sd">    Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.</span>
-<span class="sd">    :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
+<span class="sd">    `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
 </pre></div>
@@ -1846,19 +1891,19 @@ Should modify the geometrics it gets, (not remove them) as the implementation ch
 
     
   
-    <div class="desc"><p>Author: Nick LaPosta
-Determines the proper zoom level and filter range for the given frame size
-:param width: The desired size in miles for the view port.
-:return: A tuple of the zoom level and the filter range respectively</p></div>
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Determines the proper zoom level and filter range for the given frame size</p>
+<p><code>width</code>: The desired size in miles for the view port.</p>
+<p><code>return</code>: A tuple of the zoom level and the filter range respectively</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.zoom', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.Restriction.zoom" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
 <span class="sd">    Determines the proper zoom level and filter range for the given frame size</span>
-<span class="sd">    :param width: The desired size in miles for the view port.</span>
-<span class="sd">    :return: A tuple of the zoom level and the filter range respectively</span>
+<span class="sd">    `width`: The desired size in miles for the view port.</span>
+<span class="sd">    `return`: A tuple of the zoom level and the filter range respectively</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zoom_level</span> <span class="o">=</span> <span class="n">ZOOM_CONSTANT</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">filter_range</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
@@ -1884,7 +1929,8 @@ Determines the proper zoom level and filter range for the given frame size
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        This method generates a new restriction. The factory makes sure that every restriction created works off</span>
 <span class="sd">        the same measurement scale, metric or imperial.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1892,12 +1938,16 @@ Determines the proper zoom level and filter range for the given frame size
 
     <span class="k">def</span> <span class="nf">newCircleRadiusRestriction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See CircleRadiusRestriction, this method returns a new instance of that object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">CircleRadiusRestriction</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">newSquareRestriction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        See SquareRestriction, this method returns a new instance of that object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">SquareRestriction</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
@@ -1934,15 +1984,15 @@ Determines the proper zoom level and filter range for the given frame size
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-This method generates a new restriction. The factory makes sure that every restriction created works off
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method generates a new restriction. The factory makes sure that every restriction created works off
 the same measurement scale, metric or imperial.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionFactory.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionFactory.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    This method generates a new restriction. The factory makes sure that every restriction created works off</span>
 <span class="sd">    the same measurement scale, metric or imperial.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1963,12 +2013,14 @@ the same measurement scale, metric or imperial.</p></div>
 
     
   
-    <div class="desc"><p>See CircleRadiusRestriction, this method returns a new instance of that object.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See CircleRadiusRestriction, this method returns a new instance of that object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionFactory.newCircleRadiusRestriction', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionFactory.newCircleRadiusRestriction" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">newCircleRadiusRestriction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    See CircleRadiusRestriction, this method returns a new instance of that object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">CircleRadiusRestriction</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
@@ -1988,12 +2040,14 @@ the same measurement scale, metric or imperial.</p></div>
 
     
   
-    <div class="desc"><p>See SquareRestriction, this method returns a new instance of that object.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See SquareRestriction, this method returns a new instance of that object.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionFactory.newSquareRestriction', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionFactory.newSquareRestriction" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">newSquareRestriction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    See SquareRestriction, this method returns a new instance of that object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">SquareRestriction</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
@@ -2018,12 +2072,16 @@ the same measurement scale, metric or imperial.</p></div>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        A restriction that flags all points that are not within distance x from a given center point to be removed.</span>
 <span class="sd">        This is done in a square pattern by using two points, the NW corner and the SW corner. </span>
-<span class="sd">        :param center: the center point to draw distances from.</span>
-<span class="sd">        :param distance: the distance in the given metric that a point must be within from center.</span>
-<span class="sd">        :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
+
+<span class="sd">        `center`: the center point to draw distances from.</span>
+
+<span class="sd">        `distance`: the distance in the given metric that a point must be within from center.</span>
+
+<span class="sd">        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SquareRestriction</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
@@ -2037,11 +2095,13 @@ the same measurement scale, metric or imperial.</p></div>
 
     <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        This method restricts based off of the NW and SE values this object contains. It looks at each point</span>
 <span class="sd">        in a geometric and checks to see if it&#39;s contained by the lines drawn from NW and SE. If it&#39;s contained,</span>
 <span class="sd">        we know that the point is in our frame of mind.</span>
-<span class="sd">        :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
+
+<span class="sd">        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">geometry</span> <span class="ow">in</span> <span class="n">geometrics</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">geometry</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
@@ -2059,11 +2119,14 @@ the same measurement scale, metric or imperial.</p></div>
 
     <span class="k">def</span> <span class="nf">pointWithinDistance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Bill Clark</span>
+<span class="sd">        `Author`: Bill Clark</span>
+
 <span class="sd">        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to</span>
 <span class="sd">        restrict.</span>
-<span class="sd">        :param coordinates: List of coordinate values, long lat.</span>
-<span class="sd">        :return: True if the point is contained, false else.</span>
+
+<span class="sd">        `coordinates`: List of coordinate values, long lat.</span>
+
+<span class="sd">        `return`: True if the point is contained, false else.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
@@ -2073,13 +2136,16 @@ the same measurement scale, metric or imperial.</p></div>
 
     <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        A function for determining the possible intersection of the segment between two points and the region</span>
 <span class="sd">        Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called</span>
-<span class="sd">        :param start: List containing longitude and latitude of start point of segment</span>
-<span class="sd">        :param end: List containing longitude and latitude of end point of segment</span>
-<span class="sd">        :return: If the segment created by start and end intersects this region then return True, else return False</span>
+
+<span class="sd">        `start`: List containing longitude and latitude of start point of segment</span>
+
+<span class="sd">        `end`: List containing longitude and latitude of end point of segment</span>
+
+<span class="sd">        `return`: If the segment created by start and end intersects this region then return True, else return False</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">State</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">)</span>
         <span class="n">start_state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -2193,23 +2259,23 @@ the same measurement scale, metric or imperial.</p></div>
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-A restriction that flags all points that are not within distance x from a given center point to be removed.
-This is done in a square pattern by using two points, the NW corner and the SW corner. 
-:param center: the center point to draw distances from.
-:param distance: the distance in the given metric that a point must be within from center.
-:param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>A restriction that flags all points that are not within distance x from a given center point to be removed.
+This is done in a square pattern by using two points, the NW corner and the SW corner. </p>
+<p><code>center</code>: the center point to draw distances from.</p>
+<p><code>distance</code>: the distance in the given metric that a point must be within from center.</p>
+<p><code>metric</code>: the measure of distance to be used. True is metric system, False is imperial (miles).</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    A restriction that flags all points that are not within distance x from a given center point to be removed.</span>
 <span class="sd">    This is done in a square pattern by using two points, the NW corner and the SW corner. </span>
-<span class="sd">    :param center: the center point to draw distances from.</span>
-<span class="sd">    :param distance: the distance in the given metric that a point must be within from center.</span>
-<span class="sd">    :param metric: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
+<span class="sd">    `center`: the center point to draw distances from.</span>
+<span class="sd">    `distance`: the distance in the given metric that a point must be within from center.</span>
+<span class="sd">    `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">SquareRestriction</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
@@ -2240,21 +2306,21 @@ This is done in a square pattern by using two points, the NW corner and the SW c
 
     
   
-    <div class="desc inherited"><p>Author: Nick LaPosta, Bill Clark
-Uses the mathematical function of the same name to find the distance between two long lat coordinates.
-:param start: The first coordinate, a lat long value pair in a list.
-:param end: The second coordinate, a lat long value pair in a list.
-:return: The distance in the given metric system.</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Nick LaPosta, Bill Clark</p>
+<p>Uses the mathematical function of the same name to find the distance between two long lat coordinates.</p>
+<p><code>start</code>: The first coordinate, a lat long value pair in a list.</p>
+<p><code>end</code>: The second coordinate, a lat long value pair in a list.</p>
+<p><code>return</code>: The distance in the given metric system.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.haversine', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.haversine" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">haversine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta, Bill Clark</span>
+<span class="sd">    `Author`: Nick LaPosta, Bill Clark</span>
 <span class="sd">    Uses the mathematical function of the same name to find the distance between two long lat coordinates.</span>
-<span class="sd">    :param start: The first coordinate, a lat long value pair in a list.</span>
-<span class="sd">    :param end: The second coordinate, a lat long value pair in a list.</span>
-<span class="sd">    :return: The distance in the given metric system.</span>
+<span class="sd">    `start`: The first coordinate, a lat long value pair in a list.</span>
+<span class="sd">    `end`: The second coordinate, a lat long value pair in a list.</span>
+<span class="sd">    `return`: The distance in the given metric system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">end</span> <span class="o">=</span> <span class="p">[</span><span class="n">end</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
@@ -2285,25 +2351,23 @@ Uses the mathematical function of the same name to find the distance between two
 
     
   
-    <div class="desc"><p>Author: Nick LaPosta
-Version = 1.0
-A function for determining the possible intersection of the segment between two points and the region
-Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called
-:param start: List containing longitude and latitude of start point of segment
-:param end: List containing longitude and latitude of end point of segment
-:return: If the segment created by start and end intersects this region then return True, else return False</p></div>
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>A function for determining the possible intersection of the segment between two points and the region
+Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called</p>
+<p><code>start</code>: List containing longitude and latitude of start point of segment</p>
+<p><code>end</code>: List containing longitude and latitude of end point of segment</p>
+<p><code>return</code>: If the segment created by start and end intersects this region then return True, else return False</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.intersect', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.intersect" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
 <span class="sd">    A function for determining the possible intersection of the segment between two points and the region</span>
 <span class="sd">    Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called</span>
-<span class="sd">    :param start: List containing longitude and latitude of start point of segment</span>
-<span class="sd">    :param end: List containing longitude and latitude of end point of segment</span>
-<span class="sd">    :return: If the segment created by start and end intersects this region then return True, else return False</span>
+<span class="sd">    `start`: List containing longitude and latitude of start point of segment</span>
+<span class="sd">    `end`: List containing longitude and latitude of end point of segment</span>
+<span class="sd">    `return`: If the segment created by start and end intersects this region then return True, else return False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">State</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">)</span>
     <span class="n">start_state</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -2337,21 +2401,21 @@ Warning! Does not properly function for a zone passing over the Anti-Prime Merid
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
-restrict.
-:param coordinates: List of coordinate values, long lat.
-:return: True if the point is contained, false else.</p></div>
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+restrict.</p>
+<p><code>coordinates</code>: List of coordinate values, long lat.</p>
+<p><code>return</code>: True if the point is contained, false else.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.pointWithinDistance', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.pointWithinDistance" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pointWithinDistance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to</span>
 <span class="sd">    restrict.</span>
-<span class="sd">    :param coordinates: List of coordinate values, long lat.</span>
-<span class="sd">    :return: True if the point is contained, false else.</span>
+<span class="sd">    `coordinates`: List of coordinate values, long lat.</span>
+<span class="sd">    `return`: True if the point is contained, false else.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NW</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">coordinates</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SE</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
@@ -2377,21 +2441,21 @@ restrict.
 
     
   
-    <div class="desc"><p>Author: Bill Clark
-This method restricts based off of the NW and SE values this object contains. It looks at each point
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method restricts based off of the NW and SE values this object contains. It looks at each point
 in a geometric and checks to see if it's contained by the lines drawn from NW and SE. If it's contained,
-we know that the point is in our frame of mind.
-:param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</p></div>
+we know that the point is in our frame of mind.</p>
+<p><code>geometrics</code>: A list of geometric objects, which wrap an xml coordinate tag for easy access.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.restrict', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.restrict" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geometrics</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Bill Clark</span>
+<span class="sd">    `Author`: Bill Clark</span>
 <span class="sd">    This method restricts based off of the NW and SE values this object contains. It looks at each point</span>
 <span class="sd">    in a geometric and checks to see if it&#39;s contained by the lines drawn from NW and SE. If it&#39;s contained,</span>
 <span class="sd">    we know that the point is in our frame of mind.</span>
-<span class="sd">    :param geometrics: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
+<span class="sd">    `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">geometry</span> <span class="ow">in</span> <span class="n">geometrics</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">geometry</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
@@ -2426,19 +2490,19 @@ we know that the point is in our frame of mind.
 
     
   
-    <div class="desc inherited"><p>Author: Nick LaPosta
-Determines the proper zoom level and filter range for the given frame size
-:param width: The desired size in miles for the view port.
-:return: A tuple of the zoom level and the filter range respectively</p></div>
+    <div class="desc inherited"><p><code>Author</code>: Nick LaPosta</p>
+<p>Determines the proper zoom level and filter range for the given frame size</p>
+<p><code>width</code>: The desired size in miles for the view port.</p>
+<p><code>return</code>: A tuple of the zoom level and the filter range respectively</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.zoom', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.SquareRestriction.zoom" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">zoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
 <span class="sd">    Determines the proper zoom level and filter range for the given frame size</span>
-<span class="sd">    :param width: The desired size in miles for the view port.</span>
-<span class="sd">    :return: A tuple of the zoom level and the filter range respectively</span>
+<span class="sd">    `width`: The desired size in miles for the view port.</span>
+<span class="sd">    `return`: A tuple of the zoom level and the filter range respectively</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zoom_level</span> <span class="o">=</span> <span class="n">ZOOM_CONSTANT</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">filter_range</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>

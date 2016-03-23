@@ -3,17 +3,20 @@ from UrlBuilder import UrlBuilder
 from RestrictionEngine import RestrictionFactory
 import ImageMerge
 import Image
+import Utils
+import time
 argzero = 'Inputs\KML Files\\advancedexample1.kml'
 argtwo = 'Inputs\KML Files\\advancedexample2.kml'
 argone = 'Inputs\KML Files\us_states.kml'
+argarctic = 'Inputs\KML FIles\\arctic lines jan 31.kml'
 
 #Create the KmlFasade
 
-fasade = KmlFasade(argzero)
+fasade = KmlFasade(argarctic)
 fasade.placemarkToGeometrics()
 f = RestrictionFactory()
 #f = f.newSquareRestriction([-103.528629, 41.260352], 2000)
-f = f.newSquareRestriction([-74.871826, 39.833851], 200)
+f = f.newSquareRestriction([-64.871826, 66.833851], 4000)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
@@ -22,12 +25,12 @@ fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
 
 build = UrlBuilder('600x600')
 #build.viewportparam(markerlist)
-build.centerparams('39.833851,-74.871826', '7')
+build.centerparams('-64.871826,66.833851', '4')
 
 markerlist = []
 for element in fasade.geometrics:
     element.switchCoordinates()
-    print element.printCoordinates()
+    #print element.printCoordinates()
     if element.tag == "Point":
         markerlist.append(element.printCoordinates())
     if element.tag == "Polygon":
@@ -43,16 +46,22 @@ print "Number of urls: ", len(build.urllist) + 2
 
 #Merge the Url Images
 
-# images = build.download()
-# print "Downloaded."
-#
-# images = ImageMerge.convertPtoRGB(*images)
-# ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)
+#merges by downloading everything and merging everything.
 
-ImageMerge.debug = 0
-layers = ImageMerge.MergeGenerator('Inputs\Static Maps\Outfile.png', build.downloadBase())
-for img in build.downloadGenerator():
-    im = ImageMerge.convertPtoRGB(img)[0]
-    layers.add(im)
+images = build.download()
+print "Downloaded."
+images = ImageMerge.convertPtoRGB(*images)
+ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)
+
+#merges by downloading, merging, and repeating till none are left.
+
+# ImageMerge.debug = 0
+#
+# layers = ImageMerge.MergeGenerator('Inputs\Static Maps\Outfile.png', build.downloadBase())
+# for img in build.downloadGenerator():
+#     im = ImageMerge.convertPtoRGB(img)[0]
+#     layers.add(im)
+
+
 im = Image.open('Inputs\Static Maps\Outfile.png')
 im.show()

@@ -1090,11 +1090,13 @@ table {
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        A state class that represents the location of a point relative to the region</span>
-<span class="sd">        :param lon: The longitude value of the point</span>
-<span class="sd">        :param lat: The latitude value of the point</span>
+
+<span class="sd">        `lon`: The longitude value of the point</span>
+
+<span class="sd">        `lat`: The latitude value of the point</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="n">lon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="n">lat</span>
@@ -1114,10 +1116,11 @@ table {
 
     <span class="k">def</span> <span class="nf">get_slope</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        Returns the slopes that should be used for the intersection calculation.</span>
-<span class="sd">        :return: A tuple of the slopes of the two comparison lines sorted in ascending order</span>
+
+<span class="sd">        `return`: A tuple of the slopes of the two comparison lines sorted in ascending order</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">points</span> <span class="o">=</span> <span class="n">corner_points</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">]</span>
         <span class="n">first_slope</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
@@ -1129,19 +1132,21 @@ table {
 
     <span class="k">def</span> <span class="nf">in_region</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
-<span class="sd">        :return: A boolean value of the state&#39;s presence in the region</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
+<span class="sd">        `return`: A boolean value of the state&#39;s presence in the region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="mi">1</span>
 
     <span class="k">def</span> <span class="nf">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        Compares the two states and returns True if a line between them could possibly intersect the region</span>
-<span class="sd">        :param other: The second State to compare to this one</span>
-<span class="sd">        :return: A boolean value representing possible intersection with region</span>
+
+<span class="sd">        `other`: The second State to compare to this one</span>
+
+<span class="sd">        `return`: A boolean value representing possible intersection with region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">lon</span><span class="p">:</span>  <span class="c1"># Checks all possibilities where the lon states are the same</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>      <span class="c1"># All states where both points are on the same side of the region</span>
@@ -1165,11 +1170,13 @@ table {
 
 <span class="k">def</span> <span class="nf">init_state</span><span class="p">(</span><span class="n">northwest</span><span class="p">,</span> <span class="n">southeast</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
+
 <span class="sd">    Initializes the global fields that is shared by all instances of State</span>
-<span class="sd">    :param northwest: Top left coordinate list</span>
-<span class="sd">    :param southeast: Bottom right coordinate list</span>
+
+<span class="sd">    `northwest`: Top left coordinate list</span>
+
+<span class="sd">    `southeast`: Bottom right coordinate list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">lon_min</span>
     <span class="k">global</span> <span class="n">lon_max</span>
@@ -1209,21 +1216,22 @@ table {
 
     
   
-    <div class="desc"><p>Author: Nick LaPosta
-Version = 1.0
-Initializes the global fields that is shared by all instances of State
-:param northwest: Top left coordinate list
-:param southeast: Bottom right coordinate list</p></div>
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Initializes the global fields that is shared by all instances of State</p>
+<p><code>northwest</code>: Top left coordinate list</p>
+<p><code>southeast</code>: Bottom right coordinate list</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.State.init_state', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.State.init_state" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">init_state</span><span class="p">(</span><span class="n">northwest</span><span class="p">,</span> <span class="n">southeast</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
+
 <span class="sd">    Initializes the global fields that is shared by all instances of State</span>
-<span class="sd">    :param northwest: Top left coordinate list</span>
-<span class="sd">    :param southeast: Bottom right coordinate list</span>
+
+<span class="sd">    `northwest`: Top left coordinate list</span>
+
+<span class="sd">    `southeast`: Bottom right coordinate list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">lon_min</span>
     <span class="k">global</span> <span class="n">lon_max</span>
@@ -1266,11 +1274,13 @@ Initializes the global fields that is shared by all instances of State
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        A state class that represents the location of a point relative to the region</span>
-<span class="sd">        :param lon: The longitude value of the point</span>
-<span class="sd">        :param lat: The latitude value of the point</span>
+
+<span class="sd">        `lon`: The longitude value of the point</span>
+
+<span class="sd">        `lat`: The latitude value of the point</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="n">lon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="n">lat</span>
@@ -1290,10 +1300,11 @@ Initializes the global fields that is shared by all instances of State
 
     <span class="k">def</span> <span class="nf">get_slope</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        Returns the slopes that should be used for the intersection calculation.</span>
-<span class="sd">        :return: A tuple of the slopes of the two comparison lines sorted in ascending order</span>
+
+<span class="sd">        `return`: A tuple of the slopes of the two comparison lines sorted in ascending order</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">points</span> <span class="o">=</span> <span class="n">corner_points</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">]</span>
         <span class="n">first_slope</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
@@ -1305,19 +1316,21 @@ Initializes the global fields that is shared by all instances of State
 
     <span class="k">def</span> <span class="nf">in_region</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
-<span class="sd">        :return: A boolean value of the state&#39;s presence in the region</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
+<span class="sd">        `return`: A boolean value of the state&#39;s presence in the region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="mi">1</span>
 
     <span class="k">def</span> <span class="nf">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Author: Nick LaPosta</span>
-<span class="sd">        Version = 1.0</span>
+<span class="sd">        `Author`: Nick LaPosta</span>
+
 <span class="sd">        Compares the two states and returns True if a line between them could possibly intersect the region</span>
-<span class="sd">        :param other: The second State to compare to this one</span>
-<span class="sd">        :return: A boolean value representing possible intersection with region</span>
+
+<span class="sd">        `other`: The second State to compare to this one</span>
+
+<span class="sd">        `return`: A boolean value representing possible intersection with region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">lon</span><span class="p">:</span>  <span class="c1"># Checks all possibilities where the lon states are the same</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>      <span class="c1"># All states where both points are on the same side of the region</span>
@@ -1379,21 +1392,19 @@ Initializes the global fields that is shared by all instances of State
 
     
   
-    <div class="desc"><p>Author: Nick LaPosta
-Version = 1.0
-A state class that represents the location of a point relative to the region
-:param lon: The longitude value of the point
-:param lat: The latitude value of the point</p></div>
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>A state class that represents the location of a point relative to the region</p>
+<p><code>lon</code>: The longitude value of the point</p>
+<p><code>lat</code>: The latitude value of the point</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.State.State.__init__', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.State.State.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
 <span class="sd">    A state class that represents the location of a point relative to the region</span>
-<span class="sd">    :param lon: The longitude value of the point</span>
-<span class="sd">    :param lat: The latitude value of the point</span>
+<span class="sd">    `lon`: The longitude value of the point</span>
+<span class="sd">    `lat`: The latitude value of the point</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="n">lon</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="n">lat</span>
@@ -1425,19 +1436,17 @@ A state class that represents the location of a point relative to the region
 
     
   
-    <div class="desc"><p>Author: Nick LaPosta
-Version = 1.0
-Returns the slopes that should be used for the intersection calculation.
-:return: A tuple of the slopes of the two comparison lines sorted in ascending order</p></div>
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Returns the slopes that should be used for the intersection calculation.</p>
+<p><code>return</code>: A tuple of the slopes of the two comparison lines sorted in ascending order</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.State.State.get_slope', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.State.State.get_slope" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_slope</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-<span class="sd">    Version = 1.0</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
 <span class="sd">    Returns the slopes that should be used for the intersection calculation.</span>
-<span class="sd">    :return: A tuple of the slopes of the two comparison lines sorted in ascending order</span>
+<span class="sd">    `return`: A tuple of the slopes of the two comparison lines sorted in ascending order</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">points</span> <span class="o">=</span> <span class="n">corner_points</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">]</span>
     <span class="n">first_slope</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
@@ -1462,17 +1471,15 @@ Returns the slopes that should be used for the intersection calculation.
 
     
   
-    <div class="desc"><p>Author: Nick LaPosta
-Version = 1.0
-:return: A boolean value of the state's presence in the region</p></div>
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p><code>return</code>: A boolean value of the state's presence in the region</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.State.State.in_region', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.State.State.in_region" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">in_region</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-<span class="sd">    Version = 1.0</span>
-<span class="sd">    :return: A boolean value of the state&#39;s presence in the region</span>
+<span class="sd">    `Author`: Nick LaPosta</span>
+<span class="sd">    `return`: A boolean value of the state&#39;s presence in the region</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="mi">1</span>
 </pre></div>
