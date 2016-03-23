@@ -1,7 +1,7 @@
 from urllib import urlretrieve
 from time import sleep
 from random import uniform
-from Mercator import LatLongPoint
+from GeometricDataStructures.Mercator import LatLongPoint
 
 
 class UrlBuilder(object):

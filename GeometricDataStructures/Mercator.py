@@ -1,6 +1,6 @@
 from __future__ import division
 import math
-from KmlFasade import LatLongPoint
+from GeometricDataStructures.KmlFasade import LatLongPoint
 
 
 class MercatorPoint:

@@ -1,6 +1,6 @@
 from lxml import etree, objectify
-from RestrictionEngine import SquareRestriction
-from Geometrics import *
+from RestrictionEngine.RestrictionEngine import SquareRestriction
+from GeometricDataStructures.Geometrics import *
 from pykml.factory import KML_ElementMaker as KML
 import Utils
 
@@ -9,6 +9,7 @@ debug = 0
 class LatLongPoint:
     """
     Author: Nick LaPosta
+
     Container for the lat/lon coordinate for a point on a Mercator map projection.
     GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
     """

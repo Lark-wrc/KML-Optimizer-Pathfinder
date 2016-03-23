@@ -1,7 +1,7 @@
-from KmlFasade import KmlFasade
-from UrlBuilder import UrlBuilder
-from RestrictionEngine import RestrictionFactory
-import ImageMerge
+from GeometricDataStructures.KmlFasade import KmlFasade
+from StaticMapsConnections.UrlBuilder import UrlBuilder
+from RestrictionEngine.RestrictionEngine import RestrictionFactory
+import StaticMapsConnections.ImageMerge as ImageMerge
 import Image
 import Utils
 import time
