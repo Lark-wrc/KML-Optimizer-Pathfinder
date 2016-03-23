@@ -1,21 +1,23 @@
 from urllib import urlretrieve
 from time import sleep
 from random import uniform
+from Mercator import GeoLatLng
+
 
 class UrlBuilder(object):
 
-    def __init__(self, size):
+    def __init__(self, height, width=0):
         """
-        Author: Bill Clark
-        The UrlBuilder Class should be created anew for each url the user wants to build.
+        Author: Bill Clark, Nick LaPosta
+        The UrlBuilder Class should be recreated for each url the user wants to build.
         Using the methods contained, the user may create a valid google maps static api url.
-        Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
-        All inputs will be need to be converted to Long Lat, as all other files use Lat Long.
-        :param size: the size of the returned image in pixels. [0-640]x[0-640]
+        Input is not checked, and ALL INPUTS SHOULD BE NUMERIC.
+        :param height: the vertical size of the returned image in pixels. [0-640]
+        :param width: default to zero if a square image is desired. Otherwise, the horizontal size of the returned image in pixels. [0-640]
         """
 
-        self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
-        self.urlbase += 'size='+size
+        self.url = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.url += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
         self.url = self.urlbase
         self.urllist = []
         self.limit = 2000 #Proper limit is 2048, buffer of 48. Url can only be that many characters.
@@ -55,13 +57,12 @@ class UrlBuilder(object):
         self.url = self.urlbase
         return self.url
 
-    def centerparams(self, center, zoom):
+    def centerparams(self, center_point, zoom):
         """
-        Author: Bill Clark
-        This method adds two parameters to the url that are required for a consistent image. In order to merge
-        images, these parameters are required to keep the image displaying the same area. In a split scenerio,
-        these are applied to each url. Multiple calls are unnecessary.
-        :param center: The center point the map will display. latitude and longitude coordinates.
+        Author: Bill Clark, Nick LaPosta
+        This is a shortcut method that adds the two values a url must contain to be valid, given the url
+        has no viewpoint, marker, or path. It adds center and zoom.
+        :param center: The center point the map will display. GeoLatLng object
         :param zoom: How far zoomed in the map slice will be. [1-20]
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
@@ -69,36 +70,31 @@ class UrlBuilder(object):
         if len(self.urlbase) > 59:
             return 0
         curr = ""
-        curr += '&&center='+center
-        curr += '&&zoom='+zoom
+        curr += '&&center='+repr(center_point)
+        curr += '&&zoom='+repr(zoom)
         self.urlbase += curr
         self.url = self.urlbase
         return self.url
 
     def viewportparam(self, viewports):
         """
-        Author: Bill Clark
-        Appends a viewport parameter. A viewport makes each point it is given visible on the map. If the parameters
-        are provided as a list, when a coordinate is added and the length is pushed over the character limit,
-        the url will be split. If the locations are provided as a solid string, the url will only be checked after
-        everything is appended. (This could cause data loss.)
-        :param viewports: Locations in a list format. Each will be made visible.
+        Author: Bill Clark, Nick LaPosta
+        Appends a viewport parameter. A viewport makes each point it is given visible on the map.
+        :param viewports: Locations in a list format. Each will be made visible. list of GeoLatLng objects
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
         curr = self.url[:]
         curr += '&&visible='
-        if type(viewports) is list:
-            for coordin in viewports:
-                curr += coordin
-                if self.retireUrl(curr):
-                    curr = self.url + '&&visible='
-                    curr += coordin + '|'
-                else:
-                    curr += '|'
-            curr = curr[:-1]
-        elif type(viewports) is str:
-            curr += (viewports)
+
+        for coordinate in viewports:
+            curr += coordinate
+            if self.retireUrl(curr):
+                curr = self.url + '&&visible='
+                curr += coordinate + '|'
+            else:
+                curr += '|'
+        curr = curr[:-1]
 
         self.url = curr
         self.retireUrl(self.url)
@@ -106,15 +102,12 @@ class UrlBuilder(object):
 
     def addmarkers(self, styles, locations):
         """
-        Author: Bill Clark
-        Adds the locations listed as markers to the url. Each point will have the supplied style settings. If the
-        parameters are provided as a list, when a coordinate is added and the length is pushed over the character limit,
-        the url will be split. If the locations are provided as a solid string, the url will only be checked after
-        everything is appended. (This could cause data loss.)
+        Author: Bill Clark, Nick LaPosta
+        Adds the marker list to the url. Each point will have the supplied style settings.
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: size | label | color
                         Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
-        :param locations: Locations in a list format. Each will be added to be marked. list of  coordinates.
+        :param locations: Locations in a list format. Each will be added to be marked. list of GeoLatLng objects.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
@@ -124,19 +117,16 @@ class UrlBuilder(object):
         for key in styles:
             curr += key + ':' + styles[key] + '|'
 
-        if type(locations) is list:
-            for coordin in locations:
-                curr += coordin
-                if self.retireUrl(curr):
-                    curr = self.url + '&&markers='
-                    for key in styles:
-                        curr += key + ':' + styles[key] + '|'
-                    curr += coordin + '|'
-                else:
-                    curr += '|'
-            curr = curr[:-1]
-        elif type(locations) is str:
-            curr += (locations)
+        for coordin in locations:
+            curr += coordin
+            if self.retireUrl(curr):
+                curr = self.url + '&&markers='
+                for key in styles:
+                    curr += key + ':' + styles[key] + '|'
+                curr += coordin + '|'
+            else:
+                curr += '|'
+        curr = curr[:-1]
 
         self.url = curr
         self.retireUrl(self.url)
@@ -144,17 +134,12 @@ class UrlBuilder(object):
 
     def addpath(self, styles, locations):
         """
-        Author: Bill Clark
-        Adds the path listed to the url. The lines drawn and area filled will have the style setting specified.
-        If the url is split, filling with not work, and can possibly break the url. Filled areas are expected to
-        with in a single url by google maps static.
-        If the parameters are provided as a list, when a coordinate is added and the length is pushed over the
-        character limit, the url will be split. If the locations are provided as a solid string, the url will only be
-        checked after everything is appended. (This could cause data loss.)
+        Author: Bill Clark, Nick LaPosta
+        Adds the path list to the url. The lines drawn and area filled will have the style setting specified.
         :param styles: Style settings, which function like parameters, a dict of name and value.
                         Valid Names: weight | geodesic | color | fillcolor
                         Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
-        :param locations: Locations in a list format. Each will be added to be marked. list of coordinates.
+        :param locations: Locations in a list format. Each will be added to be marked. list of GeoLatLng objects.
         :return: the url with the given parameter appended to it. Also updates saved url.
         """
 
@@ -164,19 +149,16 @@ class UrlBuilder(object):
         for key in styles:
             curr += key + ':' + styles[key] + '|'
 
-        if type(locations) is list:
-            for coordin in locations:
-                curr += coordin
-                if self.retireUrl(curr):
-                    curr = self.url + "&&path="
-                    for key in styles:
-                        curr += key + ':' + styles[key] + '|'
-                    curr += coordin + '|'
-                else:
-                    curr += "|"
-            curr = curr[:-1]
-        elif type(locations) is str:
-            curr += (locations)
+        for coordinate in locations:
+            curr += coordinate
+            if self.retireUrl(curr):
+                curr = self.url + "&&path="
+                for key in styles:
+                    curr += key + ':' + styles[key] + '|'
+                curr += coordinate + '|'
+            else:
+                curr += "|"
+        curr = curr[:-1]
 
         self.url = curr
         self.retireUrl(self.url)
@@ -199,15 +181,40 @@ class UrlBuilder(object):
         for url in self.urllist:
             ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
             count+=1
-            sleep(uniform(0,1))
+            sleep(.5)
         ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
         return ret
+
+    def downloadGenerator(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
+        """
+        Author: Bill Clark
+        Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
+        the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
+        because mulitple urls may be downloaded. This is a python generator, it can be treated as an iterable
+        object and it will yield a url in every iteration, until no more exist. The generator does not return the
+        base url, as the base url is needed in every iteration.
+        :param path: a file path to save the generated image to.
+        :param prefix: The prefix to the count in the file name. Defaults to image.
+        :return: A list of the file locations for the downloaded files.
+        """
+
+        count = 1
+        #yield urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+        for url in self.urllist:
+            yield urlretrieve(url, path.format(prefix, repr(count)))[0]
+            count+=1
+            sleep(.5)
+        yield urlretrieve(self.url, path.format(prefix, repr(count)))[0]
+
+    def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
+        return urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+
 
     def countUrl(self, url):
         """
         Author: Bill Clark
         This method counts the characters in the given url. Of note, This does not use internal values, unlike most
-         methods in the class. This method is neccessary because | characters count as 3 when actually read by static
+         methods in the class. This method is necessary because | characters count as 3 when actually read by static
          maps.
         :param url: The url to be counted.
         :return: returns the number of characters in the url.
