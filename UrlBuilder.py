@@ -1,14 +1,14 @@
 from urllib import urlretrieve
 from time import sleep
 from random import uniform
-from Mercator import GeoLatLng
+from Mercator import LatLongPoint
 
 
 class UrlBuilder(object):
 
     def __init__(self, height, width=0):
         """
-        `Author`: Bill Clark
+        `Author`: Bill Clark, Nick Laposta
 
         The UrlBuilder Class should be created anew for each url the user wants to build.
         Using the methods contained, the user may create a valid google maps static api url.

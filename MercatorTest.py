@@ -8,7 +8,7 @@ build.centerparams("40.856299,-74.243730", repr(zoom))
 
 centerLat = 40.856299
 centerLon = -74.243730
-centerpoint = Mercator.GeoLatLng(centerLat, centerLon)
+centerpoint = Mercator.LatLongPoint(centerLat, centerLon)
 size = 600
 corners = Mercator.get_corners(centerpoint, zoom, size, size)
 cornerCoords = [repr(corners['N']) + "," + repr(corners['W']),
