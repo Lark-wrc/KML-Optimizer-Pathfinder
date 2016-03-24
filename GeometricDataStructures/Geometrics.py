@@ -59,9 +59,6 @@ class GeometricObject(object):
         self.remove = 0
         self.debug = 0
         self.coordinates = [] #Most definitely required.
-        # for x in coordinates.split():
-        #     s = x.split(',')
-        #     self.coordinates.append([float(s[0]), float(s[1])])
         if coordinates is str:
             for x in coordinates.split():
                 s = x.split(',')
@@ -77,7 +74,6 @@ class GeometricObject(object):
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file object.
         """
-        #self.element.find('coordinates').text = '\n'.join([','.join([str(y) for y in x]) for x in self.coordinates])
         self.element.find('coordinates').text = '\n'.join([str(x) for x in self.coordinates])
 
     def switchCoordinates(self):
@@ -88,7 +84,6 @@ class GeometricObject(object):
         `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
         """
         for coordin in self.coordinates:
-            #coordin[0], coordin[1] = coordin[1], coordin[0]
             coordin.lat, coordin.lng = coordin.lng, coordin.lat
         return self.printCoordinates()
 
@@ -101,11 +96,9 @@ class GeometricObject(object):
         `return`: String of the coordinates in the object.
         """
         if self.tag == "Point":
-            #return ','.join([str(x) for x in self.coordinates[0]])
             return str(self.coordinates[0])
         ret = ""
         for y in self.coordinates:
-            #ret += ','.join([str(x)for x in y]) + "|"
             ret += str(y) + "|"
         return ret[:-1]
 
@@ -119,11 +112,9 @@ class GeometricObject(object):
         `return`: The coordinates as Strings, placed in a list.
         """
         if self.tag == "Point":
-            #return [','.join([str(x) for x in self.coordinates[0]])]
             return [str(self.coordinates[0])]
         ret = []
         for y in self.coordinates:
-            #ret.append(','.join([str(x)for x in y]))
             ret.append(str(y))
         return ret
 

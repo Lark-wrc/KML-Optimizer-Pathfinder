@@ -1037,6 +1037,13 @@ table {
     <h1>Index</h1>
     <ul id="index">
 
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.elementPrint">elementPrint</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
@@ -1061,6 +1068,16 @@ table {
     <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.GeometricObject.coordinatesAsListStrings">coordinatesAsListStrings</a></li>
     <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.GeometricObject.printCoordinates">printCoordinates</a></li>
     <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.GeometricObject.switchCoordinates">switchCoordinates</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint">LatLongPoint</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.listed">listed</a></li>
   </ul>
 
         </li>
@@ -1137,6 +1154,32 @@ table {
   <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics" class="source">
     <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">Utils</span>
 
+<span class="k">class</span> <span class="nc">LatLongPoint</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Author: Nick LaPosta</span>
+
+<span class="sd">    Container for the lat/lon coordinate for a point on a Mercator map projection.</span>
+<span class="sd">    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude &gt; 180 or &lt; -180</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">ln</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lt</span>
+        <span class="k">if</span> <span class="n">ln</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="o">-</span><span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">ln</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lng</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">listed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lng</span><span class="p">]</span>
+
 <span class="k">class</span> <span class="nc">GeometricObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1148,7 +1191,7 @@ table {
 <span class="sd">        `return`: This object as a string.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span><span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">Utils</span><span class="o">.</span><span class="n">elementPrint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span><span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">elementPrint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1170,9 +1213,15 @@ table {
         <span class="bp">self</span><span class="o">.</span><span class="n">remove</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#Most definitely required.</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+        <span class="c1"># for x in coordinates.split():</span>
+        <span class="c1">#     s = x.split(&#39;,&#39;)</span>
+        <span class="c1">#     self.coordinates.append([float(s[0]), float(s[1])])</span>
+        <span class="k">if</span> <span class="n">coordinates</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LatLongPoint</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">coordinates</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span>
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1182,7 +1231,8 @@ table {
 <span class="sd">        This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">        made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
+        <span class="c1">#self.element.find(&#39;coordinates&#39;).text = &#39;\n&#39;.join([&#39;,&#39;.join([str(y) for y in x]) for x in self.coordinates])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">switchCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1192,7 +1242,8 @@ table {
 <span class="sd">        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
+            <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1204,10 +1255,12 @@ table {
 <span class="sd">        `return`: String of the coordinates in the object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+            <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
         <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1220,10 +1273,12 @@ table {
 <span class="sd">        `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+            <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]))</span>
+            <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">ret</span>
 
 <span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
@@ -1402,6 +1457,25 @@ table {
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s1">&#39;bad news bears&#39;</span>
+
+<span class="k">def</span> <span class="nf">elementPrint</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">bool</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
+<span class="sd">    Version = 1.0</span>
+<span class="sd">    Quick method to print an lxml element. For quicker writing.</span>
+<span class="sd">    `element`: lxml element.</span>
+
+<span class="sd">    `bool`: To pretty print or to compress to a single line.</span>
+
+<span class="sd">    `return`: the tostring of the element.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1410,6 +1484,50 @@ table {
 
   <section id="section-items">
 
+    <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.elementPrint">
+    <p>def <span class="ident">elementPrint</span>(</p><p>element, bool=0)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Version = 1.0
+Quick method to print an lxml element. For quicker writing.
+<code>element</code>: lxml element.</p>
+<p><code>bool</code>: To pretty print or to compress to a single line.</p>
+<p><code>return</code>: the tostring of the element.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.elementPrint', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.elementPrint" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">elementPrint</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">bool</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Author`: Bill Clark</span>
+
+<span class="sd">    Version = 1.0</span>
+<span class="sd">    Quick method to print an lxml element. For quicker writing.</span>
+<span class="sd">    `element`: lxml element.</span>
+
+<span class="sd">    `bool`: To pretty print or to compress to a single line.</span>
+
+<span class="sd">    `return`: the tostring of the element.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
 
     <h2 class="section-title" id="header-classes">Classes</h2>
       
@@ -1668,7 +1786,7 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        `return`: This object as a string.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span><span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">Utils</span><span class="o">.</span><span class="n">elementPrint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span><span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">elementPrint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1690,9 +1808,15 @@ values directly. The create method, in comparision, takes the top level element 
         <span class="bp">self</span><span class="o">.</span><span class="n">remove</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#Most definitely required.</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+        <span class="c1"># for x in coordinates.split():</span>
+        <span class="c1">#     s = x.split(&#39;,&#39;)</span>
+        <span class="c1">#     self.coordinates.append([float(s[0]), float(s[1])])</span>
+        <span class="k">if</span> <span class="n">coordinates</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LatLongPoint</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">coordinates</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span>
 
     <span class="k">def</span> <span class="nf">applyEdits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1702,7 +1826,8 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">        made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
+        <span class="c1">#self.element.find(&#39;coordinates&#39;).text = &#39;\n&#39;.join([&#39;,&#39;.join([str(y) for y in x]) for x in self.coordinates])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">switchCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1712,7 +1837,8 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
+            <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">printCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1724,10 +1850,12 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        `return`: String of the coordinates in the object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+            <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
         <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">coordinatesAsListStrings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1740,10 +1868,12 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+            <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]))</span>
+            <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
 
@@ -1843,9 +1973,15 @@ replacing or removing them.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">remove</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#Most definitely required.</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+    <span class="c1"># for x in coordinates.split():</span>
+    <span class="c1">#     s = x.split(&#39;,&#39;)</span>
+    <span class="c1">#     self.coordinates.append([float(s[0]), float(s[1])])</span>
+    <span class="k">if</span> <span class="n">coordinates</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LatLongPoint</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">coordinates</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span> <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span>
 </pre></div>
 
@@ -1875,7 +2011,8 @@ made to the pulled out xml values and apply them back to the file object.</p></d
 <span class="sd">    This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">    made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
+    <span class="c1">#self.element.find(&#39;coordinates&#39;).text = &#39;\n&#39;.join([&#39;,&#39;.join([str(y) for y in x]) for x in self.coordinates])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
 </pre></div>
 
   </div>
@@ -1907,10 +2044,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]))</span>
+        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
 
@@ -1941,10 +2080,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -1975,8 +2116,122 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
+        <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint" class="name">class <span class="ident">LatLongPoint</span></p>
+      
+  
+    <div class="desc"><p>Author: Nick LaPosta</p>
+<p>Container for the lat/lon coordinate for a point on a Mercator map projection.
+GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude &gt; 180 or &lt; -180</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LatLongPoint</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Author: Nick LaPosta</span>
+
+<span class="sd">    Container for the lat/lon coordinate for a point on a Mercator map projection.</span>
+<span class="sd">    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude &gt; 180 or &lt; -180</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">ln</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lt</span>
+        <span class="k">if</span> <span class="n">ln</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="o">-</span><span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">ln</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lng</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">listed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lng</span><span class="p">]</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint">LatLongPoint</a></li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.lat" class="name">var <span class="ident">lat</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, lt, ln)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">ln</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lt</span>
+    <span class="k">if</span> <span class="n">ln</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="o">-</span><span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">ln</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.listed">
+    <p>def <span class="ident">listed</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.listed', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.LatLongPoint.listed" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">listed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lng</span><span class="p">]</span>
 </pre></div>
 
   </div>
@@ -2203,10 +2458,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]))</span>
+        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
 
@@ -2241,10 +2498,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -2279,7 +2538,8 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
+        <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
 
@@ -2507,10 +2767,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]))</span>
+        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
 
@@ -2545,10 +2807,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -2583,7 +2847,8 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
+        <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
 
@@ -2809,10 +3074,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]))</span>
+        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
 
@@ -2847,10 +3114,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -2885,7 +3154,8 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
+        <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
 
@@ -3117,10 +3387,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]))</span>
+        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
 
@@ -3155,10 +3427,12 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -3193,7 +3467,8 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
+        <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
 

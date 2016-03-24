@@ -1063,15 +1063,6 @@ table {
   </ul>
 
         </li>
-        <li class="mono">
-        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint">LatLongPoint</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint.__init__">__init__</a></li>
-  </ul>
-
-        </li>
       </ul>
     </li>
 
@@ -1098,29 +1089,6 @@ table {
 <span class="kn">import</span> <span class="nn">Utils</span>
 
 <span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="k">class</span> <span class="nc">LatLongPoint</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-
-<span class="sd">    Container for the lat/lon coordinate for a point on a Mercator map projection.</span>
-<span class="sd">    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude &gt; 180 or &lt; -180</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">ln</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lt</span>
-        <span class="k">if</span> <span class="n">ln</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="o">-</span><span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">ln</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lng</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">KmlFasade</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
@@ -1155,12 +1123,12 @@ table {
 
         <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-            <span class="c1">#f.write(Utils.elementPrint(self.kmlRoot))</span>
+            <span class="c1">#f.write(elementPrint(self.kmlRoot))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kmlTree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-            <span class="c1">#f.write(Utils.elementPrint(self.kmlRoot))</span>
+            <span class="c1">#f.write(elementPrint(self.kmlRoot))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kmlTree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -1355,12 +1323,12 @@ table {
 
         <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-            <span class="c1">#f.write(Utils.elementPrint(self.kmlRoot))</span>
+            <span class="c1">#f.write(elementPrint(self.kmlRoot))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kmlTree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-            <span class="c1">#f.write(Utils.elementPrint(self.kmlRoot))</span>
+            <span class="c1">#f.write(elementPrint(self.kmlRoot))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kmlTree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -1814,103 +1782,14 @@ to make this task quicker.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-        <span class="c1">#f.write(Utils.elementPrint(self.kmlRoot))</span>
+        <span class="c1">#f.write(elementPrint(self.kmlRoot))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kmlTree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-        <span class="c1">#f.write(Utils.elementPrint(self.kmlRoot))</span>
+        <span class="c1">#f.write(elementPrint(self.kmlRoot))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kmlTree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      </div>
-      </div>
-      
-      <div class="item">
-      <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint" class="name">class <span class="ident">LatLongPoint</span></p>
-      
-  
-    <div class="desc"><p>Author: Nick LaPosta</p>
-<p>Container for the lat/lon coordinate for a point on a Mercator map projection.
-GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude &gt; 180 or &lt; -180</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint', this);">Show source &equiv;</a></p>
-  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LatLongPoint</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Author: Nick LaPosta</span>
-
-<span class="sd">    Container for the lat/lon coordinate for a point on a Mercator map projection.</span>
-<span class="sd">    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude &gt; 180 or &lt; -180</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">ln</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lt</span>
-        <span class="k">if</span> <span class="n">ln</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="o">-</span><span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">ln</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lng</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint">LatLongPoint</a></li>
-          </ul>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint.lat" class="name">var <span class="ident">lat</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, lt, ln)</p>
-    </div>
-    
-
-    
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.KmlFasade.LatLongPoint.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">ln</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lt</span>
-    <span class="k">if</span> <span class="n">ln</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">if</span> <span class="o">-</span><span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ln</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">ln</span> <span class="o">%</span> <span class="mi">180</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">ln</span>
 </pre></div>
 
   </div>
