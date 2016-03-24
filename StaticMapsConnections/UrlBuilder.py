@@ -18,8 +18,8 @@ class UrlBuilder(object):
         `size`: the size of the returned image in pixels. [0-640]x[0-640]
         """
 
-        self.url = 'https://maps.googleapis.com/maps/api/staticmap?'
-        self.url += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
+        self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.urlbase += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
         self.url = self.urlbase
         self.urllist = []
         self.limit = 2000 #Proper limit is 2048, buffer of 48. Url can only be that many characters.
@@ -252,7 +252,7 @@ class UrlBuilder(object):
         for url in self.urllist:
             yield urlretrieve(url, path.format(prefix, repr(count)))[0]
             count+=1
-            sleep(.5)
+            #sleep(.5)
         yield urlretrieve(self.url, path.format(prefix, repr(count)))[0]
 
     def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):

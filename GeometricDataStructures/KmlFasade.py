@@ -6,29 +6,6 @@ import Utils
 
 debug = 0
 
-class LatLongPoint:
-    """
-    Author: Nick LaPosta
-
-    Container for the lat/lon coordinate for a point on a Mercator map projection.
-    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
-    """
-    def __init__(self, lt, ln):
-        self.lat = lt
-        if ln < 0:
-            if -ln / 180 >= 1:
-                self.lng = 180 - -ln % 180
-            else:
-                self.lng = -(-ln % 180)
-        else:
-            if ln / 180 >= 1:
-                self.lng = 180 - ln % 180
-            else:
-                self.lng = ln
-
-    def __repr__(self):
-        return repr(self.lat) + "," + repr(self.lng)
-
 class KmlFasade(object):
 
     def __init__(self, path):
@@ -62,12 +39,12 @@ class KmlFasade(object):
 
         if path == None:
             f = open(self.filepath, 'w')
-            #f.write(Utils.elementPrint(self.kmlRoot))
+            #f.write(elementPrint(self.kmlRoot))
             self.kmlTree.write(f, pretty_print=True)
             f.close()
         else:
             f = open(path, 'w')
-            #f.write(Utils.elementPrint(self.kmlRoot))
+            #f.write(elementPrint(self.kmlRoot))
             self.kmlTree.write(f, pretty_print=True)
             f.close()
 

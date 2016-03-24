@@ -1,5 +1,5 @@
 from StaticMapsConnections.UrlBuilder import UrlBuilder
-import GeometricDataStructures.Mercator
+import GeometricDataStructures.Mercator as Mercator
 
 zoom = 16
 
