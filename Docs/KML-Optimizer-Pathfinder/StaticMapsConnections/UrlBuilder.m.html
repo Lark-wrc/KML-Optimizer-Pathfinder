@@ -1100,8 +1100,8 @@ table {
 <span class="sd">        `size`: the size of the returned image in pixels. [0-640]x[0-640]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/staticmap?&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">+=</span> <span class="s1">&#39;size=&#39;</span><span class="o">+</span><span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/staticmap?&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span> <span class="o">+=</span> <span class="s1">&#39;size=&#39;</span><span class="o">+</span><span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">urllist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1">#Proper limit is 2048, buffer of 48. Url can only be that many characters.</span>
@@ -1334,7 +1334,7 @@ table {
         <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">urllist</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">count</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
-            <span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+            <span class="c1">#sleep(.5)</span>
         <span class="k">yield</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">count</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">downloadBase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;Inputs\Static Maps</span><span class="se">\\</span><span class="s1">Mass\{} 0.png&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">):</span>
@@ -1462,8 +1462,8 @@ table {
 <span class="sd">        `size`: the size of the returned image in pixels. [0-640]x[0-640]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/staticmap?&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">+=</span> <span class="s1">&#39;size=&#39;</span><span class="o">+</span><span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/staticmap?&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span> <span class="o">+=</span> <span class="s1">&#39;size=&#39;</span><span class="o">+</span><span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">urllist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1">#Proper limit is 2048, buffer of 48. Url can only be that many characters.</span>
@@ -1696,7 +1696,7 @@ table {
         <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">urllist</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">count</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
-            <span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+            <span class="c1">#sleep(.5)</span>
         <span class="k">yield</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">count</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">downloadBase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;Inputs\Static Maps</span><span class="se">\\</span><span class="s1">Mass\{} 0.png&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">):</span>
@@ -1825,6 +1825,16 @@ table {
 
             </div>
             <div class="item">
+            <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.urlbase" class="name">var <span class="ident">urlbase</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
             <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.urllist" class="name">var <span class="ident">urllist</span></p>
             
 
@@ -1862,8 +1872,8 @@ All inputs will be need to be converted to Long Lat, as all other files use Lat 
 <span class="sd">    All inputs will be need to be converted to Long Lat, as all other files use Lat Long.</span>
 <span class="sd">    `size`: the size of the returned image in pixels. [0-640]x[0-640]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/staticmap?&#39;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">+=</span> <span class="s1">&#39;size=&#39;</span><span class="o">+</span><span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/staticmap?&#39;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span> <span class="o">+=</span> <span class="s1">&#39;size=&#39;</span><span class="o">+</span><span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="k">if</span> <span class="n">width</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlbase</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">urllist</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1">#Proper limit is 2048, buffer of 48. Url can only be that many characters.</span>
@@ -2279,7 +2289,7 @@ Invented in order to increase the space between downloads to prevent google from
     <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">urllist</span><span class="p">:</span>
         <span class="k">yield</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">count</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1">#sleep(.5)</span>
     <span class="k">yield</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">count</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 
