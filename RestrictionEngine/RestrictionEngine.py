@@ -139,11 +139,11 @@ class SquareRestriction(Restriction):
         """
         for geometry in geometrics:
             if geometry.tag == "Point":
-                if not self.pointWithinDistance(geometry.coordinates[0]):
+                if not self.pointWithinDistance(geometry.coordinates[0].listed()):
                     geometry.remove = 1
             elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
                 for coord in geometry.coordinates:
-                    if self.pointWithinDistance(coord):
+                    if self.pointWithinDistance(coord.listed()):
                         pass
                     else:
                         geometry.remove = 1
@@ -229,12 +229,12 @@ class CircleRadiusRestriction(Restriction):
 
         for geometry in geometrics:
             if geometry.tag == "Point":
-                d = self.haversine(self.center, geometry.coordinates[0])
+                d = self.haversine(self.center, geometry.coordinates[0].listed())
                 if d > self.distance:
                     geometry.remove = 1
             elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
                 for coord in geometry.coordinates:
-                    d = self.haversine(self.center, coord)
+                    d = self.haversine(self.center, coord.listed())
                     if d <= self.distance:
                         pass
                     else:

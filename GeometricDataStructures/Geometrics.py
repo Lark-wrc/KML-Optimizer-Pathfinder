@@ -1,5 +1,31 @@
 import Utils
 
+class LatLongPoint:
+    """
+    Author: Nick LaPosta
+
+    Container for the lat/lon coordinate for a point on a Mercator map projection.
+    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
+    """
+    def __init__(self, lt, ln):
+        self.lat = lt
+        if ln < 0:
+            if -ln / 180 >= 1:
+                self.lng = 180 - -ln % 180
+            else:
+                self.lng = -(-ln % 180)
+        else:
+            if ln / 180 >= 1:
+                self.lng = 180 - ln % 180
+            else:
+                self.lng = ln
+
+    def __str__(self):
+        return repr(self.lat) + "," + repr(self.lng)
+
+    def listed(self):
+        return [self.lat, self.lng]
+
 class GeometricObject(object):
 
     def __str__(self):
@@ -11,7 +37,7 @@ class GeometricObject(object):
         `return`: This object as a string.
         """
 
-        return str(self.tag)+ ' ' +self.printCoordinates()+ " " + Utils.elementPrint(self.element)
+        return str(self.tag)+ ' ' +self.printCoordinates()+ " " + elementPrint(self.element)
 
     def __init__(self, element, tag, coordinates):
         """
@@ -33,9 +59,15 @@ class GeometricObject(object):
         self.remove = 0
         self.debug = 0
         self.coordinates = [] #Most definitely required.
-        for x in coordinates.split():
-            s = x.split(',')
-            self.coordinates.append([float(s[0]), float(s[1])])
+        # for x in coordinates.split():
+        #     s = x.split(',')
+        #     self.coordinates.append([float(s[0]), float(s[1])])
+        if coordinates is str:
+            for x in coordinates.split():
+                s = x.split(',')
+                self.coordinates.append(LatLongPoint(float(s[0]),float(s[1])))
+        else:
+            self.coordinates = coordinates
         if self.debug: print self.coordinates
 
     def applyEdits(self):
@@ -45,7 +77,8 @@ class GeometricObject(object):
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file object.
         """
-        self.element.find('coordinates').text = '\n'.join([','.join([str(y) for y in x]) for x in self.coordinates])
+        #self.element.find('coordinates').text = '\n'.join([','.join([str(y) for y in x]) for x in self.coordinates])
+        self.element.find('coordinates').text = '\n'.join([str(x) for x in self.coordinates])
 
     def switchCoordinates(self):
         """
@@ -55,7 +88,8 @@ class GeometricObject(object):
         `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
         """
         for coordin in self.coordinates:
-            coordin[0], coordin[1] = coordin[1], coordin[0]
+            #coordin[0], coordin[1] = coordin[1], coordin[0]
+            coordin.lat, coordin.lng = coordin.lng, coordin.lat
         return self.printCoordinates()
 
     def printCoordinates(self):
@@ -67,10 +101,12 @@ class GeometricObject(object):
         `return`: String of the coordinates in the object.
         """
         if self.tag == "Point":
-            return ','.join([str(x) for x in self.coordinates[0]])
+            #return ','.join([str(x) for x in self.coordinates[0]])
+            return str(self.coordinates[0])
         ret = ""
         for y in self.coordinates:
-            ret += ','.join([str(x)for x in y]) + "|"
+            #ret += ','.join([str(x)for x in y]) + "|"
+            ret += str(y) + "|"
         return ret[:-1]
 
     def coordinatesAsListStrings(self):
@@ -83,10 +119,12 @@ class GeometricObject(object):
         `return`: The coordinates as Strings, placed in a list.
         """
         if self.tag == "Point":
-            return [','.join([str(x) for x in self.coordinates[0]])]
+            #return [','.join([str(x) for x in self.coordinates[0]])]
+            return [str(self.coordinates[0])]
         ret = []
         for y in self.coordinates:
-            ret.append(','.join([str(x)for x in y]))
+            #ret.append(','.join([str(x)for x in y]))
+            ret.append(str(y))
         return ret
 
 class Point(GeometricObject):
@@ -265,3 +303,22 @@ class GeometricFactory(object):
 
         else:
             print 'bad news bears'
+
+def elementPrint(element, bool=0):
+    """
+    `Author`: Bill Clark
+
+    Version = 1.0
+    Quick method to print an lxml element. For quicker writing.
+    `element`: lxml element.
+
+    `bool`: To pretty print or to compress to a single line.
+
+    `return`: the tostring of the element.
+
+    """
+
+    if bool:
+        return etree.tostring(element, pretty_print=False)
+    else:
+        return etree.tostring(element, pretty_print=True)
