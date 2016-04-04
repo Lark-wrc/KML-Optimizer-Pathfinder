@@ -270,11 +270,11 @@ class GeometricFactory(object):
             ret = []
             skip = 0 #Set to 1 initally to skip the actual multigeo tag.
             first = 1
-            first = 1
             for x in element.iter():
                 if first:
                     first = 0
                     continue
+
                 if skip:
                     skip += len(x)
                     skip -= 1
@@ -288,6 +288,7 @@ class GeometricFactory(object):
                     if x.tag == "Polygon" or x.tag == "MultiGeometry": skip += len(x)
                 else:
                     pass
+
             return ret
 
         else:

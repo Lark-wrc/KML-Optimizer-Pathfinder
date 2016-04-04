@@ -102,7 +102,6 @@ class KmlFasade(object):
                 else:
                     pass
         self.geometrics = ret
-        print len(self.geometrics)
         return ret
 
     def fasadeUpdate(self):
