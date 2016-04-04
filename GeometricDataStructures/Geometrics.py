@@ -59,7 +59,7 @@ class GeometricObject(object):
         self.remove = 0
         self.debug = 0
         self.coordinates = [] #Most definitely required.
-        if coordinates is str:
+        if type(coordinates) is str:
             for x in coordinates.split():
                 s = x.split(',')
                 self.coordinates.append(LatLongPoint(float(s[0]),float(s[1])))
@@ -74,6 +74,10 @@ class GeometricObject(object):
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file object.
         """
+        if self.remove:
+            y = self.element.getparent()
+            if y is not None: y.remove(self.element)
+            return 0
         self.element.find('coordinates').text = '\n'.join([str(x) for x in self.coordinates])
 
     def switchCoordinates(self):
@@ -136,10 +140,6 @@ class Point(GeometricObject):
         point, the point will be removed from the file. This removal is done from the Placemark containing the point.
         """
 
-        if self.remove:
-            x = self.element.getparent()
-            y = x.getparent()
-            y.remove(x)
         super(Point,self).applyEdits()
 
 
@@ -161,11 +161,6 @@ class LinearRing(GeometricObject):
         removal. This is done from the placemark above the LinearRing.
         """
 
-        if self.remove:
-                x = self.element.getparent()
-                y = x.getparent()
-                y.remove(x)
-                return 0
         super(LinearRing,self).applyEdits()
 
 
@@ -187,11 +182,6 @@ class LineString(GeometricObject):
         removal. This is done from the placemark above the LineString.
         """
 
-        if self.remove:
-                x = self.element.getparent()
-                y = x.getparent()
-                y.remove(x)
-                return 0
         super(LineString,self).applyEdits()
 
 class Polygon(GeometricObject):
@@ -214,11 +204,6 @@ class Polygon(GeometricObject):
         removal. This is done from the placemark above the Polygon.
         """
 
-        if self.remove:
-                x = self.element.getparent().getparent()
-                y = x.getparent()
-                y.remove(x)
-                return 0
         super(Polygon,self).applyEdits()
 
 
@@ -231,7 +216,7 @@ class GeometricFactory(object):
         Simple factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
-        self.geometryTypes = ('Point', 'LineString','LinearRing', 'Polygon')
+        self.geometryTypes = ('Point', 'LineString','LinearRing', 'Polygon', 'MultiGeometry')
         pass
 
     def createLiteral(self, element, tag, coordinates):
@@ -272,7 +257,39 @@ class GeometricFactory(object):
         `return`: The created Geometric Object.
         """
 
-        if element.tag != "Polygon":
+        if element.tag == "Polygon" :
+            for x in element.iter():
+                if x.tag in self.geometryTypes and x.tag != "Polygon":
+                    for child in range(len(x)):
+                        if x[child].tag == "coordinates":
+                            break
+                    return Polygon(x, element.tag, x[child].text)
+
+        elif element.tag == 'MultiGeometry':
+            ret = []
+            skip = 0
+            found = 0
+            first = 1
+            for x in element.iter():
+                if first:
+                    first = 0
+                    continue
+                if skip:
+                    skip -= 1
+                    if skip: skip += len(x)
+                if x.tag in self.geometryTypes and not skip:
+                    geo = self.create(x)
+                    assert geo is not None #Checking an object actually got made.
+                    if type(geo) is list: #catches multigeometry returns.
+                        ret.extend(geo)
+                    else:
+                        ret.append(geo)
+                    if x.tag == "Polygon": skip += len(x)+1
+                else:
+                    pass
+            return ret
+
+        else:
             for child in range(len(element)):
                 if element[child].tag == "coordinates":
                     break
@@ -284,16 +301,6 @@ class GeometricFactory(object):
                 return LineString(element, element.tag, element[child].text)
             else:
                 print 'derpy'
-        elif element.tag == 'Polygon':
-            for x in element.iter():
-                if x.tag in self.geometryTypes and x.tag != "Polygon":
-                    for child in range(len(x)):
-                        if x[child].tag == "coordinates":
-                            break
-                    return Polygon(x, element.tag, x[child].text)
-
-        else:
-            print 'bad news bears'
 
 def elementPrint(element, bool=0):
     """
