@@ -257,6 +257,7 @@ class GeometricFactory(object):
         `return`: The created Geometric Object.
         """
 
+
         if element.tag == "Polygon" :
             for x in element.iter():
                 if x.tag in self.geometryTypes and x.tag != "Polygon":
@@ -267,24 +268,24 @@ class GeometricFactory(object):
 
         elif element.tag == 'MultiGeometry':
             ret = []
-            skip = 0
-            found = 0
+            skip = 0 #Set to 1 initally to skip the actual multigeo tag.
+            first = 1
             first = 1
             for x in element.iter():
                 if first:
                     first = 0
                     continue
                 if skip:
+                    skip += len(x)
                     skip -= 1
-                    if skip: skip += len(x)
-                if x.tag in self.geometryTypes and not skip:
+                elif x.tag in self.geometryTypes:
                     geo = self.create(x)
                     assert geo is not None #Checking an object actually got made.
-                    if type(geo) is list: #catches multigeometry returns.
-                        ret.extend(geo)
-                    else:
-                        ret.append(geo)
-                    if x.tag == "Polygon": skip += len(x)+1
+
+                    if type(geo) is list: ret.extend(geo) #catches multigeometry returns.
+                    else: ret.append(geo)
+
+                    if x.tag == "Polygon" or x.tag == "MultiGeometry": skip += len(x)
                 else:
                     pass
             return ret
