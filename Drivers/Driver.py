@@ -19,7 +19,7 @@ fasade.garbageFilter()
 f = RestrictionFactory()
 f = f.newSquareRestriction([-103.528629, 41.260352], 500)
 # f = f.newSquareRestriction([64.871826, 66.833851], 250)
-# f.restrict(fasade.geometrics)
+f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
 
