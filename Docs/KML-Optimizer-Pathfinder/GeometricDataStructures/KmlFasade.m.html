@@ -1168,18 +1168,23 @@ table {
         <span class="n">factory</span> <span class="o">=</span> <span class="n">GeometricFactory</span><span class="p">()</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">skip</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placemarks</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-                <span class="c1">#if x.tag == &quot;Placemark&quot; or x.tag: skip = 0</span>
-                <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
-                    <span class="n">skip</span> <span class="o">-=</span> <span class="mi">1</span>
-                    <span class="k">if</span> <span class="n">skip</span><span class="p">:</span> <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">factory</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
-                    <span class="n">z</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">place</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placemarks</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">place</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
 
+                <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
+                    <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                    <span class="n">skip</span><span class="o">-=</span><span class="mi">1</span>
+
+                <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">factory</span><span class="o">.</span><span class="n">geometryTypes</span><span class="p">:</span>
+                    <span class="n">geo</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="c1">#Checking an object actually got made.</span>
+
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="c1">#catches multigeometry returns.</span>
+                    <span class="k">else</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="ow">or</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;MultiGeometry&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="o">=</span> <span class="n">ret</span>
         <span class="k">return</span> <span class="n">ret</span>
 
@@ -1192,7 +1197,6 @@ table {
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span><span class="p">:</span>
-            <span class="c1">#element.coordinates = [0,1]</span>
             <span class="n">element</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">remove</span><span class="p">]</span>
 
@@ -1368,18 +1372,23 @@ table {
         <span class="n">factory</span> <span class="o">=</span> <span class="n">GeometricFactory</span><span class="p">()</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">skip</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placemarks</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-                <span class="c1">#if x.tag == &quot;Placemark&quot; or x.tag: skip = 0</span>
-                <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
-                    <span class="n">skip</span> <span class="o">-=</span> <span class="mi">1</span>
-                    <span class="k">if</span> <span class="n">skip</span><span class="p">:</span> <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">factory</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
-                    <span class="n">z</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">place</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placemarks</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">place</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
 
+                <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
+                    <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                    <span class="n">skip</span><span class="o">-=</span><span class="mi">1</span>
+
+                <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">factory</span><span class="o">.</span><span class="n">geometryTypes</span><span class="p">:</span>
+                    <span class="n">geo</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="c1">#Checking an object actually got made.</span>
+
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="c1">#catches multigeometry returns.</span>
+                    <span class="k">else</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="ow">or</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;MultiGeometry&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="o">=</span> <span class="n">ret</span>
         <span class="k">return</span> <span class="n">ret</span>
 
@@ -1392,7 +1401,6 @@ table {
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span><span class="p">:</span>
-            <span class="c1">#element.coordinates = [0,1]</span>
             <span class="n">element</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">remove</span><span class="p">]</span>
 
@@ -1653,7 +1661,6 @@ If the addition folder has been generated, This method will also add that folder
 <span class="sd">    If the addition folder has been generated, This method will also add that folder to the file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span><span class="p">:</span>
-        <span class="c1">#element.coordinates = [0,1]</span>
         <span class="n">element</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">remove</span><span class="p">]</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">additionfolder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -1737,17 +1744,19 @@ objects to allow for easy of editing.</p>
     <span class="n">factory</span> <span class="o">=</span> <span class="n">GeometricFactory</span><span class="p">()</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">skip</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placemarks</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-            <span class="c1">#if x.tag == &quot;Placemark&quot; or x.tag: skip = 0</span>
+    <span class="k">for</span> <span class="n">place</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">placemarks</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">place</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
-                <span class="n">skip</span> <span class="o">-=</span> <span class="mi">1</span>
-                <span class="k">if</span> <span class="n">skip</span><span class="p">:</span> <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">factory</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
-                <span class="n">z</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+                <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                <span class="n">skip</span><span class="o">-=</span><span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">factory</span><span class="o">.</span><span class="n">geometryTypes</span><span class="p">:</span>
+                <span class="n">geo</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="c1">#Checking an object actually got made.</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="c1">#catches multigeometry returns.</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="ow">or</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;MultiGeometry&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">geometrics</span> <span class="o">=</span> <span class="n">ret</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>

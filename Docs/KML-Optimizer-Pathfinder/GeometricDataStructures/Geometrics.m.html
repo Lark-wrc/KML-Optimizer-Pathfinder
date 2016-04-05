@@ -1213,10 +1213,7 @@ table {
         <span class="bp">self</span><span class="o">.</span><span class="n">remove</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#Most definitely required.</span>
-        <span class="c1"># for x in coordinates.split():</span>
-        <span class="c1">#     s = x.split(&#39;,&#39;)</span>
-        <span class="c1">#     self.coordinates.append([float(s[0]), float(s[1])])</span>
-        <span class="k">if</span> <span class="n">coordinates</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LatLongPoint</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
@@ -1231,7 +1228,10 @@ table {
 <span class="sd">        This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">        made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#self.element.find(&#39;coordinates&#39;).text = &#39;\n&#39;.join([&#39;,&#39;.join([str(y) for y in x]) for x in self.coordinates])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">switchCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1242,7 +1242,6 @@ table {
 <span class="sd">        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
             <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 
@@ -1255,11 +1254,9 @@ table {
 <span class="sd">        `return`: String of the coordinates in the object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
             <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
         <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -1273,11 +1270,9 @@ table {
 <span class="sd">        `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
             <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
             <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">ret</span>
 
@@ -1299,10 +1294,6 @@ table {
 <span class="sd">        point, the point will be removed from the file. This removal is done from the Placemark containing the point.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 
 
@@ -1324,11 +1315,6 @@ table {
 <span class="sd">        removal. This is done from the placemark above the LinearRing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">return</span> <span class="mi">0</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LinearRing</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 
 
@@ -1350,11 +1336,6 @@ table {
 <span class="sd">        removal. This is done from the placemark above the LineString.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">return</span> <span class="mi">0</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 
 <span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">GeometricObject</span><span class="p">):</span>
@@ -1377,11 +1358,6 @@ table {
 <span class="sd">        removal. This is done from the placemark above the Polygon.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">return</span> <span class="mi">0</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Polygon</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 
 
@@ -1394,7 +1370,7 @@ table {
 <span class="sd">        Simple factory object to produce geometric objects. Can be extended to do input checking and other</span>
 <span class="sd">        such utility functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span><span class="s1">&#39;LinearRing&#39;</span><span class="p">,</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span><span class="s1">&#39;LinearRing&#39;</span><span class="p">,</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">,</span> <span class="s1">&#39;MultiGeometry&#39;</span><span class="p">)</span>
         <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">createLiteral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
@@ -1429,13 +1405,49 @@ table {
 <span class="sd">        Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.</span>
 <span class="sd">        This method take the xml tag that starts a set of data, and processes until it has the required information</span>
 <span class="sd">        to make a new Geometric.</span>
+<span class="sd">        When this factory is given a multigeometry object, it does an iteration through the multigeometry element</span>
+<span class="sd">        calling create on each sub element. Those elements are returned as a list.</span>
 
 <span class="sd">        `element`: An xml tag that has coordinate data within it.</span>
 
-<span class="sd">        `return`: The created Geometric Object.</span>
+<span class="sd">        `return`: The created Geometric Object, or a list of them. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="k">return</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;MultiGeometry&#39;</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">skip</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#Set to 1 initally to skip the actual multigeo tag.</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
+                    <span class="n">first</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
+                    <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">skip</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span><span class="p">:</span>
+                    <span class="n">geo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="c1">#Checking an object actually got made.</span>
+
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="c1">#catches multigeometry returns.</span>
+                    <span class="k">else</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;MultiGeometry&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="k">return</span> <span class="n">ret</span>
+
+        <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="n">element</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
                     <span class="k">break</span>
@@ -1447,16 +1459,6 @@ table {
                 <span class="k">return</span> <span class="n">LineString</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">element</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">print</span> <span class="s1">&#39;derpy&#39;</span>
-        <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
-                        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
-                            <span class="k">break</span>
-                    <span class="k">return</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s1">&#39;bad news bears&#39;</span>
 
 <span class="k">def</span> <span class="nf">elementPrint</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">bool</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1547,7 +1549,7 @@ Quick method to print an lxml element. For quicker writing.
 <span class="sd">        Simple factory object to produce geometric objects. Can be extended to do input checking and other</span>
 <span class="sd">        such utility functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span><span class="s1">&#39;LinearRing&#39;</span><span class="p">,</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span><span class="s1">&#39;LinearRing&#39;</span><span class="p">,</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">,</span> <span class="s1">&#39;MultiGeometry&#39;</span><span class="p">)</span>
         <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">createLiteral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
@@ -1582,13 +1584,49 @@ Quick method to print an lxml element. For quicker writing.
 <span class="sd">        Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.</span>
 <span class="sd">        This method take the xml tag that starts a set of data, and processes until it has the required information</span>
 <span class="sd">        to make a new Geometric.</span>
+<span class="sd">        When this factory is given a multigeometry object, it does an iteration through the multigeometry element</span>
+<span class="sd">        calling create on each sub element. Those elements are returned as a list.</span>
 
 <span class="sd">        `element`: An xml tag that has coordinate data within it.</span>
 
-<span class="sd">        `return`: The created Geometric Object.</span>
+<span class="sd">        `return`: The created Geometric Object, or a list of them. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="k">return</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;MultiGeometry&#39;</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">skip</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#Set to 1 initally to skip the actual multigeo tag.</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
+                    <span class="n">first</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
+                    <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">skip</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span><span class="p">:</span>
+                    <span class="n">geo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="c1">#Checking an object actually got made.</span>
+
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="c1">#catches multigeometry returns.</span>
+                    <span class="k">else</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;MultiGeometry&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="k">return</span> <span class="n">ret</span>
+
+        <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="n">element</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
                     <span class="k">break</span>
@@ -1600,16 +1638,6 @@ Quick method to print an lxml element. For quicker writing.
                 <span class="k">return</span> <span class="n">LineString</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">element</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">print</span> <span class="s1">&#39;derpy&#39;</span>
-        <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
-                        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
-                            <span class="k">break</span>
-                    <span class="k">return</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s1">&#39;bad news bears&#39;</span>
 </pre></div>
 
   </div>
@@ -1655,7 +1683,7 @@ such utility functions.</p></div>
 <span class="sd">    Simple factory object to produce geometric objects. Can be extended to do input checking and other</span>
 <span class="sd">    such utility functions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span><span class="s1">&#39;LinearRing&#39;</span><span class="p">,</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span><span class="s1">&#39;LinearRing&#39;</span><span class="p">,</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">,</span> <span class="s1">&#39;MultiGeometry&#39;</span><span class="p">)</span>
     <span class="k">pass</span>
 </pre></div>
 
@@ -1677,9 +1705,11 @@ such utility functions.</p></div>
 <p>Given an element, which is expected to have geometric data, create a geometric object for that data.
 Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.
 This method take the xml tag that starts a set of data, and processes until it has the required information
-to make a new Geometric.</p>
+to make a new Geometric.
+When this factory is given a multigeometry object, it does an iteration through the multigeometry element
+calling create on each sub element. Those elements are returned as a list.</p>
 <p><code>element</code>: An xml tag that has coordinate data within it.</p>
-<p><code>return</code>: The created Geometric Object.</p></div>
+<p><code>return</code>: The created Geometric Object, or a list of them.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.GeometricFactory.create', this);">Show source &equiv;</a></p>
   <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Geometrics.GeometricFactory.create" class="source">
@@ -1690,10 +1720,39 @@ to make a new Geometric.</p>
 <span class="sd">    Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.</span>
 <span class="sd">    This method take the xml tag that starts a set of data, and processes until it has the required information</span>
 <span class="sd">    to make a new Geometric.</span>
+<span class="sd">    When this factory is given a multigeometry object, it does an iteration through the multigeometry element</span>
+<span class="sd">    calling create on each sub element. Those elements are returned as a list.</span>
 <span class="sd">    `element`: An xml tag that has coordinate data within it.</span>
-<span class="sd">    `return`: The created Geometric Object.</span>
+<span class="sd">    `return`: The created Geometric Object, or a list of them. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="p">:</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
+                        <span class="k">break</span>
+                <span class="k">return</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;MultiGeometry&#39;</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">skip</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#Set to 1 initally to skip the actual multigeo tag.</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
+                <span class="n">first</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
+                <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">skip</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span><span class="p">:</span>
+                <span class="n">geo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">geo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="c1">#Checking an object actually got made.</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span> <span class="c1">#catches multigeometry returns.</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Polygon&quot;</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;MultiGeometry&quot;</span><span class="p">:</span> <span class="n">skip</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">ret</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">element</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
                 <span class="k">break</span>
@@ -1705,15 +1764,6 @@ to make a new Geometric.</p>
             <span class="k">return</span> <span class="n">LineString</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">element</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s1">&#39;derpy&#39;</span>
-    <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometryTypes</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
-                    <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span>
-                        <span class="k">break</span>
-                <span class="k">return</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s1">&#39;bad news bears&#39;</span>
 </pre></div>
 
   </div>
@@ -1808,10 +1858,7 @@ values directly. The create method, in comparision, takes the top level element 
         <span class="bp">self</span><span class="o">.</span><span class="n">remove</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#Most definitely required.</span>
-        <span class="c1"># for x in coordinates.split():</span>
-        <span class="c1">#     s = x.split(&#39;,&#39;)</span>
-        <span class="c1">#     self.coordinates.append([float(s[0]), float(s[1])])</span>
-        <span class="k">if</span> <span class="n">coordinates</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LatLongPoint</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
@@ -1826,7 +1873,10 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">        made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#self.element.find(&#39;coordinates&#39;).text = &#39;\n&#39;.join([&#39;,&#39;.join([str(y) for y in x]) for x in self.coordinates])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">switchCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1837,7 +1887,6 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
             <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 
@@ -1850,11 +1899,9 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        `return`: String of the coordinates in the object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
             <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
         <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -1868,11 +1915,9 @@ values directly. The create method, in comparision, takes the top level element 
 <span class="sd">        `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-            <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
             <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-            <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
             <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
@@ -1973,10 +2018,7 @@ replacing or removing them.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">remove</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#Most definitely required.</span>
-    <span class="c1"># for x in coordinates.split():</span>
-    <span class="c1">#     s = x.split(&#39;,&#39;)</span>
-    <span class="c1">#     self.coordinates.append([float(s[0]), float(s[1])])</span>
-    <span class="k">if</span> <span class="n">coordinates</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LatLongPoint</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
@@ -2011,7 +2053,10 @@ made to the pulled out xml values and apply them back to the file object.</p></d
 <span class="sd">    This is the super method for all applyEdit methods. This method and it&#39;s children are used to take the changes</span>
 <span class="sd">    made to the pulled out xml values and apply them back to the file object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1">#self.element.find(&#39;coordinates&#39;).text = &#39;\n&#39;.join([&#39;,&#39;.join([str(y) for y in x]) for x in self.coordinates])</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;coordinates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">])</span>
 </pre></div>
 
@@ -2044,11 +2089,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
@@ -2080,11 +2123,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
         <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
@@ -2116,7 +2157,6 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
         <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
@@ -2269,11 +2309,6 @@ GeoLatLng has a wrap around for the anti-meridian so that it never has a longitu
 <span class="sd">        removal. This is done from the placemark above the LineString.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">return</span> <span class="mi">0</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -2417,11 +2452,6 @@ removal. This is done from the placemark above the LineString.</p></div>
 <span class="sd">    See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">    removal. This is done from the placemark above the LineString.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">return</span> <span class="mi">0</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">LineString</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -2458,11 +2488,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
@@ -2498,11 +2526,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
         <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
@@ -2538,7 +2564,6 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
         <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
@@ -2578,11 +2603,6 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">        removal. This is done from the placemark above the LinearRing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">return</span> <span class="mi">0</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LinearRing</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -2726,11 +2746,6 @@ removal. This is done from the placemark above the LinearRing.</p></div>
 <span class="sd">    See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for</span>
 <span class="sd">    removal. This is done from the placemark above the LinearRing.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">return</span> <span class="mi">0</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">LinearRing</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -2767,11 +2782,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
@@ -2807,11 +2820,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
         <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
@@ -2847,7 +2858,6 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
         <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
@@ -2887,10 +2897,6 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">        point, the point will be removed from the file. This removal is done from the Placemark containing the point.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -3034,10 +3040,6 @@ point, the point will be removed from the file. This removal is done from the Pl
 <span class="sd">    See geometric object. This calls the super applyEdits, and if the removal flag has been set for this</span>
 <span class="sd">    point, the point will be removed from the file. This removal is done from the Placemark containing the point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-        <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -3074,11 +3076,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
@@ -3114,11 +3114,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
         <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
@@ -3154,7 +3152,6 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
         <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>
@@ -3198,11 +3195,6 @@ is still an iceberg.</p></div>
 <span class="sd">        removal. This is done from the placemark above the Polygon.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                <span class="k">return</span> <span class="mi">0</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Polygon</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -3346,11 +3338,6 @@ removal. This is done from the placemark above the Polygon.</p></div>
 <span class="sd">    See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for</span>
 <span class="sd">    removal. This is done from the placemark above the Polygon.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
-            <span class="n">y</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">return</span> <span class="mi">0</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">Polygon</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">applyEdits</span><span class="p">()</span>
 </pre></div>
 
@@ -3387,11 +3374,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: The coordinates as Strings, placed in a list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return [&#39;,&#39;.join([str(x) for x in self.coordinates[0]])]</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret.append(&#39;,&#39;.join([str(x)for x in y]))</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ret</span>
 </pre></div>
@@ -3427,11 +3412,9 @@ to a String. This method is used to provide to urlbuilder, as seperated points a
 <span class="sd">    `return`: String of the coordinates in the object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Point&quot;</span><span class="p">:</span>
-        <span class="c1">#return &#39;,&#39;.join([str(x) for x in self.coordinates[0]])</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#ret += &#39;,&#39;.join([str(x)for x in y]) + &quot;|&quot;</span>
         <span class="n">ret</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
@@ -3467,7 +3450,6 @@ as opposed to lat long as our files provide. This modifies the file in place.</p
 <span class="sd">    `return`: the tostring of the coordinate swap. This a side effect, useful for script building.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">coordin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">:</span>
-        <span class="c1">#coordin[0], coordin[1] = coordin[1], coordin[0]</span>
         <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span> <span class="o">=</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">coordin</span><span class="o">.</span><span class="n">lat</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">printCoordinates</span><span class="p">()</span>
 </pre></div>

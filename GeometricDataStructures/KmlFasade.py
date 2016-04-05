@@ -2,7 +2,7 @@ from lxml import etree, objectify
 from RestrictionEngine.RestrictionEngine import SquareRestriction
 from GeometricDataStructures.Geometrics import *
 from pykml.factory import KML_ElementMaker as KML
-import Utils
+import re
 
 debug = 0
 
@@ -21,8 +21,26 @@ class KmlFasade(object):
 
         self.filepath = path
         self.placemarks = None
+        self.garbage = []
         self.geometrics = None
         self.additionfolder = None
+
+        #Before we open the file as a kml object, we need to open it
+        # as a regular file and remove the namspace on the file. Otherwise searching will fail.
+        file = open(path, 'r')
+        lines = file.readlines()
+        file.close()
+
+        for i in xrange(len(lines)):
+            if re.search("<kml xmlns=.*", lines[i]) is not None: #Found the namespace line, remove it and rewrite.
+                lines[i] = "<kml>\n"
+                file = open(path, 'w')
+                file.writelines(lines)
+                file.close()
+                break
+            elif re.search("<kml>[\s]*", lines[1]) is not None: #A no namespace line was found, break out of the loop.
+                break
+
         self.kmlTree = etree.parse(path)
         self.kmlRoot = self.kmlTree.getroot()
 
@@ -48,6 +66,19 @@ class KmlFasade(object):
             self.kmlTree.write(f, pretty_print=True)
             f.close()
 
+    def garbageFilter(self):
+        """
+        `Author`: Bill Clark
+
+        This method is a catch all for and garbage filtering operations. Currently it has one functionality,
+        it takes every element stored in the garbage field and removes it from the Kml. Each element in the garbage
+        list has no relevent data, removing it helps with the file length.
+        """
+
+        for element in self.garbage:
+            parent = element.getparent()
+            parent.remove(element)
+
     def loadPlacemarks(self):
         """
         `Author`: Bill Clark
@@ -55,16 +86,23 @@ class KmlFasade(object):
         This method is used to append any xml tag with the placemark tag to a list and return it.
         As the most relevant data in a kml file appears in a placemark tag, this is a convience method
         to prevent excess searching.
+        During the interation, the method also looks to find all elements in the file that are irrelevant.
+        Each element with it's tag in garbage data has no geometric data we care about. We can freely
+        delete them later with the garbageFilter method.
 
         `return`: A list of lxml Element objects matching the placemark tag. This is also stored in class.
         """
 
+        garbageData = ["styleUrl", 'Style', 'LookAt', 'visibility', 'Snippet',
+                       'ScreenOverlay', 'tessellate', 'altitudeMode', 'extrude', 'TimeSpan']
         ret = []
         for x in self.kmlRoot.iter():
             if x.tag == 'Placemark':
                 if debug: print x.tag, x.text
                 ret.append(x)
-        self.placemarks = ret
+            elif x.tag in garbageData:
+                self.garbage.append(x)
+        # self.placemarks = ret
         return ret
 
     def placemarkToGeometrics(self):
@@ -79,12 +117,12 @@ class KmlFasade(object):
         """
 
         if(self.placemarks is None):
-            self.loadPlacemarks()
+            placemarks = self.loadPlacemarks()
 
         factory = GeometricFactory()
         ret = []
         skip = 0
-        for place in self.placemarks:
+        for place in placemarks:
             for element in place.iter():
 
                 if skip:

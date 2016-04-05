@@ -12,12 +12,13 @@ argarctic = 'Inputs\KML FIles\\arctic lines jan 31.kml'
 
 #Create the KmlFasade
 
-fasade = KmlFasade(argarctic)
-# fasade = KmlFasade(argone)
+# fasade = KmlFasade(argarctic)
+fasade = KmlFasade(argone)
 fasade.placemarkToGeometrics()
+fasade.garbageFilter()
 f = RestrictionFactory()
-# f = f.newSquareRestriction([-103.528629, 41.260352], 500)
-f = f.newSquareRestriction([64.871826, 66.833851], 250)
+f = f.newSquareRestriction([-103.528629, 41.260352], 500)
+# f = f.newSquareRestriction([64.871826, 66.833851], 250)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
 fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
@@ -25,8 +26,8 @@ fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
 #Build the Url
 
 build = UrlBuilder(600)
-build.centerparams('64.871826,66.833851', '4')
-# build.centerparams('41.260352,-103.528629', '4')
+# build.centerparams('64.871826,66.833851', '4')
+build.centerparams('41.260352,-103.528629', '4')
 
 markerlist = []
 for element in fasade.geometrics:
