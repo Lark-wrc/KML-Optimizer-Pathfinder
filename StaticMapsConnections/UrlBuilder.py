@@ -206,7 +206,7 @@ class UrlBuilder(object):
         self.retireUrl(self.url)
         return curr
 
-    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Outputs\Static Maps\\Mass\{} {}.png', prefix='image'):
+    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
         """
         `Author`: Bill Clark
 
@@ -231,7 +231,7 @@ class UrlBuilder(object):
         ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
         return ret
 
-    def downloadGenerator(self, path='Outputs\Static Maps\\Mass\{} {}.png', prefix='image'):
+    def downloadGenerator(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
         """
         `Author`: Bill Clark
 
@@ -255,7 +255,7 @@ class UrlBuilder(object):
             #sleep(.5)
         yield urlretrieve(self.url, path.format(prefix, repr(count)))[0]
 
-    def downloadBase(self, path='Outputs\Static Maps\\Mass\{} 0.png', prefix='image'):
+    def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
         """
         `Author`: Bill Clark
 
