@@ -84,18 +84,23 @@ class KmlFasade(object):
         factory = GeometricFactory()
         ret = []
         skip = 0
-        for element in self.placemarks:
-            for x in element.iter():
-                #if x.tag == "Placemark" or x.tag: skip = 0
-                if skip:
-                    skip -= 1
-                    if skip: skip += len(x)
-                if x.tag in factory.geometryTypes and not skip:
-                    z = factory.create(x)
-                    if z is not None:
-                        ret.append(z)
-                        if z.tag == "Polygon": skip = len(x)+1
+        for place in self.placemarks:
+            for element in place.iter():
 
+                if skip:
+                    skip += len(element)
+                    skip-=1
+
+                elif element.tag in factory.geometryTypes:
+                    geo = factory.create(element)
+                    assert geo is not None #Checking an object actually got made.
+
+                    if type(geo) is list: ret.extend(geo) #catches multigeometry returns.
+                    else: ret.append(geo)
+
+                    if element.tag == "Polygon" or element.tag == "MultiGeometry": skip = len(element)
+                else:
+                    pass
         self.geometrics = ret
         return ret
 
@@ -108,7 +113,6 @@ class KmlFasade(object):
         """
 
         for element in self.geometrics:
-            #element.coordinates = [0,1]
             element.applyEdits()
         self.geometrics = [e for e in self.geometrics if not e.remove]
 
