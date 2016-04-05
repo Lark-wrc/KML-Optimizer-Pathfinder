@@ -48,6 +48,25 @@ class KmlFasade(object):
             self.kmlTree.write(f, pretty_print=True)
             f.close()
 
+    def garbageFilter(self):
+        """
+        `Author`: Bill Clark
+
+        This method is a simple iteration to find all elements in the file that are irrelevant.
+        Each element with it's tag in garbage data has no geometric data we care about. We can freely
+        delete them.
+        """
+
+        garbageData = ["styleUrl", 'Style', 'LookAt', 'visibility', 'Snippet',
+                       'ScreenOverlay', 'tessellate', 'altitudeMode', 'extrude', 'TimeSpan']
+        garbage = []
+        for element in self.kmlRoot.iter():
+            if element.tag in garbageData:
+                garbage.append(element)
+        for element in garbage:
+            parent = element.getparent()
+            parent.remove(element)
+
     def loadPlacemarks(self):
         """
         `Author`: Bill Clark
@@ -64,7 +83,7 @@ class KmlFasade(object):
             if x.tag == 'Placemark':
                 if debug: print x.tag, x.text
                 ret.append(x)
-        self.placemarks = ret
+        # self.placemarks = ret
         return ret
 
     def placemarkToGeometrics(self):

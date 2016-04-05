@@ -251,10 +251,12 @@ class GeometricFactory(object):
         Geometric objects wrapped tags such as Point, Polygon, and LinearRing, which have coordinate data.
         This method take the xml tag that starts a set of data, and processes until it has the required information
         to make a new Geometric.
+        When this factory is given a multigeometry object, it does an iteration through the multigeometry element
+        calling create on each sub element. Those elements are returned as a list.
 
         `element`: An xml tag that has coordinate data within it.
 
-        `return`: The created Geometric Object.
+        `return`: The created Geometric Object, or a list of them.
         """
 
 
