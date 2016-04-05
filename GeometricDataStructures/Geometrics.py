@@ -1,5 +1,3 @@
-import Utils
-
 class LatLongPoint:
     """
     Author: Nick LaPosta
