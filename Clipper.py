@@ -5,64 +5,51 @@ class Clipper():
     def __init__(self):
         pass
 
-    def verticalCheck(self, aLine, bLine):
-        if aLine.start.x == aLine.end.x:
-            aLine.slope = (aLine.end.y - aLine.start.y) / (aLine.end.x - aLine.start.x)
-            aLine.cept = aLine.start.y - (aLine.slope * aLine.start.x)
-            y = (aLine.slope * bLine.start.x) + aLine.cept
-            return MercatorPoint(bLine.start.x, y)
-        else: return None
+    # def verticalCheck(self, aLine, bLine):
+    #     if aLine.start.x == aLine.end.x:
+    #         aLine.slope = (aLine.end.y - aLine.start.y) / (aLine.end.x - aLine.start.x)
+    #         aLine.cept = aLine.start.y - (aLine.slope * aLine.start.x)
+    #         y = (aLine.slope * bLine.start.x) + aLine.cept
+    #         return MercatorPoint(bLine.start.x, y)
+    #     else: return None
 
+    def getLineIntersection(self, pointA, pointB, pointC, pointD):
 
-def my_line_intersection(PointA, PointB, PointC, PointD):
+        if not if_intersect(pointA, pointB, pointC, pointD): return None
 
-    if((if_intersect(PointA, PointB, PointC, PointD) == False)):
-        return None
+        xdiff = pointA[0] - pointB[0], pointC[0] - pointD[0]
+        ydiff = pointA[1] - pointB[1], pointC[1] - pointD[1]
 
-    xdiff = (PointA[0] - PointB[0], PointC[0] - PointD[0])
-    ydiff = (PointA[1] - PointB[1], PointC[1] - PointD[1])
+        div = determinent(xdiff, ydiff)
+        if(div == 0): raise Exception("No POI")
 
-    def deterMinent(a, b):
-        return (a[0] * b[1] - a[1] * b[0])
+        d = determinent(pointA, pointB), determinent(pointC, pointD)
+        resultx = determinent(d, xdiff) / div
+        resulty = determinent(d, ydiff) / div
+        return resultx, resulty
 
-    div = deterMinent(xdiff, ydiff)
-    if(div == 0):
-        raise Exception("No POI")
+    def determinent(self, pointA, pointB):
+        return (pointA[0] * pointB[1] - pointA[1] * pointB[0])
 
+    def my_gradient(self, pointA, pointB):
+        m = None
+        if(pointA[0] != pointB[0]):
+            m = (1./(pointA[0] - pointB[0]) * (pointA[1] - pointB[1]))
+            return m
 
-    d = (deterMinent(PointA, PointB), deterMinent(PointC, PointD))
-    resultx = deterMinent(d, xdiff) / div
-    resulty = deterMinent(d, ydiff) / div
-    return resultx, resulty
+    def doLinesIntersect(self, pointA, pointB, pointC, pointD):
 
-def my_gradient(PointA, PointB):
-    m = None
-    if(PointA[0] != PointB[0]):
-        m = (1./(PointA[0] - PointB[0]) * (PointA[1] - PointB[1]))
-        return m
+        o1 = findOrientation(pointA, pointB, pointC);
+        o2 = findOrientation(pointA, pointB, pointD);
+        o3 = findOrientation(pointC, pointD, pointA);
+        o4 = findOrientation(pointC, pointD, pointB);
 
-def if_intersect(As, Ae, Bs, Be):
+        if (o1 != o2 and o3 != o4):
+           return True
+        return False
 
-    def findOrientation(p, q, r):
-        val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
-        if (val == 0.0):
-            return 0        # Orientation.COLLINEAR
-        if(val > 0):
-            return -1       #Orientation.RIGHT
-        return 1            #Orientation.LEFT
-
-    o1 = findOrientation(As, Ae, Bs);
-    o2 = findOrientation(As, Ae, Be);
-    o3 = findOrientation(Bs, Be, As);
-    o4 = findOrientation(Bs, Be, Ae);
-
-    if (o1 != o2 and o3 != o4):
-       return True
-    return False
-
-A = (1.0, 1.0)
-B = (1.0, 0.0)
-C = (1.5, 0.5)
-D = (-3.0, 0.5)
-
-print my_line_intersection(A, B, C, D)
+    def findOrientation(self, pointA, pointB, pointC):
+        val = (pointB[1] - pointA[1]) * (pointC[0] - pointB[0]) - (pointB[0] - pointA[0]) * (pointC[1] - pointB[1]);
+        if (val == 0.0): return 0  # Orientation.COLLINEAR
+        elif (val > 0): return -1  # Orientation.RIGHT
+        else: return 1  # Orientation.LEFT
