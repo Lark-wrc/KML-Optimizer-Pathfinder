@@ -24,6 +24,23 @@ class LatLongPoint:
     def listed(self):
         return [self.lat, self.lng]
 
+class LineRepresentation:
+
+    def __init__(self, start, end):
+        """
+        `Author`: Bill Clark
+
+        Simple container class for two points that will make up a full line. Both points should be mercatorPoints.
+
+        `start`: Mercator point that starts the line.
+
+        `end`: Mercator point that ends the line.
+        """
+        self.start = start
+        self.end = end
+        self.slope = None
+        self.cept = None
+
 class GeometricObject(object):
 
     def __str__(self):
@@ -97,8 +114,6 @@ class GeometricObject(object):
 
         `return`: String of the coordinates in the object.
         """
-        if self.tag == "Point":
-            return str(self.coordinates[0])
         ret = ""
         for y in self.coordinates:
             ret += str(y) + "|"
@@ -113,12 +128,12 @@ class GeometricObject(object):
 
         `return`: The coordinates as Strings, placed in a list.
         """
-        if self.tag == "Point":
-            return [str(self.coordinates[0])]
         ret = []
         for y in self.coordinates:
             ret.append(str(y))
         return ret
+
+
 
 class Point(GeometricObject):
     """
@@ -139,6 +154,23 @@ class Point(GeometricObject):
         """
 
         super(Point,self).applyEdits()
+
+    def printCoordinates(self):
+        """
+        `Author` Bill Clark
+
+        `return`: The string representation of the coordinate in the point.
+        """
+        return str(self.coordinates[0])
+
+    def coordinatesAsListStrings(self):
+        """
+        `Author` Bill Clark
+
+        `return` The coordinate that makes up the point as a list of a string. Used for url builder.
+        """
+
+        return [str(self.coordinates[0])]
 
 
 class LinearRing(GeometricObject):
