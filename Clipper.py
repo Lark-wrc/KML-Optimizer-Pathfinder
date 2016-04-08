@@ -114,7 +114,7 @@ class Clipper():
         distToB = math.sqrt(((target[0] - pointB[0]) ** 2) + (target[1] - pointB[1]) ** 2)
         return pointA if distToA <= distToB else pointB
 
-    def getCLipped(self):
+    def getClipped(self, P, Q, Ie):
         """
         'Author': Bob S. and Nick L.
 
@@ -122,15 +122,6 @@ class Clipper():
 
         :return: result, the collection of tuples representing the points of the new polygon
         """
-
-        P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
-        Q = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
-        Ie = Stack()
-        Ie.items = [(2.0, 0.5), (0.6666666666666666, -1.0), (0.0, -1.0), (0.8571428571428571, 3.0), (1.4, 3.0), (2.0, 2.25)]
-        # Result should be: [(2.0, 2.25), (1.4, 3.0), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0),
-        # (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5)]
-
-
         # P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.557142857142857, 3.0), (-1.0, 1.241935483870968), (-2.1, 0.0), (0.0, -3.0), (2.0, -1.0), (2.0, -1.0), (3.0, 0.0), (3.0, 1.0)]
         # Q = [(2.0, 3.0), (1.4, 3.0), (0.557142857142857, 3.0), (-1.0, 3.0), (-1.0, 1.241935483870968), (-1.0, -1.0), (2.0,-1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, 2.25)]
         # Ie = Stack()
@@ -190,62 +181,46 @@ class Clipper():
                         Ie[b], Ie[a] = Ie[a], Ie[b]
         return P, Ie
 
-    def getQ(selfself, subjectlines, viewportlines, Ie):
+    def getQ(self, viewportlines, Ie):
 
+        Q = []
+        corner = viewportlines[0][0]
+        storage = []
+        Q.append(corner)
+        for point in Ie:
+            if (corner[1] == point[1]):
+                storage.append(point)
+        storage.sort(key=lambda tup: tup[0], reverse = True)
+        Q.extend(storage)
 
+        corner = viewportlines[1][0]
+        storage = []
+        Q.append(corner)
+        for point in Ie:
+            if (corner[0] == point[0]):
+                storage.append(point)
+        storage.sort(key=lambda tup: tup[1], reverse = True)
+        Q.extend(storage)
 
-        Point corner;                       // Point representing cardinal corners of viewPort polygon
-        ArrayList<Point> storage ;          // temporary storage of only matching poi's
+        corner = viewportlines[2][0]
+        storage = []
+        Q.append(corner)
+        for point in Ie:
+            if (corner[1] == point[1]):
+                storage.append(point)
+        storage.sort(key=lambda tup: tup[0])
+        Q.extend(storage)
 
-        // Top right corner first
-        corner = viewPortLines.get(0).start;
-        storage = new ArrayList<Point>();
-        Q.add(corner);
-        for(Point p: Ie) {
-            if(corner.y.equals(p.y)) {
-                storage.add(p);
-            }
-        }
-        Collections.sort(storage);
-        Collections.reverse(storage);
-        Q.addAll(storage);
+        corner = viewportlines[3][0]
+        storage = []
+        Q.append(corner)
+        for point in Ie:
+            if (corner[0] == point[0]):
+                storage.append(point)
+        storage.sort(key=lambda tup: tup[1])
+        Q.extend(storage)
 
-        // top left corner next
-        corner = viewPortLines.get(1).start;
-        storage = new ArrayList<Point>();
-        Q.add(corner);
-        for(Point p: Ie) {
-            if(corner.x.equals(p.x)) {
-                storage.add(p);
-            }
-        }
-        Collections.sort(storage);
-        Collections.reverse(storage);
-        Q.addAll(storage);
-
-        // bottom left corner next
-        corner = viewPortLines.get(2).start;
-        storage = new ArrayList<Point>();
-        Q.add(corner);
-        for(Point p: Ie) {
-            if(corner.y.equals(p.y)) {
-                storage.add(p);
-            }
-        }
-        Collections.sort(storage);
-        Q.addAll(storage);
-
-        // bottom right corner last
-        corner = viewPortLines.get(3).start;
-        storage = new ArrayList<Point>();
-        Q.add(corner);
-        for(Point p: Ie) {
-            if(corner.x.equals(p.x)) {
-                storage.add(p);
-            }
-        }
-        Collections.sort(storage);
-        Q.addAll(storage);
+        return Q
 
 class Stack():
 
@@ -272,21 +247,18 @@ class Stack():
          return len(self.items)
 
 if __name__ == '__main__':
-    s = Stack()
-    s.push(("Do", "Re", "Mi"))
-    s.push(("A", "B", "C"))
-    s.push((1, 2, 3))
-    # print s.items
-    # print s.pop()
-    # print s.items
-    # print s.pop()
-    # print s.items
-    # print s.pop()
 
     clipper = Clipper()
-    print clipper.getCLipped().items
+    P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
+    Q = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
+    Ie = Stack()
+    Ie.items = [(2.0, 0.5), (0.6666666666666666, -1.0), (0.0, -1.0), (0.8571428571428571, 3.0), (1.4, 3.0), (2.0, 2.25)]
+    # Result should be: [(2.0, 2.25), (1.4, 3.0), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0),
+    # (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5)]
+
+    result = clipper.getClipped(P, Q, Ie).items
+    print result
     test = [(2.0, 2.25), (1.4, 3.0), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0),(0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5)]
-    print test == clipper.getCLipped().items
 
     subjectlines = [((3.0, 1.0), (1.0, 3.5)) , ((1.0, 3.5), (0.0, 0.0)), ((0.0, 0.0), (0.0, -3.0)), ((0.0, -3.0), (1.0, 0.0)), ((1.0, 0.0), (3.0, 1.0))]
     viewportlines = [((2.0, 3.0), (-1.0, 3.0)),  ((-1.0, 3.0), (-1.0, -1.0)),  ((-1.0, -1.0), (2.0, -1.0)),  ((2.0, -1.0), (2.0, 3.0))]
@@ -299,7 +271,13 @@ if __name__ == '__main__':
     print (testIe)
     print (resultIe.items)
 
-    testQ = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)][(2.0, 0.5), (0.6666666666666666, -1.0), (0.0, -1.0), (0.8571428571428571, 3.0), (1.4, 3.0), (2.0, 2.25)]
-    print (clipper.getQ(subjectlines, viewportlines, testIe))
-    print "success"
+    testQ = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
+    resultQ = clipper.getQ(viewportlines, testIe)
+    print (testQ == resultQ)
+    print (testQ)
+    print (resultQ)
 
+    print test == result
+    print test
+    print clipper.getClipped(resultP, resultQ, resultIe).items
+    print "success"
