@@ -21,10 +21,10 @@ class Clipper():
         Returns the point, as a tuple, at which the line segments composed composed of points A, B and poinst C, D intersect
         If the lines do not intersect, return None.
 
-        'pointA': start point of first line
-        'pointB': end point of first line
-        'pointC': start point of second line
-        'pointD': end point of second line
+        `pointA`: start point of first line
+        `pointB`: end point of first line
+        `pointC`: start point of second line
+        `pointD`: end point of second line
         """
         if not self.doLinesIntersect(pointA, pointB, pointC, pointD): return None
 
@@ -45,24 +45,24 @@ class Clipper():
 
         Returns the algebraic determinent of the parameterized points using linear combinations of thier coordinate pairs.
 
-        'pointA': start point of line
-        'pointB': end point of line
+        `pointA`: start point of line
+        `pointB`: end point of line
         """
         return (pointA[0] * pointB[1] - pointA[1] * pointB[0])
 
-    def gradient(self, pointA, pointB):
-        """
-        `Author`: Bob Seedorf
-
-        Returns the 'slope' of the line composed of the two points
-
-        'pointA': start point of line
-        'pointB': end point of line
-        """
-        m = None
-        if(pointA[0] != pointB[0]):
-            m = (1./(pointA[0] - pointB[0]) * (pointA[1] - pointB[1]))
-            return m
+    # def gradient(self, pointA, pointB):
+    #     """
+    #     `Author`: Bob Seedorf
+    #
+    #     Returns the 'slope' of the line composed of the two points
+    #
+    #     `pointA`: start point of line
+    #     `pointB`: end point of line
+    #     """
+    #     m = None
+    #     if(pointA[0] != pointB[0]):
+    #         m = (1./(pointA[0] - pointB[0]) * (pointA[1] - pointB[1]))
+    #         return m
 
     def doLinesIntersect(self, pointA, pointB, pointC, pointD):
         """
@@ -70,10 +70,10 @@ class Clipper():
 
         Returns True if the line segments composed of points A, B and points C, D have an intersection point
 
-        'pointA': start point of first line
-        'pointB': end point of first line
-        'pointC': start point of second line
-        'pointD': end point of second line
+        `pointA`: start point of first line
+        `pointB`: end point of first line
+        `pointC`: start point of second line
+        `pointD`: end point of second line
         """
 
         o1 = self.findOrientation(pointA, pointB, pointC);
@@ -91,9 +91,9 @@ class Clipper():
 
         Returns orientation of three given points in coordinate space
 
-        'pointA': first point being passed
-        'pointB': second point being passed
-        'pointC': third point being passed
+        `pointA`: first point being passed
+        `pointB`: second point being passed
+        `pointC`: third point being passed
         """
         val = (pointB[1] - pointA[1]) * (pointC[0] - pointB[0]) - (pointB[0] - pointA[0]) * (pointC[1] - pointB[1]);
         if (val == 0.0): return 0   # Orientation.COLLINEAR
@@ -106,9 +106,9 @@ class Clipper():
 
         Returns the point, of only pointA or pointB, that is dimensionally closest to the point target
 
-        'target': control point form whom the distances of the other two will be checked
-        'pointA': first point to be checked, has return precedence over pointB
-        'pointB': second point to be checked
+        `target`: control point form whom the distances of the other two will be checked
+        `pointA`: first point to be checked, has return precedence over pointB
+        `pointB`: second point to be checked
         """
         distToA = math.sqrt(((target[0] - pointA[0]) ** 2) + (target[1] - pointA[1]) ** 2)
         distToB = math.sqrt(((target[0] - pointB[0]) ** 2) + (target[1] - pointB[1]) ** 2)
@@ -116,11 +116,11 @@ class Clipper():
 
     def getClipped(self, P, Q, Ie):
         """
-        'Author': Bob S. and Nick L.
+        `Author`: Bob S, Nick L, Bill C.
 
         This method returns the result of the clipping algorithm as a collection of coordinate pairs
 
-        :return: result, the collection of tuples representing the points of the new polygon
+        o`return`: result, the collectin of tuples representing the points of the new polygon
         """
         # P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.557142857142857, 3.0), (-1.0, 1.241935483870968), (-2.1, 0.0), (0.0, -3.0), (2.0, -1.0), (2.0, -1.0), (3.0, 0.0), (3.0, 1.0)]
         # Q = [(2.0, 3.0), (1.4, 3.0), (0.557142857142857, 3.0), (-1.0, 3.0), (-1.0, 1.241935483870968), (-1.0, -1.0), (2.0,-1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, 2.25)]
@@ -131,39 +131,38 @@ class Clipper():
 
 
         result = Stack()
-        result.items = []
         reserve = Ie.peek()
         location = reserve
-        flag = True
-        while(flag):
+        while 1:
             Ie.pop()
             end = Ie.peek()
             index = P.index(location)
-            while( not location == end):
+            while not location == end :
                 result.push(location)
-                index += 1
-                index = index % len(P)
+                index = (index+1) % len(P)
                 location = P[index]
             Ie.pop()
-            try:
-                end = Ie.peek()
-            except Exception:
+
+            if Ie.isEmpty():
                 end = reserve
-                flag = False
-            finally:
-                index = Q.index(location)
-                while ( not location == end):
-                    result.push(location)
-                    index += 1
-                    index = index % len(Q)
-                    location = Q[index]
+                break
+
+            index = Q.index(location)
+            while not location == end:
+                result.push(location)
+                index = (index+1) % len(Q)
+                location = Q[index]
+            # try:
+            #     end = Ie.peek()
+            # except Exception:
+            #     end = reserve
+            #     flag = False
         return result
 
     def getP(self, subjectlines, viewportlines):
 
         P = []
         Ie = Stack()
-        Ie.items = []
         for subjectline in reversed(subjectlines):
             P.append(subjectline[1])
             crossCount = 0
@@ -174,53 +173,73 @@ class Clipper():
                     P.append(poi)
                     Ie.push(poi)
                     crossCount += 1
-                if (crossCount > 1):
+                if (crossCount):
                     if(Ie.peek() == self.getClosestPoint(P[len(P) - 3], P[len(P) - 2], P[len(P) - 1])):
                         # perform swap
                         a, b = len(P) - 2, len(P) - 1
                         Ie[b], Ie[a] = Ie[a], Ie[b]
+                if crossCount == 2:
+                    break
         return P, Ie
 
     def getQ(self, viewportlines, Ie):
 
         Q = []
-        corner = viewportlines[0][0]
-        storage = []
-        Q.append(corner)
-        for point in Ie:
-            if (corner[1] == point[1]):
-                storage.append(point)
-        storage.sort(key=lambda tup: tup[0], reverse = True)
-        Q.extend(storage)
+        storagebank = []
 
-        corner = viewportlines[1][0]
-        storage = []
-        Q.append(corner)
-        for point in Ie:
-            if (corner[0] == point[0]):
-                storage.append(point)
-        storage.sort(key=lambda tup: tup[1], reverse = True)
-        Q.extend(storage)
-
-        corner = viewportlines[2][0]
-        storage = []
-        Q.append(corner)
-        for point in Ie:
-            if (corner[1] == point[1]):
-                storage.append(point)
-        storage.sort(key=lambda tup: tup[0])
-        Q.extend(storage)
-
-        corner = viewportlines[3][0]
-        storage = []
-        Q.append(corner)
-        for point in Ie:
-            if (corner[0] == point[0]):
-                storage.append(point)
-        storage.sort(key=lambda tup: tup[1])
-        Q.extend(storage)
-
+        for i in range(0, 4):
+            corner = viewportlines[1][0]
+            storage = []
+            Q.append(corner)
+            for point in Ie:
+                if (corner[1] == point[1]):
+                    storage.append(point)
+            storagebank.append(storage)
+        storagebank[0].sort(key=lambda tup: tup[0], reverse=True)
+        storagebank[1].sort(key=lambda tup: tup[1], reverse=True)
+        storagebank[2].sort(key=lambda tup: tup[0])
+        storagebank[3].sort(key=lambda tup: tup[1])
+        Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
         return Q
+
+        # Q = []
+        # corner = viewportlines[0][0]
+        # storage = []
+        # Q.append(corner)
+        # for point in Ie:
+        #     if (corner[1] == point[1]):
+        #         storage.append(point)
+        # storage.sort(key=lambda tup: tup[0], reverse = True)
+        # Q.extend(storage)
+        #
+        # corner = viewportlines[1][0]
+        # storage = []
+        # Q.append(corner)
+        # for point in Ie:
+        #     if (corner[0] == point[0]):
+        #         storage.append(point)
+        # storage.sort(key=lambda tup: tup[1], reverse = True)
+        # Q.extend(storage)
+        #
+        # corner = viewportlines[2][0]
+        # storage = []
+        # Q.append(corner)
+        # for point in Ie:
+        #     if (corner[1] == point[1]):
+        #         storage.append(point)
+        # storage.sort(key=lambda tup: tup[0])
+        # Q.extend(storage)
+        #
+        # corner = viewportlines[3][0]
+        # storage = []
+        # Q.append(corner)
+        # for point in Ie:
+        #     if (corner[0] == point[0]):
+        #         storage.append(point)
+        # storage.sort(key=lambda tup: tup[1])
+        # Q.extend(storage)
+        #
+        # return Q
 
 class Stack():
 
