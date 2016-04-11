@@ -31,6 +31,9 @@ class RestrictionFactory(object):
         """
         return SquareRestriction(center, distance, self.metric)
 
+    def newMercatorClipped(self, viewport):
+        return MercatorClipperRestriction(viewport, 0)
+
 
 # kinda really an interface
 class Restriction(object):
@@ -100,6 +103,31 @@ class Restriction(object):
         c = 2*asin(sqrt(a))
 
         return r * c
+
+class MercatorClipperRestriction(Restriction):
+
+    def __init__(self, viewport, metric=0):
+        super(MercatorClipperRestriction,self).__init__(metric)
+        self.viewport = viewport
+
+
+    def restrict(self, geometrics):
+        clippy = Clipper()
+        for geometry in geometrics:
+            ticker = 0
+            for coordin in geometry.coordinates:
+                y = geometry.coordin[0]
+                x = geometry.coordin[1]
+                if not (y >= self.viewport[1][0] and y <= self.viewport[0][0] \
+                    and x >= self.viewport[2][1] and x <= self.viewport[0][1]):
+                    geometry.remove = 1
+                    ticker +=1
+            if ticker == len(geometry.coordinates): break
+            lines = geometry.coordinatesAsListLines()
+            newgeometry = clippy.clip(lines, self.viewport)
+            geometry.coordinates = newgeometry
+
+
 
 
 class SquareRestriction(Restriction):

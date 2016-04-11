@@ -24,23 +24,6 @@ class LatLongPoint:
     def listed(self):
         return [self.lat, self.lng]
 
-class LineRepresentation:
-
-    def __init__(self, start, end):
-        """
-        `Author`: Bill Clark
-
-        Simple container class for two points that will make up a full line. Both points should be mercatorPoints.
-
-        `start`: Mercator point that starts the line.
-
-        `end`: Mercator point that ends the line.
-        """
-        self.start = start
-        self.end = end
-        self.slope = None
-        self.cept = None
-
 class GeometricObject(object):
 
     def __str__(self):
@@ -131,6 +114,13 @@ class GeometricObject(object):
         ret = []
         for y in self.coordinates:
             ret.append(str(y))
+        return ret
+
+    def coordinatesAsListLines(self):
+        ret = []
+        length = len(self.coordinates)
+        for i in range(0, length):
+            ret.append([self.coordinates[i], self.coordinates[(i+1)%length]])
         return ret
 
 
