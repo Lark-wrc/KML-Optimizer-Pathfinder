@@ -125,7 +125,8 @@ class Clipper():
         result = Stack()
         reserve = Ie.peek()
         location = reserve
-        while 1:
+        flag = 1
+        while flag:
             Ie.pop()
             end = Ie.peek()
             index = P.index(location)
@@ -137,7 +138,9 @@ class Clipper():
 
             if Ie.isEmpty():
                 end = reserve
-                break
+                flag = 0
+            else:
+                end = Ie.peek()
 
             index = Q.index(location)
             while not location == end:
