@@ -3,7 +3,6 @@ from StaticMapsConnections.UrlBuilder import UrlBuilder
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 import StaticMapsConnections.ImageMerge as ImageMerge
 import Image
-import Utils
 import time
 argzero = 'Inputs\KML Files\\advancedexample1.kml'
 argtwo = 'Inputs\KML Files\\advancedexample2.kml'
@@ -21,7 +20,7 @@ f = f.newSquareRestriction([-103.528629, 41.260352], 500)
 # f = f.newSquareRestriction([64.871826, 66.833851], 250)
 f.restrict(fasade.geometrics)
 fasade.fasadeUpdate()
-fasade.rewrite('Inputs\KML Files\\rewritten recent.kml')
+fasade.rewrite('Outputs\\Driver Rewrite.kml')
 
 #Build the Url
 
@@ -53,17 +52,17 @@ print "Number of urls: ", len(build.urllist) + 2
 images = build.download()
 print "Downloaded."
 images = ImageMerge.convertPtoRGB(*images)
-ImageMerge.mergeModeRGB('Inputs\Static Maps\Outfile.png', *images)
+ImageMerge.mergeModeRGB('Outputs\Outfile.png', *images)
 
 #merges by downloading, merging, and repeating till none are left.
 
 # ImageMerge.debug = 0
 #
-# layers = ImageMerge.MergeGenerator('Inputs\Static Maps\Outfile.png', build.downloadBase())
+# layers = ImageMerge.MergeGenerator('Outputs\Outfile.png', build.downloadBase())
 # for img in build.downloadGenerator():
 #     im = ImageMerge.convertPtoRGB(img)[0]
 #     layers.add(im)
 
 
-im = Image.open('Inputs\Static Maps\Outfile.png')
+im = Image.open('Outputs\Outfile.png')
 im.show()

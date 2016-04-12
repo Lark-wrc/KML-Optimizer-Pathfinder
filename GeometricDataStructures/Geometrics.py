@@ -1,4 +1,28 @@
-import Utils
+class LatLongPoint:
+    """
+    Author: Nick LaPosta
+
+    Container for the lat/lon coordinate for a point on a Mercator map projection.
+    GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
+    """
+    def __init__(self, lt, ln):
+        self.lat = lt
+        if ln < 0:
+            if -ln / 180 >= 1:
+                self.lng = 180 - -ln % 180
+            else:
+                self.lng = -(-ln % 180)
+        else:
+            if ln / 180 >= 1:
+                self.lng = 180 - ln % 180
+            else:
+                self.lng = ln
+
+    def __str__(self):
+        return repr(self.lat) + "," + repr(self.lng)
+
+    def listed(self):
+        return [self.lat, self.lng]
 
 class LatLongPoint:
     """
