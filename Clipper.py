@@ -183,6 +183,7 @@ class Clipper():
                         Ie.items[b], Ie.items[a] = Ie.items[a], Ie.items[b]
                 if crossCount == 2:
                     break
+        P.reverse()
         return P, Ie
 
     def getQ(self, viewportlines, Ie):
