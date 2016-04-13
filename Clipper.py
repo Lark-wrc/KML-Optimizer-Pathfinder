@@ -25,21 +25,39 @@ class Clipper():
         `pointD`: end point of second line
         """
 
+        # if pointC.lng == pointD.lng:
+        #     line1m = (pointB.lat - pointA.lat) / (pointB.lng - pointA.lng)
+        #     line1b = pointA.lat - (line1m * pointA.lng)
+        #     y = (line1m * pointC.lng) + line1b
+        #     return LatLongPoint(y, pointC.lng)
+        # if pointA.lng == pointB.lng:
+        #     line2m = (pointD.lat - pointC.lat) / (pointD.lng - pointC.lng)
+        #     line2b = pointC.lat - (line2m * pointC.lng)
+        #     y = (line2m * pointA.lng) + line2b
+        #     return LatLongPoint(y, pointA.lng)
+        # line1m = (pointB.lat - pointA.lat) / (pointB.lng - pointA.lng)
+        # line2m = (pointD.lat - pointC.lat) / (pointD.lng - pointC.lng)
+        # line1b = pointA.lat - (line1m * pointA.lng)
+        # line2b = pointC.lat - (line2m * pointC.lng)
+        # x = ((-1 * line1b) + line2b) / (line1m - line2m)
+        # y = (line1m * x) + line1b
+        # return LatLongPoint(y, x)
+
         xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
         ydiff = pointA.lat - pointB.lat, pointC.lat - pointD.lat
 
         div = self.determinentTup(xdiff, ydiff)
         d = self.determinentPoint(pointA, pointB), self.determinentPoint(pointC, pointD)
 
-        resultx = self.determinentTup(d, xdiff) / div
-        resulty = self.determinentTup(d, ydiff) / div
+        resultx = float(self.determinentTup(d, xdiff)) / float(div)
+        resulty = float(self.determinentTup(d, ydiff)) / float(div)
         return LatLongPoint(resulty, resultx)
 
     def determinentTup(self, pointA, pointB):
         """
         `Author`: Bob Seedorf
 
-        Returns the algebraic determinent of the parameterized points using linear combinations of their coordinate pairs.
+        Returns the algebraic determinent of the parameterized tuple using linear combinations of their coordinate pairs ([0], [1]).
          _    _
         | A, C |
         |_B, D_|    =   (A * D) - (B * C) = return value
@@ -53,10 +71,9 @@ class Clipper():
         """
         `Author`: Bob Seedorf
 
-        Returns the algebraic determinent of the parameterized points using linear combinations of their coordinate pairs.
-         _    _
-        | A, C |
-        |_B, D_|    =   (A * D) - (B * C) = return value
+        Returns the algebraic determinent of the parameterized LatLongPoints using linear combinations of their coordinate pairs (lat, lng).
+        Uses similar manner to that described above
+        Note: this method will only work when used on LatlongPoints, as it requires lat, lng object s
 
         `pointA`: start point of line
         `pointB`: end point of line
@@ -145,7 +162,7 @@ class Clipper():
             Ie.pop()
             end = Ie.peek()
             index = P.index(location)
-            while not location.__cmp__(end) :
+            while not location == end :
                 result.push(location)
                 index = (index+1) % len(P)
                 location = P[index]
@@ -158,7 +175,7 @@ class Clipper():
                 end = Ie.peek()
 
             index = Q.index(location)
-            while not location.__cmp__(end):
+            while not location == end:
                 result.push(location)
                 index = (index+1) % len(Q)
                 location = Q[index]
@@ -220,17 +237,17 @@ class Clipper():
             storage = []
             storage.append(corner)
             for point in Ie:
-                if(i == 0 or i == 2):
+                if i == 0 or i == 2:
                     if(corner.lat == point.lat):
-                        storage.append(point);
+                        storage.append(point)
                 else: # i == 1 or i == 3
                     if(corner.lng == point.lng):
-                        storage.append(point);
+                        storage.append(point)
             storagebank.append(storage)
-        storagebank[0].sort(key=lambda tup: tup[0], reverse=True)
-        storagebank[1].sort(key=lambda tup: tup[1], reverse=True)
-        storagebank[2].sort(key=lambda tup: tup[0])
-        storagebank[3].sort(key=lambda tup: tup[1])
+        storagebank[0].sort(key=lambda tup: tup.lng, reverse=True)
+        storagebank[1].sort(key=lambda tup: tup.lat, reverse=True)
+        storagebank[2].sort(key=lambda tup: tup.lng)
+        storagebank[3].sort(key=lambda tup: tup.lat)
         Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
         return Q
 

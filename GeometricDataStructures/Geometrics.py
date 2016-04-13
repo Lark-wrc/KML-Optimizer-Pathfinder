@@ -21,11 +21,17 @@ class LatLongPoint:
     def __str__(self):
         return repr(self.lat) + "," + repr(self.lng)
 
+    def __repr__(self):
+        return self.__str__()
+
     def listed(self):
         return [self.lat, self.lng]
 
     def __cmp__(self, other):
-        return self.lat == other.lat and self.lng == other.lng
+        return (self.lat == other.lat and self.lng == other.lng)
+
+    def __eq__(self, other):
+        return (self.lat == other.lat and self.lng == other.lng)
 
     def __getitem__(self, item):
         return self;
