@@ -236,11 +236,9 @@ class Clipper():
 
     def unFlattenList(self, list):
 
-        newlist =[]
-        for index in range(0, (len(list) -1)):
-            newlist.append((list[index], list[index+1]))
-        newlist.append((list[len(list) -1], list[0]))
-        return newlist
+        temp = list[1:] + list[:1]  # rotate list by one, to the left
+        return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
+
 
     def runMe(self, subjectlines, viewportlines):
 
