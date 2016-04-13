@@ -1,4 +1,5 @@
 from GeometricDataStructures.Mercator import MercatorPoint
+from GeometricDataStructures.Geometrics import LatLongPoint
 import math
 
 class Clipper():
@@ -24,17 +25,17 @@ class Clipper():
         `pointD`: end point of second line
         """
 
-        xdiff = pointA[0] - pointB[0], pointC[0] - pointD[0]
-        ydiff = pointA[1] - pointB[1], pointC[1] - pointD[1]
+        xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
+        ydiff = pointA.lat - pointB.lat, pointC.lat - pointD.lat
 
-        div = self.determinent(xdiff, ydiff)
-        d = self.determinent(pointA, pointB), self.determinent(pointC, pointD)
+        div = self.determinentTup(xdiff, ydiff)
+        d = self.determinentPoint(pointA, pointB), self.determinentPoint(pointC, pointD)
 
-        resultx = self.determinent(d, xdiff) / div
-        resulty = self.determinent(d, ydiff) / div
-        return resultx, resulty
+        resultx = self.determinentTup(d, xdiff) / div
+        resulty = self.determinentTup(d, ydiff) / div
+        return LatLongPoint(resulty, resultx)
 
-    def determinent(self, pointA, pointB):
+    def determinentTup(self, pointA, pointB):
         """
         `Author`: Bob Seedorf
 
@@ -47,6 +48,20 @@ class Clipper():
         `pointB`: end point of line
         """
         return (pointA[0] * pointB[1] - pointA[1] * pointB[0])
+
+    def determinentPoint(self, pointA, pointB):
+        """
+        `Author`: Bob Seedorf
+
+        Returns the algebraic determinent of the parameterized points using linear combinations of their coordinate pairs.
+         _    _
+        | A, C |
+        |_B, D_|    =   (A * D) - (B * C) = return value
+
+        `pointA`: start point of line
+        `pointB`: end point of line
+        """
+        return (pointA.lng * pointB.lat - pointA.lat * pointB.lng)
 
     def doLinesIntersect(self, pointA, pointB, pointC, pointD):
         """
@@ -83,7 +98,7 @@ class Clipper():
         `pointB`: second point being passed
         `pointC`: third point being passed
         """
-        val = (pointB[1] - pointA[1]) * (pointC[0] - pointB[0]) - (pointB[0] - pointA[0]) * (pointC[1] - pointB[1]);
+        val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
         if (val == 0.0): return 0   # Orientation.COLLINEAR
         elif (val > 0): return -1   # Orientation.RIGHT
         else: return 1              # Orientation.LEFT
@@ -100,8 +115,8 @@ class Clipper():
         `pointA`: first point to be checked, has return precedence over pointB
         `pointB`: second point to be checked
         """
-        distToA = math.sqrt(((target[0] - pointA[0]) ** 2) + (target[1] - pointA[1]) ** 2)
-        distToB = math.sqrt(((target[0] - pointB[0]) ** 2) + (target[1] - pointB[1]) ** 2)
+        distToA = math.sqrt(((target.lng - pointA.lng) ** 2) + (target.lat - pointA.lat) ** 2)
+        distToB = math.sqrt(((target.lng - pointB.lng) ** 2) + (target.lat - pointB.lat) ** 2)
         return pointA if distToA <= distToB else pointB
 
     def getClipped(self, P, Q, Ie):
@@ -130,7 +145,7 @@ class Clipper():
             Ie.pop()
             end = Ie.peek()
             index = P.index(location)
-            while not location == end :
+            while not location.__cmp__(end) :
                 result.push(location)
                 index = (index+1) % len(P)
                 location = P[index]
@@ -143,7 +158,7 @@ class Clipper():
                 end = Ie.peek()
 
             index = Q.index(location)
-            while not location == end:
+            while not location.__cmp__(end):
                 result.push(location)
                 index = (index+1) % len(Q)
                 location = Q[index]
@@ -164,6 +179,8 @@ class Clipper():
         :param viewportlines:
         :return: P, the collection of all points that lie on the subject lines of the polyogn being examined
         """
+        subjectlines = self.unFlattenList(subjectlines)
+        viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
         P = []
         Ie = Stack()
         for subjectline in reversed(subjectlines):
@@ -199,12 +216,16 @@ class Clipper():
         Q = []
         storagebank = []
         for i in range(0, 4):
-            corner = viewportlines[i][0]
+            corner = viewportlines[i]
             storage = []
             storage.append(corner)
             for point in Ie:
-                if (corner[((i % 2) + 1) % 2] == point[((i % 2) + 1) % 2]):
-                    storage.append(point)
+                if(i == 0 or i == 2):
+                    if(corner.lat == point.lat):
+                        storage.append(point);
+                else: # i == 1 or i == 3
+                    if(corner.lng == point.lng):
+                        storage.append(point);
             storagebank.append(storage)
         storagebank[0].sort(key=lambda tup: tup[0], reverse=True)
         storagebank[1].sort(key=lambda tup: tup[1], reverse=True)
@@ -213,10 +234,21 @@ class Clipper():
         Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
         return Q
 
+    def unFlattenList(self, list):
+
+        newlist =[]
+        for index in range(0, (len(list) -1)):
+            newlist.append((list[index], list[index+1]))
+        newlist.append((list[len(list) -1], list[0]))
+        return newlist
+
     def runMe(self, subjectlines, viewportlines):
 
         P, Ie = self.getP(subjectlines, viewportlines)         # find P
+        print "P :",P
+        print "Ie:", Ie.items
         Q = self.getQ(viewportlines, Ie)                       # find Q
+        print "Q :",Q
         result = self.getClipped(P, Q, Ie)                     # get clipped
         return result
 
@@ -256,34 +288,41 @@ class Stack():
 if __name__ == '__main__':
 
     clipper = Clipper()
-    P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
-    Q = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
-    Ie = Stack()
-    Ie.items = [(2.0, 0.5), (0.6666666666666666, -1.0), (0.0, -1.0), (0.8571428571428571, 3.0), (1.4, 3.0), (2.0, 2.25)]
-    # Result should be: [(2.0, 2.25), (1.4, 3.0), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5)]
 
-    result = clipper.getClipped(P, Q, Ie).items
-    print result
-    test = [(2.0, 2.25), (1.4, 3.0), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0),(0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5)]
+    # P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
+    # Q = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
+    # Ie = Stack()
+    # Ie.items = [(2.0, 0.5), (0.6666666666666666, -1.0), (0.0, -1.0), (0.8571428571428571, 3.0), (1.4, 3.0), (2.0, 2.25)]
+    # # Result should be: [(2.0, 2.25), (1.4, 3.0), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5)]
+    #
+    # result = clipper.getClipped(P, Q, Ie).items
+    # print result
+    # test = [(2.0, 2.25), (1.4, 3.0), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0),(0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5)]
+    #
+    # subjectlines = [((3.0, 1.0), (1.0, 3.5)) , ((1.0, 3.5), (0.0, 0.0)), ((0.0, 0.0), (0.0, -3.0)), ((0.0, -3.0), (1.0, 0.0)), ((1.0, 0.0), (3.0, 1.0))]
+    # viewportlines = [((2.0, 3.0), (-1.0, 3.0)),  ((-1.0, 3.0), (-1.0, -1.0)),  ((-1.0, -1.0), (2.0, -1.0)),  ((2.0, -1.0), (2.0, 3.0))]
+    #
+    # testP = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
+    # testP.reverse()
+    # testIe = [(2.0, 0.5), (0.6666666666666666, -1.0), (0.0, -1.0), (0.8571428571428571, 3.0), (1.4, 3.0), (2.0, 2.25)]
+    # resultP, resultIe = clipper.getP(subjectlines, viewportlines)
+    # print (testP == resultP, testIe == resultIe)
+    # print (testIe)
+    # print (resultIe.items)
+    #
+    # testQ = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
+    # resultQ = clipper.getQ(viewportlines, testIe)
+    # print (testQ == resultQ)
+    # print (testQ)
+    # print (resultQ)
+    #
+    # print test == result
+    # print test
+    # print clipper.getClipped(resultP, resultQ, resultIe).items
 
-    subjectlines = [((3.0, 1.0), (1.0, 3.5)) , ((1.0, 3.5), (0.0, 0.0)), ((0.0, 0.0), (0.0, -3.0)), ((0.0, -3.0), (1.0, 0.0)), ((1.0, 0.0), (3.0, 1.0))]
-    viewportlines = [((2.0, 3.0), (-1.0, 3.0)),  ((-1.0, 3.0), (-1.0, -1.0)),  ((-1.0, -1.0), (2.0, -1.0)),  ((2.0, -1.0), (2.0, 3.0))]
 
-    testP = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
-    testP.reverse()
-    testIe = [(2.0, 0.5), (0.6666666666666666, -1.0), (0.0, -1.0), (0.8571428571428571, 3.0), (1.4, 3.0), (2.0, 2.25)]
-    resultP, resultIe = clipper.getP(subjectlines, viewportlines)
-    print (testP == resultP, testIe == resultIe)
-    print (testIe)
-    print (resultIe.items)
-
-    testQ = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
-    resultQ = clipper.getQ(viewportlines, testIe)
-    print (testQ == resultQ)
-    print (testQ)
-    print (resultQ)
-
-    print test == result
-    print test
-    print clipper.getClipped(resultP, resultQ, resultIe).items
+    subjectlines = [LatLongPoint(1,3), LatLongPoint(3.5,1), LatLongPoint(0,0), LatLongPoint(-3,0), LatLongPoint(0,1)]
+    viewportlines = [LatLongPoint(3,2), LatLongPoint(3,-1), LatLongPoint(-1,-1), LatLongPoint(-1,2)]
+    for point in clipper.runMe(subjectlines, viewportlines).items:
+        print point
     print "success"

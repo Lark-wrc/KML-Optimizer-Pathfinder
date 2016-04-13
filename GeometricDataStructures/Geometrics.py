@@ -24,6 +24,12 @@ class LatLongPoint:
     def listed(self):
         return [self.lat, self.lng]
 
+    def __cmp__(self, other):
+        return self.lat == other.lat and self.lng == other.lng
+
+    def __getitem__(self, item):
+        return self;
+
 class GeometricObject(object):
 
     def __str__(self):
