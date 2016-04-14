@@ -205,16 +205,16 @@ class Clipper():
             crossCount = 0
             for viewportline in viewportlines:
                 poi = None
-                if (self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1])):
+                if self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1]):
                     poi = self.getLineIntersection(subjectline[0], subjectline[1], viewportline[0], viewportline[1])
                     P.append(poi)
                     Ie.push(poi)
                     crossCount += 1
-                if (crossCount > 2):
-                    if(Ie.peek() == self.getClosestPoint(P[len(P) - 3], P[len(P) - 2], P[len(P) - 1])):
+                if crossCount > 1:
+                    if Ie.peek() == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
                         # perform swap
-                        a, b = len(P) - 2, len(P) - 1
-                        Ie.items[b], Ie.items[a] = Ie.items[a], Ie.items[b]
+                        Ie.items[-1], Ie.items[-2] = Ie.items[-2], Ie.items[-1]
+                        P[-1], P[-2] = P[-2], P[-1]
                 if crossCount == 2:
                     break
         P.reverse()
@@ -237,12 +237,16 @@ class Clipper():
             storage = []
             storage.append(corner)
             for point in Ie:
-                if i == 0 or i == 2:
-                    if(corner.lat == point.lat):
-                        storage.append(point)
-                else: # i == 1 or i == 3
-                    if(corner.lng == point.lng):
-                        storage.append(point)
+                corner_coords = [corner.lat, corner.lng]
+                point_coords = [point.lat, point.lng]
+                if corner_coords[i % 2] == point_coords[i % 2]:
+                    storage.append(point)
+                #if i == 0 or i == 2:
+                #    if(corner.lat == point.lat):
+                #        storage.append(point)
+                #else:  # i == 1 or i == 3
+                #    if(corner.lng == point.lng):
+                #        storage.append(point)
             storagebank.append(storage)
         storagebank[0].sort(key=lambda tup: tup.lng, reverse=True)
         storagebank[1].sort(key=lambda tup: tup.lat, reverse=True)
@@ -341,7 +345,9 @@ if __name__ == '__main__':
     for point in clipper.runMe(subjectlines, viewportlines).items:
         print point
 
-    subjectlines = [LatLongPoint(1,3), LatLongPoint(3.5,1), LatLongPoint(0,-2), LatLongPoint(-3,0), LatLongPoint(0,1)]
+    print "\n--------------------------------------------------------------------------------------------\n"
+
+    subjectlines = [LatLongPoint(1,3), LatLongPoint(3.5,1), LatLongPoint(1.5,0.75), LatLongPoint(3.5,0.5), LatLongPoint(1,-0.5)]
     viewportlines = [LatLongPoint(3,2), LatLongPoint(3,-1), LatLongPoint(-1,-1), LatLongPoint(-1,2)]
     for point in clipper.runMe(subjectlines, viewportlines).items:
         print point
