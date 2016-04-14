@@ -340,4 +340,8 @@ if __name__ == '__main__':
     viewportlines = [LatLongPoint(3,2), LatLongPoint(3,-1), LatLongPoint(-1,-1), LatLongPoint(-1,2)]
     for point in clipper.runMe(subjectlines, viewportlines).items:
         print point
-    print "success"
+
+    subjectlines = [LatLongPoint(1,3), LatLongPoint(3.5,1), LatLongPoint(0,-2), LatLongPoint(-3,0), LatLongPoint(0,1)]
+    viewportlines = [LatLongPoint(3,2), LatLongPoint(3,-1), LatLongPoint(-1,-1), LatLongPoint(-1,2)]
+    for point in clipper.runMe(subjectlines, viewportlines).items:
+        print point

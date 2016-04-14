@@ -31,7 +31,7 @@ class LatLongPoint:
         return (self.lat == other.lat and self.lng == other.lng)
 
     def __eq__(self, other):
-        return (self.lat == other.lat and self.lng == other.lng)
+        return (round(self.lat,7) == round(other.lat,7) and round(self.lng,7) == round(other.lng,7))
 
     def __getitem__(self, item):
         return self;
