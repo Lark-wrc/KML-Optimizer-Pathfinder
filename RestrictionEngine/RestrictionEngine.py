@@ -1,5 +1,6 @@
 from math import radians, sin, cos, asin, sqrt, log
 import State
+from Clipper import Clipper
 
 ZOOM_CONSTANT = 10 + log(45, 2)  # Final Variable, Do Not Modify
 
@@ -109,6 +110,8 @@ class MercatorClipperRestriction(Restriction):
     def __init__(self, viewport, metric=0):
         super(MercatorClipperRestriction,self).__init__(metric)
         self.viewport = viewport
+        self.NW = self.viewport[1]
+        self.SE = self.viewport[3]
 
 
     def restrict(self, geometrics):
@@ -116,18 +119,31 @@ class MercatorClipperRestriction(Restriction):
         for geometry in geometrics:
             ticker = 0
             for coordin in geometry.coordinates:
-                y = geometry.coordin[0]
-                x = geometry.coordin[1]
-                if not (y >= self.viewport[1][0] and y <= self.viewport[0][0] \
-                    and x >= self.viewport[2][1] and x <= self.viewport[0][1]):
+                # if not (coordin.lng >= self.viewport[2].lng and coordin.lng <= self.viewport[0].lng \
+                #     and coordin.lat >= self.viewport[2].lat and coordin.lat <= self.viewport[0].lat):
+                #     geometry.remove = 1
+                #     #ticker +=1
+                if not self.pointWithinDistance(coordin):
                     geometry.remove = 1
-                    ticker +=1
-            if ticker == len(geometry.coordinates): break
-            lines = geometry.coordinatesAsListLines()
-            newgeometry = clippy.clip(lines, self.viewport)
-            geometry.coordinates = newgeometry
+            if ticker == len(geometry.coordinates) or geometry.tag == "Point": continue
+            #newgeometry = clippy.runMe(geometry.coordinates, self.viewport)
+            #geometry.coordinates = newgeometry
 
+    def pointWithinDistance(self, coordinates):
+        """
+        `Author`: Bill Clark
 
+        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+        restrict.
+
+        `coordinates`: List of coordinate values, long lat.
+
+        `return`: True if the point is contained, false else.
+        """
+        if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+            if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
+                return True
+        return False
 
 
 class SquareRestriction(Restriction):

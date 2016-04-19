@@ -72,7 +72,7 @@ class GeometricObject(object):
         if type(coordinates) is str:
             for x in coordinates.split():
                 s = x.split(',')
-                self.coordinates.append(LatLongPoint(float(s[0]),float(s[1])))
+                self.coordinates.append(LatLongPoint(float(s[1]),float(s[0])))
         else:
             self.coordinates = coordinates
         if self.debug: print self.coordinates
@@ -127,14 +127,6 @@ class GeometricObject(object):
         for y in self.coordinates:
             ret.append(str(y))
         return ret
-
-    def coordinatesAsListLines(self):
-        ret = []
-        length = len(self.coordinates)
-        for i in range(0, length):
-            ret.append([self.coordinates[i], self.coordinates[(i+1)%length]])
-        return ret
-
 
 
 class Point(GeometricObject):
