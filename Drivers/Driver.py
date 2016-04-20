@@ -4,28 +4,36 @@ from RestrictionEngine.RestrictionEngine import RestrictionFactory
 import StaticMapsConnections.ImageMerge as ImageMerge
 import Image
 from GeometricDataStructures.Mercator import *
+from GeometricDataStructures.Geometrics import LatLongPoint
+import Clipper
 import time
+
+
 argzero = 'Inputs\KML Files\\advancedexample1.kml'
 argtwo = 'Inputs\KML Files\\advancedexample2.kml'
 argone = 'Inputs\KML Files\us_states.kml'
 argarctic = 'Inputs\KML FIles\\arctic lines jan 31.kml'
 
 #center = [-103.528629, 41.260352]
-center = [74.4057, 40.0583] # jersey
-zoom = 4
+center = [40.0583, -74.4057] # jersey
+centerPoint = LatLongPoint(center[0], center[1])
+zoom = 7
 size = 600
 
 #Create some restrictions.
 merc = MercatorProjection()
 f = RestrictionFactory()
 
-square = f.newSquareRestriction(center, 500)
+square = f.newSquareRestriction(center, 1000)
 #square = f.newSquareRestriction([64.871826, 66.833851], 250)
-clipped = f.newMercatorClipped(merc.get_corners(center), zoom, size, size)
+clipped = f.newMercatorClipped(merc.get_corners(centerPoint, zoom, size, size))
+
+
 
 #Create the KmlFasade
 
-# fasade = KmlFasade(argarctic)
+
+
 fasade = KmlFasade(argone)
 
 fasade.placemarkToGeometrics()
@@ -37,25 +45,24 @@ fasade.rewrite('Outputs\\Driver Rewrite.kml')
 
 #Create the KmlFasade
 
-# fasade = KmlFasade(argarctic)
-fasade = KmlFasade(argone)
-
-fasade.placemarkToGeometrics()
-fasade.garbageFilter()
-
-square.restrict(fasade.geometrics)
-fasade.fasadeUpdate()
-fasade.rewrite('Outputs\\Driver Rewrite1.kml')
+# fasade = KmlFasade(argone)
+#
+# fasade.placemarkToGeometrics()
+# fasade.garbageFilter()
+#
+# square.restrict(fasade.geometrics)
+# fasade.fasadeUpdate()
+# fasade.rewrite('Outputs\\Driver Rewrite1.kml')
 
 #Build the Url
 
-build = UrlBuilder(repr(size))
+build = UrlBuilder(size)
 # build.centerparams('64.871826,66.833851', '4')
-build.centerparams(','.join(center), repr(zoom))
+build.centerparams(','.join([repr(x) for x in center]), repr(zoom))
 
 markerlist = []
 for element in fasade.geometrics:
-    element.switchCoordinates()
+    #element.switchCoordinates()
     #print element.printCoordinates()
     if element.tag == "Point":
         markerlist.append(element.printCoordinates())
