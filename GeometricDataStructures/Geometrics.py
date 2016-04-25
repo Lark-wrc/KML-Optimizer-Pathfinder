@@ -9,15 +9,18 @@ class LatLongPoint:
     """
     def __init__(self, lt, ln):
         self.lat = lt
+        self.lng = ln
+        self.rewrap()
 
-        if ln < -360 and ln > 360:
+    def rewrap(self):
+        if self.lng < -360 and self.lng > 360:
             raise Exception("\"Invalid directional directions\" - Nick")
-        elif ln < -180:
-            self.lng = ln + 360
-        elif ln > 180:
-            self.lng = ln - 360
+        elif self.lng < -180:
+            self.lng = self.lng + 360
+        elif self.lng > 180:
+            self.lng = self.lng - 360
         else:
-            self.lng = ln
+            self.lng = self.lng
 
     def __str__(self):
         return repr(self.lat) + "," + repr(self.lng)

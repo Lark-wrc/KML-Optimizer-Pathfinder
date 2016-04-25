@@ -163,6 +163,7 @@ class Clipper():
             end = Ie.peek()
             index = P.index(location)
             while not location == end :
+                location.rewrap()
                 result.push(location)
                 index = (index+1) % len(P)
                 location = P[index]
@@ -176,6 +177,7 @@ class Clipper():
 
             index = Q.index(location)
             while not location == end:
+                location.rewrap()
                 result.push(location)
                 index = (index+1) % len(Q)
                 location = Q[index]
@@ -196,8 +198,6 @@ class Clipper():
         :param viewportlines:
         :return: P, the collection of all points that lie on the subject lines of the polyogn being examined
         """
-        subjectlines = self.unFlattenList(subjectlines)
-        viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
         P = []
         Ie = Stack()
         for subjectline in reversed(subjectlines):
@@ -233,7 +233,7 @@ class Clipper():
         Q = []
         storagebank = []
         for i in range(0, 4):
-            corner = viewportlines[i]
+            corner = viewportlines[i][0]
             storage = []
             storage.append(corner)
             for point in Ie:
@@ -255,20 +255,58 @@ class Clipper():
         Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
         return Q
 
-    def unFlattenList(self, list):
+    def unwrap(self, list):
+        """
+        'Author' Bob S. and Nick L.
 
+        this method 'wraps' the longitude points of an *already un-flattened list*
+        By ensuring the polygon crosses the anti-meridian, then moving all points that extend around the anti-meridian going negative to positive;
+        by moving those points into the extra dimensional standard coordinate plain 'off the map' from the polar plain
+
+        :param list - the un-flattened list of the polygon being modified
+        :return: None, this method statically modifies the parameterized list
+        """
+        for p in list:
+            if (p[0].lng * p[1].lng) < 0:    # if one is negative and the other positive
+                if p[0].lng > p[1].lng:
+                    if p[0].lng - p[1].lng > 180:
+                        p[1].lng = p[1].lng + 360
+                elif p[1].lng > p[0].lng:
+                    if p[1].lng - p[0].lng > 180:
+                        p[0].lng = p[0].lng + 360
+
+    def unFlattenList(self, list):
+        """
+        'Author' Bob S.
+
+        this method 'un-flattens' the list being passed
+        by creating a tuple of each lat-long-point and it's respective neighbor a new list of 'lines' is created for the purpose of iteration by the necessary methods.
+
+        :param list - list to be modified.
+        :return: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
+        """
         temp = list[1:] + list[:1]  # rotate list by one, to the left
         return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
 
 
     def runMe(self, subjectlines, viewportlines):
 
+        # unflatten subject viewport...
+        subjectlines = self.unFlattenList(subjectlines)
+        viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
+
+        # next unwrap these line sets
+        self.unwrap(subjectlines)
+        self.unwrap(viewportlines)
+
+        # run me, in order
         P, Ie = self.getP(subjectlines, viewportlines)         # find P
         print "P :",P
         print "Ie:", Ie.items
         Q = self.getQ(viewportlines, Ie)                       # find Q
         print "Q :",Q
         result = self.getClipped(P, Q, Ie)                     # get clipped
+
         return result
 
 
@@ -355,24 +393,16 @@ if __name__ == '__main__':
     print "\n--------------------------------------------------------------------------------------------\n"
 
     list = [(-122.084073,37.430983152841), (-122.08387556846,37.430981784499),
-
           (-122.07566645719,37.428010604887), (-122.07553564869,37.427893171576),
-
           (-122.07293386374,37.420439569303), (-122.07296986194,37.420285414427),
-
           (-122.07876327046,37.41406822808), (-122.07893836645,37.41399584117),
-
           (-122.08830978301,37.41367089012), (-122.08849215429,37.413730881959),
-
           (-122.09494567437,37.419523409628), (-122.09499845163,37.419674486238),
-
           (-122.09322460731,37.427279812044), (-122.09310718708,37.427405852613),
-
           (-122.08446780291,37.430977679891), (-122.08427043154,37.430981784499),
           (-122.084073,37.430983152841)]
 
     newlist = list[0::2]
-
     lllist = []
 
     for pair in newlist:
