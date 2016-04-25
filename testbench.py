@@ -28,4 +28,4 @@ for p in subjectlines:
 print LatLongPoint(0, -190)
 print LatLongPoint(0, 181)
 print LatLongPoint(-180, 255)
-print LatLongPoint(180, -720)
+print LatLongPoint(180, -359)

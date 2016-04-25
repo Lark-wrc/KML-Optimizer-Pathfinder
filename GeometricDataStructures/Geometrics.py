@@ -10,7 +10,7 @@ class LatLongPoint:
     def __init__(self, lt, ln):
         self.lat = lt
 
-        if ln > -360 and ln < 360:
+        if ln < -360 and ln > 360:
             raise Exception("\"Invalid directional directions\" - Nick")
         elif ln < -180:
             self.lng = ln + 360
