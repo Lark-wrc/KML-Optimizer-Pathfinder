@@ -4,19 +4,20 @@ class LatLongPoint:
 
     Container for the lat/lon coordinate for a point on a Mercator map projection.
     GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
+
+    NOTE this implementation may not work, I am changing it to suit a test -Bob 4-23-16
     """
     def __init__(self, lt, ln):
         self.lat = lt
-        if ln < 0:
-            if -ln / 180 >= 1:
-                self.lng = 180 - -ln % 180
-            else:
-                self.lng = -(-ln % 180)
+
+        if ln > -360 and ln < 360:
+            raise Exception("\"Invalid directional directions\" - Nick")
+        elif ln < -180:
+            self.lng = ln + 360
+        elif ln > 180:
+            self.lng = ln - 360
         else:
-            if ln / 180 >= 1:
-                self.lng = 180 - ln % 180
-            else:
-                self.lng = ln
+            self.lng = ln
 
     def __str__(self):
         return repr(self.lat) + "," + repr(self.lng)
