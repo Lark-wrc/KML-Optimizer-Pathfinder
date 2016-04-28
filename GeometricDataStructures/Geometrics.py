@@ -22,6 +22,9 @@ class LatLongPoint:
         else:
             self.lng = self.lng
 
+    def getTup(self):
+        return (self.lng, self.lat)
+
     def __str__(self):
         return repr(self.lat) + "," + repr(self.lng)
 

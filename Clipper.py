@@ -12,9 +12,9 @@ class Clipper:
 
         Returns the point, as a tuple, at which the line segments composed composed of points A, B and points C, D intersect
         First the tuple of the difference in the x's an y's of points A, B and then points C, D are found.
-        Next the determinent of the xdiffs and ydiffs is found and stored in div for later reference.
-        Next the determinent of the the individual lines, A, B and C, D are found, this yields value d.
-        Subsequently the cooresponding point of intersection's x and y values are found through the division of the determinent of d and ydiff and d and xdiff by div
+        Next the determinant of the xdiffs and ydiffs is found and stored in div for later reference.
+        Next the determinant of the the individual lines, A, B and C, D are found, this yields value d.
+        Subsequently the corresponding point of intersection's x and y values are found through the division of the determinant of d and ydiff and d and xdiff by div
         The return is the pair of values, resutltx and resulty, representing the coordinate pair that is the the point of intersection
         NOTE: Does NOT check if lines intersect, as a precondition that should be accomplished before this method is called
 
@@ -45,39 +45,26 @@ class Clipper:
         xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
         ydiff = pointA.lat - pointB.lat, pointC.lat - pointD.lat
 
-        div = self.determinentTup(xdiff, ydiff)
-        d = self.determinentPoint(pointA, pointB), self.determinentPoint(pointC, pointD)
+        div = self.determinant(xdiff, ydiff)
+        d = self.determinant(pointA.getTup(), pointB.getTup()), self.determinant(pointC.getTup(), pointD.getTup())
 
-        resultx = float(self.determinentTup(d, xdiff)) / float(div)
-        resulty = float(self.determinentTup(d, ydiff)) / float(div)
+        resultx = float(self.determinant(d, xdiff)) / float(div)
+        resulty = float(self.determinant(d, ydiff)) / float(div)
         return LatLongPoint(resulty, resultx)
 
-    def determinentTup(self, pointA, pointB):
+    def determinant(self, tupA, tupB):
         """
         `Author`: Bob Seedorf
 
-        Returns the algebraic determinent of the parameterized tuple using linear combinations of their coordinate pairs ([0], [1]).
+        Returns the algebraic determinant of the parameterized tuple using linear combinations of their coordinate pairs ([0], [1]).
          _    _
-        | A, C |
+        | A  C |
         |_B, D_|    =   (A * D) - (B * C) = return value
 
         `pointA`: start point of line
         `pointB`: end point of line
         """
-        return (pointA[0] * pointB[1] - pointA[1] * pointB[0])
-
-    def determinentPoint(self, pointA, pointB):
-        """
-        `Author`: Bob Seedorf
-
-        Returns the algebraic determinent of the parameterized LatLongPoints using linear combinations of their coordinate pairs (lat, lng).
-        Uses similar manner to that described above
-        Note: this method will only work when used on LatlongPoints, as it requires lat, lng object s
-
-        `pointA`: start point of line
-        `pointB`: end point of line
-        """
-        return (pointA.lng * pointB.lat - pointA.lat * pointB.lng)
+        return (tupA[0] * tupB[1] - tupB[0] * tupA[1])
 
     def doLinesIntersect(self, pointA, pointB, pointC, pointD):
         """
@@ -307,7 +294,7 @@ class Clipper:
 
     def runMe(self, subjectlines, viewportlines):
 
-        # unflatten subject viewport...
+        # un-flatten subject viewport...
         subjectlines = self.unFlattenList(subjectlines)
         viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
 
@@ -316,13 +303,19 @@ class Clipper:
         self.unwrap(viewportlines)
 
         # run me, in order
-        P, Ie = self.getP(subjectlines, viewportlines)         # find P
+        # find P, Ie
+        P, Ie = self.getP(subjectlines, viewportlines)
         print "P :",P
         print "Ie:", Ie.items
-        Q = self.getQ(viewportlines, Ie)                       # find Q
-        print "Q :",Q
-        result = self.getClipped(P, Q, Ie)                     # get clipped
+        if not Ie.items or Ie.items == []:
+            return None
 
+        # then find Q
+        Q = self.getQ(viewportlines, Ie)
+        print "Q :",Q
+
+        # then get CLipped
+        result = self.getClipped(P, Q, Ie)
         return result
 
 
@@ -432,9 +425,9 @@ if __name__ == '__main__':
     for point in clipper.runMe(subjectlines, viewportlines).items:
         print point
 
-    # simple rectangle at 0,0 - break system; rectangle is too wide (wider than 180)
-    subjectlines1 = [LatLongPoint(30, -90), LatLongPoint(30, 91), LatLongPoint(-30, 91), LatLongPoint(-30, -90)]
-    subjectlines2 = [LatLongPoint(30, -90), LatLongPoint(30, 91), LatLongPoint(-30, 91), LatLongPoint(-30, -90)]
+    # another simple rectangle - works
+    subjectlines1 = [LatLongPoint(30, 170), LatLongPoint(0, 160), LatLongPoint(-30, 170), LatLongPoint(-30, -170), LatLongPoint(0, -160), LatLongPoint(30, -170)]
+    subjectlines2 = [LatLongPoint(30, 170), LatLongPoint(0, 160), LatLongPoint(-30, 170), LatLongPoint(-30, -170), LatLongPoint(0, -160), LatLongPoint(30, -170)]
 
     control = clipper.unFlattenList(subjectlines1)
     test = clipper.unFlattenList(subjectlines2)
