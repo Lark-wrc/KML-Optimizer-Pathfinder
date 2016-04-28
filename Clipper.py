@@ -316,6 +316,7 @@ class Clipper:
 
         # then get CLipped
         result = self.getClipped(P, Q, Ie)
+        result.items.append(result[0])
         return result
 
 

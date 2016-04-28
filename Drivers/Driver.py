@@ -35,7 +35,7 @@ clipped = f.newMercatorClipped(merc.get_corners(centerPoint, zoom, size, size))
 
 
 
-fasade = KmlFasade(argtest)
+fasade = KmlFasade(argone)
 
 fasade.placemarkToGeometrics()
 fasade.removeGarbageTags()
@@ -60,14 +60,15 @@ for element in fasade.geometrics:
     #print element.printCoordinates()
     if element.tag == "Point":
         markerlist.append(element.printCoordinates())
-    if element.tag == "Polygon":
-        build.addpath({"color":"blue", "weight":'5'}, element.coordinatesAsListStrings())
     if len(element.element.attrib) > 0 and element.element.attrib["id"] == "Viewport":
         build.addpath({"color":"red", "weight":'5'}, element.coordinatesAsListStrings())
+    elif element.tag == "Polygon":
+        build.addpath({"color":"blue", "weight":'5'}, element.coordinatesAsListStrings())
     if element.tag == "LineString":
         build.addpath({"color":"yellow", "weight":'5'}, element.coordinatesAsListStrings())
 
 #build.addmarkers({"color":"blue"}, str(fasade.geometrics[1].coordinates[0]))
+build.addmarkers({"color":"yellow"}, '41.3079222,-74.6096236')
 build.printUrls()
 
 print "Number of urls: ", len(build.urllist) + 2
