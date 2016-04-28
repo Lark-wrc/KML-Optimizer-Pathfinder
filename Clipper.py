@@ -1,8 +1,7 @@
-from GeometricDataStructures.Mercator import MercatorPoint
 from GeometricDataStructures.Geometrics import LatLongPoint
 import math
 
-class Clipper():
+class Clipper:
 
     def __init__(self):
         pass
@@ -263,6 +262,10 @@ class Clipper():
         By ensuring the polygon crosses the anti-meridian, then moving all points that extend around the anti-meridian going negative to positive;
         by moving those points into the extra dimensional standard coordinate plain 'off the map' from the polar plain
 
+        NOTE: this method acts on the implication that the points of the polygon being transformed are NO MORE than 180 degrees apart longitudinally
+        This needed to be the case as there exists no other way to determine whether or not a point should or should not be transformed
+         By relying on a maximum limit, we have chosen the [ath of the visualization software in google earth to limit the capacity for polygons' dimensions to exceed 180- degrees width
+
         :param list - the un-flattened list of the polygon being modified
         :return: None, this method statically modifies the parameterized list
         """
@@ -274,6 +277,19 @@ class Clipper():
                 elif p[1].lng > p[0].lng:
                     if p[1].lng - p[0].lng > 180:
                         p[0].lng = p[0].lng + 360
+
+    def rewrap(self, list):
+        """
+        'Author' Bob S.
+
+        This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by re-wraping each of the coordinate pair's values individually
+
+        :param list - the un-flattened list of the polygon being modified
+        :return: None, this method statically modifies the parameterized list
+        """
+        for p in list:
+            p[0].rewrap()
+            p[1].rewrap()
 
     def unFlattenList(self, list):
         """
@@ -415,4 +431,30 @@ if __name__ == '__main__':
     viewportlines = [LatLongPoint(37.419523409628, -122.09494567437), LatLongPoint(37.427279812044, -122.09322460731), LatLongPoint(37.430977679891,-122.08446780291), LatLongPoint(37.430983152841,-122.084073)]
     for point in clipper.runMe(subjectlines, viewportlines).items:
         print point
+
+    # simple rectangle at 0,0 - break system; rectangle is too wide (wider than 180)
+    subjectlines1 = [LatLongPoint(30, -90), LatLongPoint(30, 91), LatLongPoint(-30, 91), LatLongPoint(-30, -90)]
+    subjectlines2 = [LatLongPoint(30, -90), LatLongPoint(30, 91), LatLongPoint(-30, 91), LatLongPoint(-30, -90)]
+
+    control = clipper.unFlattenList(subjectlines1)
+    test = clipper.unFlattenList(subjectlines2)
+
+    print control
+    print test
+
+    print "\n-------------------------------\n"
+
+    clipper.unwrap(test)
+
+    print control
+    print test
+
+    # do some stuff on the subjectlines / viewport lines here
+    print "\n-------------------------------\n"
+    # this ti sthe psot processing for the lat/lng's
+
+    clipper.rewrap(test)
+
+    print test
+
 
