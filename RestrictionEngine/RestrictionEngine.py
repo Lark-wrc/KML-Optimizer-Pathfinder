@@ -134,7 +134,7 @@ class MercatorClipperRestriction(Restriction):
             geometry.coordinates[:] = geometry.coordinates[-(length - startCoord):] + geometry.coordinates[:startCoord]
             if not length == geometry.remove and not geometry.remove == 0:  # Completely in/outside the viewport.
                 newgeometry = clippy.runMe(geometry.coordinates, self.viewport)
-                geometry.coordinates = newgeometry.items
+                geometry.coordinates[:] = newgeometry.items
 
     def pointWithinCorners(self, coordinates):
         """

@@ -184,8 +184,6 @@ class Clipper:
         :param viewportlines:
         :return: P, the collection of all points that lie on the subject lines of the polyogn being examined
         """
-        subjectlines = self.unFlattenList(subjectlines)
-        viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
         P = []
         Ie = Stack()
         for subjectline in reversed(subjectlines):

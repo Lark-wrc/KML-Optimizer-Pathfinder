@@ -10,8 +10,8 @@ class LatLongPoint:
     NOTE this implementation may not work, I am changing it to suit a test -Bob 4-23-16
     """
     def __init__(self, lt, ln):
-        self.lat = lt
-        self.lng = ln
+        self.lat = round(lt, 7)
+        self.lng = round(ln, 7)
         self.rewrap()
 
     def rewrap(self):

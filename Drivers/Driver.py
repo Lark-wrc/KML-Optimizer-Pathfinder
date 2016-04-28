@@ -61,9 +61,11 @@ for element in fasade.geometrics:
     if element.tag == "Point":
         markerlist.append(element.printCoordinates())
     if element.tag == "Polygon":
+        build.addpath({"color":"blue", "weight":'5'}, element.coordinatesAsListStrings())
+    if len(element.element.attrib) > 0 and element.element.attrib["id"] == "Viewport":
         build.addpath({"color":"red", "weight":'5'}, element.coordinatesAsListStrings())
     if element.tag == "LineString":
-        build.addpath({"color":"blue", "weight":'5'}, element.coordinatesAsListStrings())
+        build.addpath({"color":"yellow", "weight":'5'}, element.coordinatesAsListStrings())
 
 #build.addmarkers({"color":"blue"}, str(fasade.geometrics[1].coordinates[0]))
 build.printUrls()
