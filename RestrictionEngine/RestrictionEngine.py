@@ -36,7 +36,6 @@ class RestrictionFactory(object):
         return MercatorClipperRestriction(viewport, 0)
 
 
-# kinda really an interface
 class Restriction(object):
 
     def __init__(self, metric):
@@ -117,19 +116,27 @@ class MercatorClipperRestriction(Restriction):
     def restrict(self, geometrics):
         clippy = Clipper()
         for geometry in geometrics:
-            ticker = 0
+            last_pos = -1
+            startCoord = 0
+            count = 0
             for coordin in geometry.coordinates:
-                # if not (coordin.lng >= self.viewport[2].lng and coordin.lng <= self.viewport[0].lng \
-                #     and coordin.lat >= self.viewport[2].lat and coordin.lat <= self.viewport[0].lat):
-                #     geometry.remove = 1
-                #     #ticker +=1
-                if not self.pointWithinDistance(coordin):
-                    geometry.remove = 1
-            if ticker == len(geometry.coordinates) or geometry.tag == "Point": continue
-            #newgeometry = clippy.runMe(geometry.coordinates, self.viewport)
-            #geometry.coordinates = newgeometry
+                count = count+1
+                if not self.pointWithinCorners(coordin):
+                    geometry.remove += 1
+                    curr_pos = 0
+                else: curr_pos = 1
 
-    def pointWithinDistance(self, coordinates):
+                if last_pos == 0 and curr_pos == 1:
+                    startCoord = geometry.coordinates.index(coordin)-1
+                last_pos = curr_pos
+
+            length = len(geometry.coordinates)
+            geometry.coordinates[:] = geometry.coordinates[-(length - startCoord):] + geometry.coordinates[:startCoord]
+            if not length == geometry.remove and not geometry.remove == 0:  # Completely in/outside the viewport.
+                newgeometry = clippy.runMe(geometry.coordinates, self.viewport)
+                geometry.coordinates = newgeometry.items
+
+    def pointWithinCorners(self, coordinates):
         """
         `Author`: Bill Clark
 

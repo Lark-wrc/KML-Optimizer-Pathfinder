@@ -1,3 +1,5 @@
+from lxml import etree
+
 class LatLongPoint:
     """
     Author: Nick LaPosta
@@ -31,6 +33,9 @@ class LatLongPoint:
     def __repr__(self):
         return self.__str__()
 
+    def rewriteStr(self):
+        return repr(self.lng) + "," + repr(self.lat)
+
     def listed(self):
         return [self.lat, self.lng]
 
@@ -54,7 +59,7 @@ class GeometricObject(object):
         `return`: This object as a string.
         """
 
-        return str(self.tag)+ ' ' +self.printCoordinates()+ " " + elementPrint(self.element)
+        return str(self.tag)+ ' ' + self.printCoordinates() + " " + elementPrint(self.element)
 
     def __init__(self, element, tag, coordinates):
         """
@@ -75,11 +80,11 @@ class GeometricObject(object):
         self.tag = tag
         self.remove = 0
         self.debug = 0
-        self.coordinates = [] #Most definitely required.
+        self.coordinates = []  # Most definitely required.
         if type(coordinates) is str:
             for x in coordinates.split():
                 s = x.split(',')
-                self.coordinates.append(LatLongPoint(float(s[1]),float(s[0])))
+                self.coordinates.append(LatLongPoint(float(s[1]), float(s[0])))
         else:
             self.coordinates = coordinates
         if self.debug: print self.coordinates
@@ -91,22 +96,22 @@ class GeometricObject(object):
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file object.
         """
-        if self.remove:
+        if self.remove == len(self.coordinates):
             y = self.element.getparent()
             if y is not None: y.remove(self.element)
             return 0
-        self.element.find('coordinates').text = '\n'.join([str(x) for x in self.coordinates])
+        self.element.find('coordinates').text = '\n'.join([x.rewriteStr() for x in self.coordinates])
 
-    def switchCoordinates(self):
-        """
-        Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-        as opposed to lat long as our files provide. This modifies the file in place.
-
-        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
-        """
-        for coordin in self.coordinates:
-            coordin.lat, coordin.lng = coordin.lng, coordin.lat
-        return self.printCoordinates()
+    # def switchCoordinates(self):
+    #     """
+    #     Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
+    #     as opposed to lat long as our files provide. This modifies the file in place.
+    #
+    #     `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
+    #     """
+    #     for coordin in self.coordinates:
+    #         coordin.lat, coordin.lng = coordin.lng, coordin.lat
+    #     return self.printCoordinates()
 
     def printCoordinates(self):
         """
@@ -247,7 +252,7 @@ class GeometricFactory(object):
         Simple factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
-        self.geometryTypes = ('Point', 'LineString','LinearRing', 'Polygon', 'MultiGeometry')
+        self.geometryTypes = ('Point', 'LineString', 'LinearRing', 'Polygon', 'MultiGeometry')
         pass
 
     def createLiteral(self, element, tag, coordinates):
@@ -301,8 +306,8 @@ class GeometricFactory(object):
 
         elif element.tag == 'MultiGeometry':
             ret = []
-            skip = 0 #Set to 1 initally to skip the actual multigeo tag.
-            first = 1
+            skip = 0
+            first = 1  # Set to 1 initally to skip the actual multigeo tag.
             for x in element.iter():
                 if first:
                     first = 0
