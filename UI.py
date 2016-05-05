@@ -12,7 +12,7 @@ import StaticMapsConnections.ImageMerge as ImageMerge
 
 class myFrame(Frame):
 
-    ftypes = [('KML files', '*.kml')]
+    ftypes = [('KML files', '*.kml'), ('KMZ files', '*.kmz'), ('All files', '*')]
     itypes = [('All files', '*'), ('PNG files', '*.png')]
     text = "testing"
     root = Tkinter.Tk()
@@ -91,9 +91,10 @@ class myFrame(Frame):
             self.txt.insert(END, "\n")
 
         # class wide storage of necessary center of focus info
-        self.lat = self.entries[0][1]
-        self.lng = self.entries[1][1]
-        self.dist = self.entries[2][1]
+        self.lat = float(self.entries[0][1].get())
+        self.lng = float(self.entries[1][1].get())
+        self.dist = float(self.entries[2][1].get())
+        self.size = float(self.entries[3][1].get())
 
         self.driver()
         return
@@ -115,7 +116,7 @@ class myFrame(Frame):
         :param :
         """
 
-        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Open which file...")
+        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Open which file...", defaultextension=".kml")
         if file != '':
             self.infile = open(file, 'r')
             self.text = self.infile.read()
@@ -128,8 +129,8 @@ class myFrame(Frame):
             self.txt.insert(END, message)
             self.txt.insert(END, "\n")
             self.haveReadFile = True
-            return path
-        return os.path.split(file) [0]
+            return os.path.abspath(file)
+        return os.path.abspath(file)
 
     def saveFileKML(self):
         """
@@ -142,7 +143,6 @@ class myFrame(Frame):
         file = tkFileDialog.asksaveasfilename(parent=self.root,filetypes=self.ftypes ,title="Save the file as...", defaultextension=".kml")
         if file:
             self.outfile = open(file, 'w')
-            self.outfile.write(self.text)
 
             path = os.path.split(file) [0]
             name = os.path.split(file) [1]
@@ -152,8 +152,8 @@ class myFrame(Frame):
             self.txt.insert(END, message)
             self.txt.insert(END, "\n")
             self.haveReadFile = True
-            return path
-        return os.path.split(file) [0]
+            return os.path.abspath(file)
+        return os.path.abspath(file)
 
     def saveFileImg(self):
         """
@@ -163,8 +163,8 @@ class myFrame(Frame):
         :param :
         """
 
-        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the file as...",
-                                              defaultextension=".kml")
+        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the image as...",
+                                              defaultextension=".png")
         if file:
             self.outimg = open(file, 'w')
 
@@ -175,8 +175,8 @@ class myFrame(Frame):
             print message
             self.txt.insert(END, message)
             self.txt.insert(END, "\n")
-            return path
-        return os.path.split(file) [0]
+            return os.path.abspath(file)
+        return os.path.abspath(file)
 
     def driver(self):
         """
@@ -192,12 +192,14 @@ class myFrame(Frame):
             fasade = KmlFasade(self.onOpen())
         else:
             fasade = KmlFasade(self.infile)
+
         fasade.placemarkToGeometrics()
         fasade.garbageFilter()
         f = RestrictionFactory()
-        f = f.newSquareRestriction([float(self.lng), float(self.lat)], float(self.size))
+        f = f.newSquareRestriction([self.lng, self.lat], self.size)
         f.restrict(fasade.geometrics)
         fasade.fasadeUpdate()
+
         if (not self.haveWriteFile):
             fasade.rewrite(self.saveFileKML())
         else:
