@@ -1,6 +1,7 @@
 
 import Tkinter
 from Tkinter import *
+from ScrolledText import *
 import tkFileDialog
 import tkMessageBox
 import os
@@ -8,23 +9,19 @@ from GeometricDataStructures.KmlFasade import KmlFasade
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 import StaticMapsConnections.ImageMerge as ImageMerge
-# import Image
+import image
 
 class myFrame(Frame):
 
     ftypes = [('KML files', '*.kml'), ('KMZ files', '*.kmz'), ('All files', '*')]
     itypes = [('All files', '*'), ('PNG files', '*.png')]
-    text = "testing"
+    text = "KML Klipper"
     root = Tkinter.Tk()
     root.withdraw()
 
     # fields for user input, stored along with their respective entries
-    fields = 'latitude', 'longitude', 'distance', 'size'
+    fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance', 'Image Size'
     entries = []
-
-    # switch to request user input on go button
-    haveReadFile = False
-    haveWriteFile = False
 
     def __init__(self, parent):
         """
@@ -39,6 +36,10 @@ class myFrame(Frame):
 
         self.parent = parent
         self.initUI()
+
+        # switch to request user input on go button
+        self.infile = None
+        self.outfile = None
 
     def initUI(self):
         """
@@ -60,21 +61,25 @@ class myFrame(Frame):
 
         for field in self.fields:
             row = Frame(self)
-            label = Label(row, width=15, text=field, anchor='w')
+            label = Label(row, width=20, text=field, anchor='w')
             entry = Entry(row)
             row.pack(side=TOP, fill=X, padx=5, pady=5)
             label.pack(side=LEFT)
             entry.pack(side=RIGHT, expand=YES, fill=X)
             self.entries.append((field, entry))
 
-        go = Button(self, text = "GO.", command = self.start)
-        go.pack()
+        row = Frame(self)
+        go = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
+        quitButton = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
+        row.pack(side=TOP, fill=X, padx=15, pady=15)
+        go.pack(side=LEFT, expand = YES)
+        quitButton.pack(side=RIGHT, expand=YES)
 
-        quitButton = Button(self, text = "QUIT.", command = self.onQuit)
-        quitButton.pack()
+        label = Label(self, text = "Output:")
+        label.pack()
 
-        self.txt = Text(self)
-        self.txt.pack(fill=BOTH, expand=1)
+        self.txt = ScrolledText(self)
+        self.txt.pack(fill=NONE, expand=1)
 
     def start(self):
         """
@@ -116,21 +121,17 @@ class myFrame(Frame):
         :param :
         """
 
-        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Open which file...", defaultextension=".kml")
+        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
             self.infile = open(file, 'r')
             self.text = self.infile.read()
 
-            path = os.path.split(file) [0]
-            name = os.path.split(file) [1]
-            pathname = path + "/" + name
-            message = "Successfully read " + pathname
+            pathname = os.path.abspath(file)
+            message = "OPEN: Successfully chose " + pathname
             print message
             self.txt.insert(END, message)
             self.txt.insert(END, "\n")
-            self.haveReadFile = True
-            return os.path.abspath(file)
-        return os.path.abspath(file)
+        return pathname
 
     def saveFileKML(self):
         """
@@ -140,20 +141,16 @@ class myFrame(Frame):
         :param :
         """
 
-        file = tkFileDialog.asksaveasfilename(parent=self.root,filetypes=self.ftypes ,title="Save the file as...", defaultextension=".kml")
+        file = tkFileDialog.asksaveasfilename(parent=self.root,filetypes=self.ftypes ,title="Save the file as", defaultextension=".kml")
         if file:
             self.outfile = open(file, 'w')
 
-            path = os.path.split(file) [0]
-            name = os.path.split(file) [1]
-            pathname = path + "/" + name
-            message = "Successfully wrote to " + pathname
+            pathname = os.path.abspath(file)
+            message = "SAVE: Successfully chose " + pathname
             print message
             self.txt.insert(END, message)
             self.txt.insert(END, "\n")
-            self.haveReadFile = True
-            return os.path.abspath(file)
-        return os.path.abspath(file)
+        return pathname
 
     def saveFileImg(self):
         """
@@ -163,20 +160,16 @@ class myFrame(Frame):
         :param :
         """
 
-        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the image as...",
-                                              defaultextension=".png")
+        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the image as", defaultextension=".png")
         if file:
             self.outimg = open(file, 'w')
 
-            path = os.path.split(file)[0]
-            name = os.path.split(file)[1]
-            pathname = path + "/" + name
-            message = "Successfully stored image in " + pathname
+            pathname = os.path.abspath(file)
+            message = "IMAGE: Successfully stored image in " + pathname
             print message
             self.txt.insert(END, message)
             self.txt.insert(END, "\n")
-            return os.path.abspath(file)
-        return os.path.abspath(file)
+        return pathname
 
     def driver(self):
         """
@@ -188,7 +181,7 @@ class myFrame(Frame):
         """
 
         # Create the KmlFasade, force user input if not read file has been selected
-        if(not self.haveReadFile):
+        if(self.infile is None):
             fasade = KmlFasade(self.onOpen())
         else:
             fasade = KmlFasade(self.infile)
@@ -200,7 +193,7 @@ class myFrame(Frame):
         f.restrict(fasade.geometrics)
         fasade.fasadeUpdate()
 
-        if (not self.haveWriteFile):
+        if (self.outfile is None):
             fasade.rewrite(self.saveFileKML())
         else:
             fasade.rewrite(self.outfile)
@@ -228,11 +221,12 @@ class myFrame(Frame):
             print "Number of urls: ", len(build.urllist) + 2
 
             # Merge the Url Images
-
             # merges by downloading everything and merging everything.
 
             images = build.download()
             print "Downloaded."
+            self.txt.insert(END, "Downloaded.")
+            self.txt.insert(END, "\n")
             images = ImageMerge.convertPtoRGB(*images)
             outimage = self.saveFileImg()
             ImageMerge.mergeModeRGB(outimage, *images)
@@ -246,7 +240,9 @@ class myFrame(Frame):
             #     im = ImageMerge.convertPtoRGB(img)[0]
             #     layers.add(im)
 
-            im = Image.open(outimage)
+            self.txt.insert(END, "Opening, " + outimage)
+            self.txt.insert(END, "\n")
+            im = image.open(outimage)
             im.show()
 
 def main():
