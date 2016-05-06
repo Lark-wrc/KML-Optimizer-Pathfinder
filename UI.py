@@ -9,7 +9,7 @@ from GeometricDataStructures.KmlFasade import KmlFasade
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 import StaticMapsConnections.ImageMerge as ImageMerge
-import image
+from PIL import Image
 
 class myFrame(Frame):
 
@@ -20,14 +20,14 @@ class myFrame(Frame):
     root.withdraw()
 
     # fields for user input, stored along with their respective entries
-    fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance', 'Image Size'
+    fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
     entries = []
 
     def __init__(self, parent):
         """
         Author: Bob Seedorf
 
-        This is the ui interface from which a user is provided the ability to open a chosen file for processing,
+        This is the user interface from which a user is provided the ability to open a chosen file for processing,
         apply filters for the processing functionality, and save a processed file to a location
         :param parent:
         """
@@ -55,9 +55,8 @@ class myFrame(Frame):
         self.parent.config(menu=menubar)
 
         fileMenu = Menu(menubar)
-        fileMenu.add_command(label="Open", command=self.onOpen)
-        fileMenu.add_command(label="Save", command=self.saveFileKML)
-        menubar.add_cascade(label="File", menu=fileMenu)
+        menubar.add_command(label="Open", command=self.onOpen)
+        menubar.add_command(label="Save", command=self.saveFileKML)
 
         for field in self.fields:
             row = Frame(self)
@@ -102,7 +101,6 @@ class myFrame(Frame):
         self.size = float(self.entries[3][1].get())
 
         self.driver()
-        return
 
     def onQuit(self):
         """
@@ -124,7 +122,6 @@ class myFrame(Frame):
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
             self.infile = open(file, 'r')
-            self.text = self.infile.read()
 
             pathname = os.path.abspath(file)
             message = "OPEN: Successfully chose " + pathname
@@ -200,7 +197,6 @@ class myFrame(Frame):
 
         # Build the Url
         build = UrlBuilder(600)
-        # build.centerparams('41.260352,-103.528629', '4')
         build.centerparams('%s, %s' % (self.lat, self.lng), '%s' % (self.dist))
 
         markerlist = []
@@ -218,17 +214,20 @@ class myFrame(Frame):
             build.addmarkers({"color": "blue"}, markerlist)
             build.printUrls()
 
-            print "Number of urls: ", len(build.urllist) + 2
+            message = "Number of urls: ", len(build.urllist) + 2
+            print message
+            self.txt.insert(END, message)
+            self.txt.insert(END, '\n')
 
             # Merge the Url Images
             # merges by downloading everything and merging everything.
 
-            images = build.download()
+            outimage = self.saveFileImg()
+            images = build.download(outimage, 'image')
             print "Downloaded."
             self.txt.insert(END, "Downloaded.")
             self.txt.insert(END, "\n")
             images = ImageMerge.convertPtoRGB(*images)
-            outimage = self.saveFileImg()
             ImageMerge.mergeModeRGB(outimage, *images)
 
             # merges by downloading, merging, and repeating till none are left.
@@ -242,7 +241,7 @@ class myFrame(Frame):
 
             self.txt.insert(END, "Opening, " + outimage)
             self.txt.insert(END, "\n")
-            im = image.open(outimage)
+            im = Image.open(outimage)
             im.show()
 
 def main():
@@ -255,7 +254,7 @@ def main():
     root= Tk()
     frame= myFrame(root)
     frame.pack()
-    root.geometry("500x350+300+300")
+    root.geometry("500x500+300+300")
 
     root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
 

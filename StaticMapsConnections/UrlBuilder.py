@@ -206,7 +206,7 @@ class UrlBuilder(object):
         self.retireUrl(self.url)
         return curr
 
-    def download(self, path='C:\Users\Research\Documents\Code Repositories\KML-Optimizer-Pathfinder\Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
+    def download(self, path, prefix):
         """
         `Author`: Bill Clark
 
