@@ -80,6 +80,15 @@ class myFrame(Frame):
         self.txt = ScrolledText(self)
         self.txt.pack(fill=NONE, expand=1)
 
+    def log(self, text):
+        """
+        This method is used to update the text area of the UI with the recent input, and notifications
+        :param text:
+        :return:
+        """
+        print text
+        self.txt.insert(END, text.__str__() + "\n")
+
     def start(self):
         """
         Author: Bob Seedorf
@@ -90,9 +99,7 @@ class myFrame(Frame):
         for entry in self.entries:
             field = entry[0]
             text  = entry[1].get()
-            print('%s: %s' % (field, text))
-            self.txt.insert(END, '%s: %s' % (field, text))
-            self.txt.insert(END, "\n")
+            self.log('%s: %s' % (field, text))
 
         # class wide storage of necessary center of focus info
         self.lat = float(self.entries[0][1].get())
@@ -119,15 +126,14 @@ class myFrame(Frame):
         :param :
         """
 
+    # init pathname to local resource __file__ in case of erroneous choice
+        pathname = os.path.join(os.path.dirname(__file__), '..')
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
             self.infile = open(file, 'r')
-
             pathname = os.path.abspath(file)
             message = "OPEN: Successfully chose " + pathname
-            print message
-            self.txt.insert(END, message)
-            self.txt.insert(END, "\n")
+            self.log(message)
         return pathname
 
     def saveFileKML(self):
@@ -137,16 +143,14 @@ class myFrame(Frame):
         This method will write, at the request of the user, the file after processing
         :param :
         """
-
+        pathname = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root,filetypes=self.ftypes ,title="Save the file as", defaultextension=".kml")
         if file:
             self.outfile = open(file, 'w')
 
             pathname = os.path.abspath(file)
             message = "SAVE: Successfully chose " + pathname
-            print message
-            self.txt.insert(END, message)
-            self.txt.insert(END, "\n")
+            self.log(message)
         return pathname
 
     def saveFileImg(self):
@@ -156,16 +160,14 @@ class myFrame(Frame):
         This method will write, at the request of the user, the image file after processing
         :param :
         """
-
+        pathname = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the image as", defaultextension=".png")
         if file:
             self.outimg = open(file, 'w')
 
             pathname = os.path.abspath(file)
             message = "IMAGE: Successfully stored image in " + pathname
-            print message
-            self.txt.insert(END, message)
-            self.txt.insert(END, "\n")
+            self.log(message)
         return pathname
 
     def driver(self):
@@ -191,11 +193,12 @@ class myFrame(Frame):
         f.restrict(fasade.geometrics)
         fasade.fasadeUpdate()
 
-        if (self.outfile is None):
-            tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
-            fasade.rewrite(self.saveFileKML())
-        else:
-            fasade.rewrite(self.outfile)
+        # code to indicate the user has not chosen an output kml and then requests one
+        # if (self.outfile is None):
+        #     tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
+        #     fasade.rewrite(self.saveFileKML())
+        # else:
+        #     fasade.rewrite(self.outfile)
 
         # Build the Url
         build = UrlBuilder(600)
@@ -214,14 +217,10 @@ class myFrame(Frame):
                 build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
 
         build.addmarkers({"color": "blue"}, markerlist)
-        self.urls = build.printUrls()
-        self.txt.insert(END, self.urls)
-        self.txt.insert(END, "\n")
+        self.log(build.printUrls())
 
         message = "Number of urls: ", len(build.urllist) + 2
-        print message
-        self.txt.insert(END, message)
-        self.txt.insert(END, '\n')
+        self.log(message)
 
         # Merge the Url Images
         # merges by downloading everything and merging everything.
@@ -229,9 +228,7 @@ class myFrame(Frame):
         tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
         outimage = self.saveFileImg()
         images = build.download(outimage, 'image')
-        print "Downloaded."
-        self.txt.insert(END, "Downloaded.")
-        self.txt.insert(END, "\n")
+        self.log("Downloaded.")
         images = ImageMerge.convertPtoRGB(*images)
         ImageMerge.mergeModeRGB(outimage, *images)
 
@@ -244,12 +241,11 @@ class myFrame(Frame):
         #     im = ImageMerge.convertPtoRGB(img)[0]
         #     layers.add(im)
 
-        self.txt.insert(END, "Opening, " + outimage)
-        self.txt.insert(END, "\nFinished\n--------------------\n")
+        self.log("Opening, " + outimage + "\nFinished\n--------------------\n")
         im = Image.open(outimage)
         im.show()
 
-def main():
+def main(w, h):
     """
     Author: Bob Seedorf
 
@@ -260,21 +256,14 @@ def main():
     frame= myFrame(root)
     frame.pack()
 
-    width = root.winfo_width()
-    height = root.winfo_height()
-    x = (root.winfo_screenwidth() // 2) - (width // 2)
-    y = (root.winfo_screenheight() // 2) - (height // 2)
-    center_x = x - (550 // 2)
-    center_y = y - (550 // 2)
-    root.geometry('%sx%s+%s+%s' % (550, 550, center_x, center_y))
-
-    # width = root.winfo_screenwidth()
-    # height = root.winfo_screenheight()
-    # root.geometry("550x550+" + ((height / width) * 150).__str__() + "+" + ((width / height) * 120).__str__() +"")
+    x = (root.winfo_screenwidth() // 2) - (root.winfo_width() // 2)
+    y = (root.winfo_screenheight() // 2) - (root.winfo_height() // 2)
+    offset_x = x - (w // 2)
+    offset_y = y - (h // 2)
+    root.geometry('%sx%s+%s+%s' % (550, 550, offset_x, offset_y))
 
     root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
-
     root.mainloop()
 
 if __name__ == '__main__':
-    main()
+    main(550, 550)
