@@ -60,7 +60,7 @@ class myFrame(Frame):
 
         for field in self.fields:
             row = Frame(self)
-            label = Label(row, width=20, text=field, anchor='w')
+            label = Label(row, width=30, text=field, anchor='w')
             entry = Entry(row)
             row.pack(side=TOP, fill=X, padx=5, pady=5)
             label.pack(side=LEFT)
@@ -179,6 +179,7 @@ class myFrame(Frame):
 
         # Create the KmlFasade, force user input if not read file has been selected
         if(self.infile is None):
+            tkMessageBox.showwarning("Open file", "Please Choose A KML file to Open")
             fasade = KmlFasade(self.onOpen())
         else:
             fasade = KmlFasade(self.infile)
@@ -191,6 +192,7 @@ class myFrame(Frame):
         fasade.fasadeUpdate()
 
         if (self.outfile is None):
+            tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
             fasade.rewrite(self.saveFileKML())
         else:
             fasade.rewrite(self.outfile)
@@ -212,7 +214,9 @@ class myFrame(Frame):
                 build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
 
         build.addmarkers({"color": "blue"}, markerlist)
-        build.printUrls()
+        self.urls = build.printUrls()
+        self.txt.insert(END, self.urls)
+        self.txt.insert(END, "\n")
 
         message = "Number of urls: ", len(build.urllist) + 2
         print message
@@ -222,6 +226,7 @@ class myFrame(Frame):
         # Merge the Url Images
         # merges by downloading everything and merging everything.
 
+        tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
         outimage = self.saveFileImg()
         images = build.download(outimage, 'image')
         print "Downloaded."
@@ -240,7 +245,7 @@ class myFrame(Frame):
         #     layers.add(im)
 
         self.txt.insert(END, "Opening, " + outimage)
-        self.txt.insert(END, "\n")
+        self.txt.insert(END, "\nFinished\n--------------------\n")
         im = Image.open(outimage)
         im.show()
 
@@ -254,7 +259,18 @@ def main():
     root= Tk()
     frame= myFrame(root)
     frame.pack()
-    root.geometry("500x500+300+300")
+
+    width = root.winfo_width()
+    height = root.winfo_height()
+    x = (root.winfo_screenwidth() // 2) - (width // 2)
+    y = (root.winfo_screenheight() // 2) - (height // 2)
+    center_x = x - (550 // 2)
+    center_y = y - (550 // 2)
+    root.geometry('%sx%s+%s+%s' % (550, 550, center_x, center_y))
+
+    # width = root.winfo_screenwidth()
+    # height = root.winfo_screenheight()
+    # root.geometry("550x550+" + ((height / width) * 150).__str__() + "+" + ((width / height) * 120).__str__() +"")
 
     root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
 

@@ -322,6 +322,7 @@ class UrlBuilder(object):
         for url in self.urllist:
             print url
         print self.url
+        return self.urllist
 
     def __str__(self):
         """
