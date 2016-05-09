@@ -197,7 +197,7 @@ class myFrame(Frame):
 
         # Build the Url
         build = UrlBuilder(600)
-        build.centerparams('%s, %s' % (self.lat, self.lng), '%s' % (self.dist))
+        build.centerparams('%s,%s' % (self.lat, self.lng), '%s' % (self.dist))
 
         markerlist = []
         for element in fasade.geometrics:
@@ -211,38 +211,38 @@ class myFrame(Frame):
             if element.tag == "LineString":
                 build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
 
-            build.addmarkers({"color": "blue"}, markerlist)
-            build.printUrls()
+        build.addmarkers({"color": "blue"}, markerlist)
+        build.printUrls()
 
-            message = "Number of urls: ", len(build.urllist) + 2
-            print message
-            self.txt.insert(END, message)
-            self.txt.insert(END, '\n')
+        message = "Number of urls: ", len(build.urllist) + 2
+        print message
+        self.txt.insert(END, message)
+        self.txt.insert(END, '\n')
 
-            # Merge the Url Images
-            # merges by downloading everything and merging everything.
+        # Merge the Url Images
+        # merges by downloading everything and merging everything.
 
-            outimage = self.saveFileImg()
-            images = build.download(outimage, 'image')
-            print "Downloaded."
-            self.txt.insert(END, "Downloaded.")
-            self.txt.insert(END, "\n")
-            images = ImageMerge.convertPtoRGB(*images)
-            ImageMerge.mergeModeRGB(outimage, *images)
+        outimage = self.saveFileImg()
+        images = build.download(outimage, 'image')
+        print "Downloaded."
+        self.txt.insert(END, "Downloaded.")
+        self.txt.insert(END, "\n")
+        images = ImageMerge.convertPtoRGB(*images)
+        ImageMerge.mergeModeRGB(outimage, *images)
 
-            # merges by downloading, merging, and repeating till none are left.
+        # merges by downloading, merging, and repeating till none are left.
 
-            # ImageMerge.debug = 0
-            #
-            # layers = ImageMerge.MergeGenerator('Outputs\Outfile.png', build.downloadBase())
-            # for img in build.downloadGenerator():
-            #     im = ImageMerge.convertPtoRGB(img)[0]
-            #     layers.add(im)
+        # ImageMerge.debug = 0
+        #
+        # layers = ImageMerge.MergeGenerator('Outputs\Outfile.png', build.downloadBase())
+        # for img in build.downloadGenerator():
+        #     im = ImageMerge.convertPtoRGB(img)[0]
+        #     layers.add(im)
 
-            self.txt.insert(END, "Opening, " + outimage)
-            self.txt.insert(END, "\n")
-            im = Image.open(outimage)
-            im.show()
+        self.txt.insert(END, "Opening, " + outimage)
+        self.txt.insert(END, "\n")
+        im = Image.open(outimage)
+        im.show()
 
 def main():
     """
