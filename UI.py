@@ -130,7 +130,6 @@ class myFrame(Frame):
         pathname = os.path.join(os.path.dirname(__file__), '..')
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
-            self.infile = open(file, 'r')
             pathname = os.path.abspath(file)
             message = "OPEN: Successfully chose " + pathname
             self.log(message)
@@ -146,8 +145,6 @@ class myFrame(Frame):
         pathname = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root,filetypes=self.ftypes ,title="Save the file as", defaultextension=".kml")
         if file:
-            self.outfile = open(file, 'w')
-
             pathname = os.path.abspath(file)
             message = "SAVE: Successfully chose " + pathname
             self.log(message)
@@ -163,8 +160,6 @@ class myFrame(Frame):
         pathname = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the image as", defaultextension=".png")
         if file:
-            self.outimg = open(file, 'w')
-
             pathname = os.path.abspath(file)
             message = "IMAGE: Successfully stored image in " + pathname
             self.log(message)
@@ -224,7 +219,6 @@ class myFrame(Frame):
 
         # Merge the Url Images
         # merges by downloading everything and merging everything.
-
         tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
         outimage = self.saveFileImg()
         images = build.download(outimage, 'image')
@@ -232,18 +226,11 @@ class myFrame(Frame):
         images = ImageMerge.convertPtoRGB(*images)
         ImageMerge.mergeModeRGB(outimage, *images)
 
-        # merges by downloading, merging, and repeating till none are left.
-
-        # ImageMerge.debug = 0
-        #
-        # layers = ImageMerge.MergeGenerator('Outputs\Outfile.png', build.downloadBase())
-        # for img in build.downloadGenerator():
-        #     im = ImageMerge.convertPtoRGB(img)[0]
-        #     layers.add(im)
-
-        self.log("Opening, " + outimage + "\nFinished\n--------------------\n")
+        self.log("Opening, " + outimage)
         im = Image.open(outimage)
         im.show()
+        self.log("\nFinished\n--------------------\n")
+
 
 def main(w, h):
     """
