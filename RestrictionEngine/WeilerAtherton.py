@@ -2,6 +2,17 @@ from GeometricDataStructures.Geometrics import LatLongPoint
 import math
 
 class WeilerClipping:
+    """
+    `Author`: Bob S. Bill C. Nick L. and Eliakah K.
+
+    This class encapsulates all of the functionality of our implementation of the 'Weiler Atherton' Polygon Clipping Algorithm.
+
+    Included are all of the arithmetic operations, transformations and calculations necessary to accomplish our goal.
+    First build the polygons composed of the subject, being clipped, and the viewport against which the subject is being clipped are defined
+    Next we construct the integral collections, P, Q, and Ie (see the methods getP and getQ) to stage the execution of clipping.
+    Finally, these collections are fed into the clip method, that returns the new polygon as a flat list of points, in sequence, representing the new polygon as a set of vertices
+
+    """
 
     def __init__(self):
         pass
@@ -10,18 +21,20 @@ class WeilerClipping:
         """
         `Author`: Bob Seedorf, Eliakah K.
 
-        Returns the point, as a tuple, at which the line segments composed composed of points A, B and points C, D intersect
+        Returns the point, as a LatLongPoint object, at which the line segments composed of points A, B and points C, D intersect
         First the tuple of the difference in the x's an y's of points A, B and then points C, D are found.
-        Next the determinant of the xdiffs and ydiffs is found and stored in div for later reference.
+        Next the determinant of the difference of the x values y values, respctively, are stored
         Next the determinant of the the individual lines, A, B and C, D are found, this yields value d.
         Subsequently the corresponding point of intersection's x and y values are found through the division of the determinant of d and ydiff and d and xdiff by div
-        The return is the pair of values, resutltx and resulty, representing the coordinate pair that is the the point of intersection
+        The return is the pair of values, resutltx and resulty, representing the coordinate pair that is the point of intersection
+
         NOTE: Does NOT check if lines intersect, as a precondition that should be accomplished before this method is called
 
         `pointA`: start point of first line
         `pointB`: end point of first line
         `pointC`: start point of second line
         `pointD`: end point of second line
+
         """
 
         xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
@@ -45,6 +58,7 @@ class WeilerClipping:
 
         `pointA`: start point of line
         `pointB`: end point of line
+
         """
         return (tupA[0] * tupB[1] - tupB[0] * tupA[1])
 
@@ -52,8 +66,8 @@ class WeilerClipping:
         """
         `Author`: Bob Seedorf, Eliakah K.
 
-        Returns True if the line segments composed of points A, B and points C, D have an intersection point
-        By finding the orientation of any three given points the trait of the lines intersection can be determined through relatioinal equality
+        Returns True if the line segments composed of points A, B and points C, D have an intersection point.
+        By finding the orientation of any three given points the traits of the lines intersection can be determined through relational equality
         The orientation of the lines, being only the decision that they rotate either clockwise, counterclockwise, or not at all (collinear) is used to determine the
         In the case that the orientation of A, B, and C is the same as A, B, and D, and the the orientation of C, D, and A is the same as C, D, and B, then the lines do not intersect
 
@@ -61,6 +75,7 @@ class WeilerClipping:
         `pointB`: end point of first line
         `pointC`: start point of second line
         `pointD`: end point of second line
+
         """
 
         o1 = self.findOrientation(pointA, pointB, pointC)
@@ -77,29 +92,33 @@ class WeilerClipping:
         `Author`: Bob Seedorf
 
         Returns orientation of three given points in coordinate space.
+        The assumption lines drwan between points A, B and B, C and C, A are used to define this 'orientation'
         Through projection of the combinations of lines and extraneous points the slopes of the projections are found to be of an appropriate orientatoin
 
         `pointA`: first point being passed
         `pointB`: second point being passed
         `pointC`: third point being passed
+
         """
         val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - \
               (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
         if val == 0.0: return 0   # Orientation.COLLINEAR
         elif val > 0: return -1   # Orientation.RIGHT
-        else: return 1              # Orientation.LEFT
+        else: return 1            # Orientation.LEFT
 
     def getClosestPoint(self, target, pointA, pointB):
         """
         `Author`: Bob Seedorf
 
-        Returns the point, of only pointA or pointB, that is dimensionally closest to the point target
-        By using the pythagorean theorem and calculating the hypotenuse of the triangle composed of sides difference in x and difference in y for the two given points, the closest point is selected based on this distance.
+        Returns the point, of the set {pointA, pointB} that is dimensionally closest to the point target
+        By using the pythagorean theorem and calculating the hypotenuse of the triangle composed of sides of the difference in x and difference in y for the two given points, the closest point is selected based on this distance.
+
         NOTE: in the case that the two points are of equal distance, point A will be chosen over point B
 
         `target`: control point form whom the distances of the other two will be checked
         `pointA`: first point to be checked, has return precedence over pointB
         `pointB`: second point to be checked
+
         """
         distToA = math.sqrt(((target.lng - pointA.lng) ** 2) + (target.lat - pointA.lat) ** 2)
         distToB = math.sqrt(((target.lng - pointB.lng) ** 2) + (target.lat - pointB.lat) ** 2)
@@ -110,11 +129,12 @@ class WeilerClipping:
         `Author`: Bob S, Nick L, Bill C.
 
         This method returns the result of the clipping algorithm as a collection of coordinate pairs; a list of tuples
-        Using the collections, P, Q, and Ie, the resultant clipped polyogn is found through an iteration over P and Q based on Ie.
+        Using the collections, P, Q, and Ie, the resultant clipped polygon is found through an iteration over P and Q based on Ie.
         The collection of P is used to find all the necessary points on the subject polygon, while the collection of Q is used to find the necessary points on the viewport polygon.
-        by 'bouncing back and forth' between these two collections, as we pop intersection points off Ie, the bounded regiion of the result is constructed and returned as a list of points representing every vertex of the shape
+        by 'bouncing back and forth' between these two collections, as we pop intersection points off Ie, the bounded region of the result is constructed in a dynamic fashion and returned as a list of points representing every vertex of the shape
 
         `return`: result, the collection of tuples representing the points of the new polygon
+
         """
 
         result = Stack()
@@ -152,11 +172,10 @@ class WeilerClipping:
 
         This method calculates and maintains the list of points, P, to be used during the iterative phase of the getCLipped method
 
-        `subjectlines`:
+        `subjectlines`: The collection points that compose all vertices of the subject which we are clipping
+        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+        `return`: P and Ie, the collection of all points that lie on the subject lines of the polygon being examined and the collection of all points of intersection respectively
 
-        `viewportlines`:
-
-        `return`: P, the collection of all points that lie on the subject lines of the polyogn being examined
         """
         P = []
         Ie = Stack()
@@ -187,11 +206,10 @@ class WeilerClipping:
         this method returns the collection, Q, of all points that lie on the lines of the viewport polyogn being examined
         By iterating over Ie, the list of points of intersection, every point of intersection cooresponding to the line starting with the point at index 1-4 of the viewport is checked and ordered as to generate a counter clockwise, flattened collection of the viewport
 
-        `viewportlines`:
-
-        `Ie`:
-
+        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+        `Ie`:  and the collection of all points of intersection between subjeclines and viewportlines
         `return`: Q, the collection of all points that lie on the viewport polygon
+
         """
         Q = []
         storagebank = []
@@ -227,11 +245,13 @@ class WeilerClipping:
         by moving those points into the extra dimensional standard coordinate plain 'off the map' from the polar plain
 
         NOTE: this method acts on the implication that the points of the polygon being transformed are NO MORE than 180 degrees apart longitudinally
-        This needed to be the case as there exists no other way to determine whether or not a point should or should not be transformed
-         By relying on a maximum limit, we have chosen the [ath of the visualization software in google earth to limit the capacity for polygons' dimensions to exceed 180- degrees width
+        This is required to be the case as there exists no other way to determine whether or not a point should or should not be transformed
+        By relying on a maximum limit, we have chosen to be 180, the polyogns' diemnsion are capped at a width of no more 180 degreees
+        However, the path of the visualization software in google earth will not limit the capacity for polygons' dimensions to exceed 180 degrees width
 
         `list`: the un-flattened list of the polygon being modified
-        `return` None, this method statically modifies the parameterized list
+        `return`: None, this method statically modifies the parameterized list
+
         """
         for p in list:
             if (p[0].lng * p[1].lng) < 0:    # if one is negative and the other positive
@@ -246,10 +266,11 @@ class WeilerClipping:
         """
         'Author' Bob S.
 
-        This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by re-wraping each of the coordinate pair's values individually
+        This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by calculating each of the coordinate pair's values individually
 
-        `list` the un-flattened list of the polygon being modified
-        `return` None, this method statically modifies the parameterized list
+        `list`: the un-flattened list of the polygon being modified
+        `return`: None, this method statically modifies the parameterized list
+
         """
         for p in list:
             p[0].rewrap()
@@ -264,6 +285,7 @@ class WeilerClipping:
 
         `list` - list to be modified.
         `return`: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
+
         """
         temp = list[1:] + list[:1]  # rotate list by one, to the left
         return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
@@ -291,7 +313,7 @@ class WeilerClipping:
         Q = self.getQ(viewportlines, Ie)
         print "Q :",Q
 
-        # then get CLipped
+        # then get Clipped
         result = self.getClipped(P, Q, Ie)
         result.items.append(result[0])
         return result
@@ -302,6 +324,8 @@ class Stack():
      'Author' Bob S.
 
      this class is used only to ensure the proper procedures of the getClipped algorithm are executed appropriately
+
+     TODO remove this implementation in favor of a python list
 
      """
      def __init__(self):
