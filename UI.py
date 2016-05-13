@@ -23,6 +23,9 @@ class myFrame(Frame):
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
     entries = []
+    infile = None
+    outfile = None
+    outimage = None
 
     def __init__(self, parent):
         """
@@ -38,10 +41,6 @@ class myFrame(Frame):
         self.parent = parent
         self.initUI()
 
-        # switch to request user input on go button
-        self.infile = None
-        self.outfile = None
-
     def initUI(self):
         """
         Author: Bob Seedorf
@@ -55,7 +54,6 @@ class myFrame(Frame):
         menubar = Menu(self.parent)
         self.parent.config(menu=menubar)
 
-        fileMenu = Menu(menubar)
         menubar.add_command(label="Open", command=self.onOpen)
         menubar.add_command(label="Save", command=self.saveFileKML)
 
@@ -128,13 +126,13 @@ class myFrame(Frame):
         """
 
     # init pathname to local resource __file__ in case of erroneous choice
-        pathname = os.path.join(os.path.dirname(__file__), '..')
+        myFrame.infile = os.path.join(os.path.dirname(__file__), '..')
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
-            pathname = os.path.abspath(file)
-            message = "OPEN: Successfully chose " + pathname
+            myFrame.infile = os.path.abspath(file)
+            message = "OPEN: Successfully chose " + myFrame.infile
             self.log(message)
-        return pathname
+        return myFrame.infile
 
     def saveFileKML(self):
         """
@@ -143,13 +141,13 @@ class myFrame(Frame):
         This method will write, at the request of the user, the file after processing
         :param :
         """
-        pathname = os.path.join(os.path.dirname(__file__), '..')
+        myFrame.outfile = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root,filetypes=self.ftypes ,title="Save the file as", defaultextension=".kml")
         if file:
-            pathname = os.path.abspath(file)
-            message = "SAVE: Successfully chose " + pathname
+            myFrame.outfile = os.path.abspath(file)
+            message = "SAVE: Successfully chose " + myFrame.outfile
             self.log(message)
-        return pathname
+        return myFrame.outfile
 
     def saveFileImg(self):
         """
@@ -158,13 +156,13 @@ class myFrame(Frame):
         This method will write, at the request of the user, the image file after processing
         :param :
         """
-        pathname = os.path.join(os.path.dirname(__file__), '..')
+        myFrame.outimage = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the image as", defaultextension=".png")
         if file:
-            pathname = os.path.abspath(file)
-            message = "IMAGE: Successfully stored image in " + pathname
+            myFrame.outimage = os.path.abspath(file)
+            message = "IMAGE: Successfully stored image in " + myFrame.outimage
             self.log(message)
-        return pathname
+        return myFrame.outimage
 
     def driver(self):
         """
@@ -176,11 +174,11 @@ class myFrame(Frame):
         """
 
         # Create the KmlFasade, force user input if not read file has been selected
-        if(self.infile is None):
+        if(myFrame.infile is None):
             tkMessageBox.showwarning("Open file", "Please Choose A KML file to Open")
             fasade = KmlFasade(self.onOpen())
         else:
-            fasade = KmlFasade(self.infile)
+            fasade = KmlFasade(myFrame.infile)
 
         fasade.placemarkToGeometrics()
         fasade.garbageFilter()
@@ -190,11 +188,11 @@ class myFrame(Frame):
         fasade.fasadeUpdate()
 
         # code to indicate the user has not chosen an output kml and then requests one
-        # if (self.outfile is None):
+        # if (myFrame.outfile is None):
         #     tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
         #     fasade.rewrite(self.saveFileKML())
         # else:
-        #     fasade.rewrite(self.outfile)
+        #     fasade.rewrite(myFrame.outfile)
 
         # Build the Url
         build = UrlBuilder(600)
@@ -221,15 +219,11 @@ class myFrame(Frame):
         # Merge the Url Images
         # merges by downloading everything and merging everything.
         tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
-        outimage = self.saveFileImg()
+        myFrame.outimage = self.saveFileImg()
 
-        app = waitDialog.waitDialog(350, 100, outimage, build)
-        # app.mainloop()                                           # calls and activates waitDialog to process image downloads
+        waitDialog.waitDialog(350, 100, myFrame.outimage, build)      # calls and activates waitDialog to process image downloads
 
-        self.log("Opening, " + outimage)
-        im = Image.open(outimage)
-        im.show()
-        self.log("\nFinished\n--------------------\n")
+        self.log("\nFinished\n------------------------------\n")
 
 def main(w, h):
     """
