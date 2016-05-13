@@ -1,28 +1,52 @@
+from lxml import etree
+
 class LatLongPoint:
     """
     Author: Nick LaPosta
 
     Container for the lat/lon coordinate for a point on a Mercator map projection.
     GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
+
+    NOTE this implementation may not work, I am changing it to suit a test -Bob 4-23-16
     """
     def __init__(self, lt, ln):
-        self.lat = lt
-        if ln < 0:
-            if -ln / 180 >= 1:
-                self.lng = 180 - -ln % 180
-            else:
-                self.lng = -(-ln % 180)
+        self.lat = round(lt, 7)
+        self.lng = round(ln, 7)
+        self.rewrap()
+
+    def rewrap(self):
+        if self.lng < -360 and self.lng > 360:
+            raise Exception("\"Invalid directional directions\" - Nick")
+        elif self.lng < -180:
+            self.lng = self.lng + 360
+        elif self.lng > 180:
+            self.lng = self.lng - 360
         else:
-            if ln / 180 >= 1:
-                self.lng = 180 - ln % 180
-            else:
-                self.lng = ln
+            self.lng = self.lng
+
+    def getTup(self):
+        return (self.lng, self.lat)
 
     def __str__(self):
         return repr(self.lat) + "," + repr(self.lng)
 
+    def __repr__(self):
+        return self.__str__()
+
+    def rewriteStr(self):
+        return repr(self.lng) + "," + repr(self.lat)
+
     def listed(self):
         return [self.lat, self.lng]
+
+    def __cmp__(self, other):
+        return (self.lat == other.lat and self.lng == other.lng)
+
+    def __eq__(self, other):
+        return (round(self.lat,7) == round(other.lat,7) and round(self.lng,7) == round(other.lng,7))
+
+    def __getitem__(self, item):
+        return self;
 
 class GeometricObject(object):
 
@@ -35,7 +59,7 @@ class GeometricObject(object):
         `return`: This object as a string.
         """
 
-        return str(self.tag)+ ' ' +self.printCoordinates()+ " " + elementPrint(self.element)
+        return str(self.tag)+ ' ' + self.printCoordinates() + " " + elementPrint(self.element)
 
     def __init__(self, element, tag, coordinates):
         """
@@ -56,11 +80,11 @@ class GeometricObject(object):
         self.tag = tag
         self.remove = 0
         self.debug = 0
-        self.coordinates = [] #Most definitely required.
+        self.coordinates = []  # Most definitely required.
         if type(coordinates) is str:
             for x in coordinates.split():
                 s = x.split(',')
-                self.coordinates.append(LatLongPoint(float(s[0]),float(s[1])))
+                self.coordinates.append(LatLongPoint(float(s[1]), float(s[0])))
         else:
             self.coordinates = coordinates
         if self.debug: print self.coordinates
@@ -72,22 +96,22 @@ class GeometricObject(object):
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
         made to the pulled out xml values and apply them back to the file object.
         """
-        if self.remove:
+        if self.remove == len(self.coordinates):
             y = self.element.getparent()
             if y is not None: y.remove(self.element)
             return 0
-        self.element.find('coordinates').text = '\n'.join([str(x) for x in self.coordinates])
+        self.element.find('coordinates').text = '\n'.join([x.rewriteStr() for x in self.coordinates])
 
-    def switchCoordinates(self):
-        """
-        Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-        as opposed to lat long as our files provide. This modifies the file in place.
-
-        `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
-        """
-        for coordin in self.coordinates:
-            coordin.lat, coordin.lng = coordin.lng, coordin.lat
-        return self.printCoordinates()
+    # def switchCoordinates(self):
+    #     """
+    #     Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
+    #     as opposed to lat long as our files provide. This modifies the file in place.
+    #
+    #     `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
+    #     """
+    #     for coordin in self.coordinates:
+    #         coordin.lat, coordin.lng = coordin.lng, coordin.lat
+    #     return self.printCoordinates()
 
     def printCoordinates(self):
         """
@@ -97,8 +121,6 @@ class GeometricObject(object):
 
         `return`: String of the coordinates in the object.
         """
-        if self.tag == "Point":
-            return str(self.coordinates[0])
         ret = ""
         for y in self.coordinates:
             ret += str(y) + "|"
@@ -113,12 +135,11 @@ class GeometricObject(object):
 
         `return`: The coordinates as Strings, placed in a list.
         """
-        if self.tag == "Point":
-            return [str(self.coordinates[0])]
         ret = []
         for y in self.coordinates:
             ret.append(str(y))
         return ret
+
 
 class Point(GeometricObject):
     """
@@ -139,6 +160,23 @@ class Point(GeometricObject):
         """
 
         super(Point,self).applyEdits()
+
+    def printCoordinates(self):
+        """
+        `Author` Bill Clark
+
+        `return`: The string representation of the coordinate in the point.
+        """
+        return str(self.coordinates[0])
+
+    def coordinatesAsListStrings(self):
+        """
+        `Author` Bill Clark
+
+        `return` The coordinate that makes up the point as a list of a string. Used for url builder.
+        """
+
+        return [str(self.coordinates[0])]
 
 
 class LinearRing(GeometricObject):
@@ -214,7 +252,7 @@ class GeometricFactory(object):
         Simple factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
-        self.geometryTypes = ('Point', 'LineString','LinearRing', 'Polygon', 'MultiGeometry')
+        self.geometryTypes = ('Point', 'LineString', 'LinearRing', 'Polygon', 'MultiGeometry')
         pass
 
     def createLiteral(self, element, tag, coordinates):
@@ -268,8 +306,8 @@ class GeometricFactory(object):
 
         elif element.tag == 'MultiGeometry':
             ret = []
-            skip = 0 #Set to 1 initally to skip the actual multigeo tag.
-            first = 1
+            skip = 0
+            first = 1  # Set to 1 initally to skip the actual multigeo tag.
             for x in element.iter():
                 if first:
                     first = 0

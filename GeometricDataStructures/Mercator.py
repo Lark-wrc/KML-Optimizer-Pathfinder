@@ -140,5 +140,7 @@ class MercatorProjection:
         sw_point = MercatorPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
         sw_lat_lon = self.from_point_to_lat_lng(sw_point)
 
-        return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng,
-                    NE=ne_lat_lon, NW=nw_lat_lon, SE=se_lat_lon, SW=sw_lat_lon)
+        # return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng,
+        #             NE=ne_lat_lon, NW=nw_lat_lon, SE=se_lat_lon, SW=sw_lat_lon)
+
+        return (ne_lat_lon, nw_lat_lon, sw_lat_lon, se_lat_lon)
