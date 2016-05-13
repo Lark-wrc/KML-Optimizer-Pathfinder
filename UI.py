@@ -10,6 +10,7 @@ from StaticMapsConnections.UrlBuilder import UrlBuilder
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 import StaticMapsConnections.ImageMerge as ImageMerge
 from PIL import Image
+import waitDialog
 
 class myFrame(Frame):
 
@@ -221,22 +222,20 @@ class myFrame(Frame):
         # merges by downloading everything and merging everything.
         tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
         outimage = self.saveFileImg()
-        images = build.download(outimage, 'image')
-        self.log("Downloaded.")
-        images = ImageMerge.convertPtoRGB(*images)
-        ImageMerge.mergeModeRGB(outimage, *images)
+
+        app = waitDialog.waitDialog(350, 100, outimage, build)
+        # app.mainloop()                                           # calls and activates waitDialog to process image downloads
 
         self.log("Opening, " + outimage)
         im = Image.open(outimage)
         im.show()
         self.log("\nFinished\n--------------------\n")
 
-
 def main(w, h):
     """
     Author: Bob Seedorf
 
-    Run-ME method
+    Run-Me method
     param :
     """
     root= Tk()
