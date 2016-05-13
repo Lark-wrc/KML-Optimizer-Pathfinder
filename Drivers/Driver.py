@@ -1,13 +1,11 @@
-from GeometricDataStructures.KmlFasade import KmlFasade
-from StaticMapsConnections.UrlBuilder import UrlBuilder
-from RestrictionEngine.RestrictionEngine import RestrictionFactory
-import StaticMapsConnections.ImageMerge as ImageMerge
-import Image
-from GeometricDataStructures.Mercator import *
-from GeometricDataStructures.Geometrics import LatLongPoint
-import Clipper
-import time
+from PIL import Image
 
+import StaticMapsConnections.ImageMerge as ImageMerge
+from GeometricDataStructures.Geometrics import LatLongPoint
+from GeometricDataStructures.KmlFasade import KmlFasade
+from GeometricDataStructures.Mercator import *
+from RestrictionEngine.RestrictionEngine import RestrictionFactory
+from StaticMapsConnections.UrlBuilder import UrlBuilder
 
 argzero = 'Inputs\KML Files\\advancedexample1.kml'
 argtwo = 'Inputs\KML Files\\advancedexample2.kml'
@@ -27,7 +25,7 @@ f = RestrictionFactory()
 
 square = f.newSquareRestriction(center, 250)
 #square = f.newSquareRestriction([64.871826, 66.833851], 250)
-clipped = f.newMercatorClipped(merc.get_corners(centerPoint, zoom, size, size))
+clipped = f.newWAClipping(merc.get_corners(centerPoint, zoom, size, size))
 
 
 

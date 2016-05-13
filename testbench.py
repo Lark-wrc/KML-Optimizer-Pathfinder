@@ -1,5 +1,5 @@
 from GeometricDataStructures.Geometrics import LatLongPoint
-from Clipper import Clipper
+from RestrictionEngine.WeilerAtherton import WeilerClipping
 
 def unwrap(list):
 
@@ -12,7 +12,7 @@ def unwrap(list):
                 if p[1].lng - p[0].lng > 180:
                     p[0].lng = p[0].lng + 360
 
-clipper = Clipper()
+clipper = WeilerClipping()
 
 # broken
 # subjectlines1 = [LatLongPoint(87, -155), LatLongPoint(87, -205), LatLongPoint(0,-255), LatLongPoint(-87, -205), LatLongPoint(-87, -155), LatLongPoint(0, -105)]

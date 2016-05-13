@@ -1,6 +1,6 @@
 from math import radians, sin, cos, asin, sqrt, log
+from WeilerAtherton import WeilerClipping
 import State
-from Clipper import Clipper
 
 ZOOM_CONSTANT = 10 + log(45, 2)  # Final Variable, Do Not Modify
 
@@ -32,8 +32,13 @@ class RestrictionFactory(object):
         """
         return SquareRestriction(center, distance, self.metric)
 
-    def newMercatorClipped(self, viewport):
-        return MercatorClipperRestriction(viewport, 0)
+    def newWAClipping(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        see MercatorRestriction, this method returns a new instance of the object.
+        """
+        return WAClippingRestriction(viewport)
 
 
 class Restriction(object):
@@ -104,17 +109,38 @@ class Restriction(object):
 
         return r * c
 
-class MercatorClipperRestriction(Restriction):
 
-    def __init__(self, viewport, metric=0):
-        super(MercatorClipperRestriction,self).__init__(metric)
+class WAClippingRestriction(Restriction):
+
+    def __init__(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        This method uses the weiler atherton algorithm module to clip geometrics. Any points and lines
+        within the viewport's corners are left in the geometric, everything else is removed. The polygon
+        is closed as well.
+
+        `Viewport`: = The return from the get_corners method of the mercator module. This is the 4 points
+        that make up the corner of the viewport.
+        """
+        super(WAClippingRestriction, self).__init__(0)
         self.viewport = viewport
         self.NW = self.viewport[1]
         self.SE = self.viewport[3]
 
-
     def restrict(self, geometrics):
-        clippy = Clipper()
+        """
+        `Author`: Bill Clark
+
+        This restriction iterates all through the provided list of geometrics. On each iteration,
+        the coordinates in the geometry are checked for two things; being within the viewport of the
+        Restriction and if the point is an entry point. An entry point is required for WA clipping to work,
+        simply a point that the prior point was not in the viewport. After the iteration, any geometry that is
+        partially in the viewport is clipped via the WeilerAtherton module.
+
+        `geometrics`: list of geometric objects.
+        """
+        atherton = WeilerClipping()
         for geometry in geometrics:
             last_pos = -1
             startCoord = 0
@@ -133,7 +159,7 @@ class MercatorClipperRestriction(Restriction):
             length = len(geometry.coordinates)
             geometry.coordinates[:] = geometry.coordinates[-(length - startCoord):] + geometry.coordinates[:startCoord]
             if not length == geometry.remove and not geometry.remove == 0:  # Completely in/outside the viewport.
-                newgeometry = clippy.runMe(geometry.coordinates, self.viewport)
+                newgeometry = atherton.clip(geometry.coordinates, self.viewport)
                 geometry.coordinates[:] = newgeometry.items
 
     def pointWithinCorners(self, coordinates):
@@ -143,7 +169,7 @@ class MercatorClipperRestriction(Restriction):
         Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
         restrict.
 
-        `coordinates`: List of coordinate values, long lat.
+        `coordinates`: A LatLongPoint object.
 
         `return`: True if the point is contained, false else.
         """
@@ -168,7 +194,7 @@ class SquareRestriction(Restriction):
 
         `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
-        super(SquareRestriction,self).__init__(metric)
+        super(SquareRestriction, self).__init__(metric)
         self.center = center
         self.distance = distance
         if metric:

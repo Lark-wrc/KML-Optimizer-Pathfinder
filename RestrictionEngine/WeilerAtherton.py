@@ -1,7 +1,7 @@
 from GeometricDataStructures.Geometrics import LatLongPoint
 import math
 
-class Clipper:
+class WeilerClipping:
 
     def __init__(self):
         pass
@@ -23,24 +23,6 @@ class Clipper:
         `pointC`: start point of second line
         `pointD`: end point of second line
         """
-
-        # if pointC.lng == pointD.lng:
-        #     line1m = (pointB.lat - pointA.lat) / (pointB.lng - pointA.lng)
-        #     line1b = pointA.lat - (line1m * pointA.lng)
-        #     y = (line1m * pointC.lng) + line1b
-        #     return LatLongPoint(y, pointC.lng)
-        # if pointA.lng == pointB.lng:
-        #     line2m = (pointD.lat - pointC.lat) / (pointD.lng - pointC.lng)
-        #     line2b = pointC.lat - (line2m * pointC.lng)
-        #     y = (line2m * pointA.lng) + line2b
-        #     return LatLongPoint(y, pointA.lng)
-        # line1m = (pointB.lat - pointA.lat) / (pointB.lng - pointA.lng)
-        # line2m = (pointD.lat - pointC.lat) / (pointD.lng - pointC.lng)
-        # line1b = pointA.lat - (line1m * pointA.lng)
-        # line2b = pointC.lat - (line2m * pointC.lng)
-        # x = ((-1 * line1b) + line2b) / (line1m - line2m)
-        # y = (line1m * x) + line1b
-        # return LatLongPoint(y, x)
 
         xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
         ydiff = pointA.lat - pointB.lat, pointC.lat - pointD.lat
@@ -81,13 +63,13 @@ class Clipper:
         `pointD`: end point of second line
         """
 
-        o1 = self.findOrientation(pointA, pointB, pointC);
-        o2 = self.findOrientation(pointA, pointB, pointD);
-        o3 = self.findOrientation(pointC, pointD, pointA);
-        o4 = self.findOrientation(pointC, pointD, pointB);
+        o1 = self.findOrientation(pointA, pointB, pointC)
+        o2 = self.findOrientation(pointA, pointB, pointD)
+        o3 = self.findOrientation(pointC, pointD, pointA)
+        o4 = self.findOrientation(pointC, pointD, pointB)
 
-        if (o1 != o2 and o3 != o4):
-           return True
+        if o1 != o2 and o3 != o4:
+            return True
         return False
 
     def findOrientation(self, pointA, pointB, pointC):
@@ -101,9 +83,10 @@ class Clipper:
         `pointB`: second point being passed
         `pointC`: third point being passed
         """
-        val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
-        if (val == 0.0): return 0   # Orientation.COLLINEAR
-        elif (val > 0): return -1   # Orientation.RIGHT
+        val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - \
+              (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
+        if val == 0.0: return 0   # Orientation.COLLINEAR
+        elif val > 0: return -1   # Orientation.RIGHT
         else: return 1              # Orientation.LEFT
 
     def getClosestPoint(self, target, pointA, pointB):
@@ -133,12 +116,6 @@ class Clipper:
 
         `return`: result, the collection of tuples representing the points of the new polygon
         """
-        # P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.557142857142857, 3.0), (-1.0, 1.241935483870968), (-2.1, 0.0), (0.0, -3.0), (2.0, -1.0), (2.0, -1.0), (3.0, 0.0), (3.0, 1.0)]
-        # Q = [(2.0, 3.0), (1.4, 3.0), (0.557142857142857, 3.0), (-1.0, 3.0), (-1.0, 1.241935483870968), (-1.0, -1.0), (2.0,-1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, 2.25)]
-        # Ie = Stack()
-        # Ie.items = [(2.0, -1.0), (2.0, -1.0), (-1.0, 1.241935483870968), (0.557142857142857, 3.0), (1.4, 3.0), (2.0, 2.25)]
-        # result should be: [(2.0, 2.25), (1.4, 3.0), (0.557142857142857, 3.0), (-1.0, 1.241935483870968), (-1.0,
-        # -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0), (2.0, -1.0)]
 
         result = Stack()
         reserve = Ie.peek()
@@ -148,7 +125,7 @@ class Clipper:
             Ie.pop()
             end = Ie.peek()
             index = P.index(location)
-            while not location == end :
+            while not location == end:
                 location.rewrap()
                 result.push(location)
                 index = (index+1) % len(P)
@@ -167,22 +144,19 @@ class Clipper:
                 result.push(location)
                 index = (index+1) % len(Q)
                 location = Q[index]
-            # try:
-            #     end = Ie.peek()
-            # except Exception:
-            #     end = reserve
-            #     flag = False
         return result
 
     def getP(self, subjectlines, viewportlines):
         """
         'Author' Bob S. Nick L. and Bill C.
 
-        This method caluctlates and mainatnins the lsit of points, P, to be used during the iterative phase of the getCLipped method
+        This method calculates and maintains the list of points, P, to be used during the iterative phase of the getCLipped method
 
-        :param subjectlines:
-        :param viewportlines:
-        :return: P, the collection of all points that lie on the subject lines of the polyogn being examined
+        `subjectlines`:
+
+        `viewportlines`:
+
+        `return`: P, the collection of all points that lie on the subject lines of the polyogn being examined
         """
         P = []
         Ie = Stack()
@@ -212,9 +186,12 @@ class Clipper:
 
         this method returns the collection, Q, of all points that lie on the lines of the viewport polyogn being examined
         By iterating over Ie, the list of points of intersection, every point of intersection cooresponding to the line starting with the point at index 1-4 of the viewport is checked and ordered as to generate a counter clockwise, flattened collection of the viewport
-        :param viewportlines:
-        :param Ie:
-        :return: Q, the collection of all points that lie on the viewport polygon
+
+        `viewportlines`:
+
+        `Ie`:
+
+        `return`: Q, the collection of all points that lie on the viewport polygon
         """
         Q = []
         storagebank = []
@@ -253,8 +230,8 @@ class Clipper:
         This needed to be the case as there exists no other way to determine whether or not a point should or should not be transformed
          By relying on a maximum limit, we have chosen the [ath of the visualization software in google earth to limit the capacity for polygons' dimensions to exceed 180- degrees width
 
-        :param list - the un-flattened list of the polygon being modified
-        :return: None, this method statically modifies the parameterized list
+        `list`: the un-flattened list of the polygon being modified
+        `return` None, this method statically modifies the parameterized list
         """
         for p in list:
             if (p[0].lng * p[1].lng) < 0:    # if one is negative and the other positive
@@ -271,8 +248,8 @@ class Clipper:
 
         This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by re-wraping each of the coordinate pair's values individually
 
-        :param list - the un-flattened list of the polygon being modified
-        :return: None, this method statically modifies the parameterized list
+        `list` the un-flattened list of the polygon being modified
+        `return` None, this method statically modifies the parameterized list
         """
         for p in list:
             p[0].rewrap()
@@ -285,14 +262,14 @@ class Clipper:
         this method 'un-flattens' the list being passed
         by creating a tuple of each lat-long-point and it's respective neighbor a new list of 'lines' is created for the purpose of iteration by the necessary methods.
 
-        :param list - list to be modified.
-        :return: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
+        `list` - list to be modified.
+        `return`: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
         """
         temp = list[1:] + list[:1]  # rotate list by one, to the left
         return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
 
 
-    def runMe(self, subjectlines, viewportlines):
+    def clip(self, subjectlines, viewportlines):
 
         # un-flatten subject viewport...
         subjectlines = self.unFlattenList(subjectlines)
@@ -354,7 +331,7 @@ class Stack():
 
 if __name__ == '__main__':
 
-    clipper = Clipper()
+    clipper = WeilerClipping()
 
     # P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
     # Q = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
@@ -390,14 +367,14 @@ if __name__ == '__main__':
 
     subjectlines = [LatLongPoint(1,3), LatLongPoint(3.5,1), LatLongPoint(0,0), LatLongPoint(-3,0), LatLongPoint(0,1)]
     viewportlines = [LatLongPoint(3,2), LatLongPoint(3,-1), LatLongPoint(-1,-1), LatLongPoint(-1,2)]
-    for point in clipper.runMe(subjectlines, viewportlines).items:
+    for point in clipper.clip(subjectlines, viewportlines).items:
         print point
 
     print "\n--------------------------------------------------------------------------------------------\n"
 
     subjectlines = [LatLongPoint(1,3), LatLongPoint(3.5,1), LatLongPoint(1.5,0.75), LatLongPoint(3.5,0.5), LatLongPoint(1,-0.5)]
     viewportlines = [LatLongPoint(3,2), LatLongPoint(3,-1), LatLongPoint(-1,-1), LatLongPoint(-1,2)]
-    for point in clipper.runMe(subjectlines, viewportlines).items:
+    for point in clipper.clip(subjectlines, viewportlines).items:
         print point
 
     print "\n--------------------------------------------------------------------------------------------\n"
@@ -423,7 +400,7 @@ if __name__ == '__main__':
 
     subjectlines = lllist
     viewportlines = [LatLongPoint(37.419523409628, -122.09494567437), LatLongPoint(37.427279812044, -122.09322460731), LatLongPoint(37.430977679891,-122.08446780291), LatLongPoint(37.430983152841,-122.084073)]
-    for point in clipper.runMe(subjectlines, viewportlines).items:
+    for point in clipper.clip(subjectlines, viewportlines).items:
         print point
 
     # another simple rectangle - works
