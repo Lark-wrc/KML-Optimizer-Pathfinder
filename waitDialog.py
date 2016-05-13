@@ -49,6 +49,7 @@ class waitDialog(tk.Tk):
     def activate(self):
         self.set("We are merging the downloaded URL images now. This may take a few minutes" + "\nA button will appear for you to close this when work is done")
 
+        # taken from the linear execution in UI
         self.images = self.build.download(self.outimage, 'image')
         self.images = StaticMapsConnections.ImageMerge.convertPtoRGB(*self.images)
         StaticMapsConnections.ImageMerge.mergeModeRGB(self.outimage, *self.images)

@@ -54,8 +54,9 @@ class myFrame(Frame):
         menubar = Menu(self.parent)
         self.parent.config(menu=menubar)
 
-        menubar.add_command(label="Open", command=self.onOpen)
-        menubar.add_command(label="Save", command=self.saveFileKML)
+        menubar.add_command(label="Open KML", command=self.onOpen)
+        menubar.add_command(label="Save KML", command=self.saveFileKML)
+        menubar.add_command(label="Save Img", command=self.saveFileImg)
 
         for field in self.fields:
             row = Frame(self)
@@ -174,7 +175,7 @@ class myFrame(Frame):
         """
 
         # Create the KmlFasade, force user input if not read file has been selected
-        if(myFrame.infile is None):
+        if myFrame.infile is None:
             tkMessageBox.showwarning("Open file", "Please Choose A KML file to Open")
             fasade = KmlFasade(self.onOpen())
         else:
@@ -216,14 +217,15 @@ class myFrame(Frame):
         message = "Number of urls: ", len(build.urllist) + 2
         self.log(message)
 
+        if myFrame.outimage is None:
+            tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
+            myFrame.outimage = self.saveFileImg()
+
         # Merge the Url Images
         # merges by downloading everything and merging everything.
-        tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
-        myFrame.outimage = self.saveFileImg()
-
         waitDialog.waitDialog(350, 100, myFrame.outimage, build)      # calls and activates waitDialog to process image downloads
 
-        self.log("\nFinished\n------------------------------\n")
+        self.log("\nFinished\n------------------------------------------------------------\n")
 
 def main(w, h):
     """

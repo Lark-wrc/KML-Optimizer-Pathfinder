@@ -1,4 +1,5 @@
 from PIL import Image
+import waitDialog
 
 debug = 0
 diffnum = 50
@@ -30,6 +31,7 @@ def mergeModeRGB(outfile, base, *images):
 
     basedata = baseimage.load()
     layeringdata = layeringimage.load()
+    count = 0
 
     for top in images:
         topimage = Image.open(top)
@@ -49,6 +51,7 @@ def mergeModeRGB(outfile, base, *images):
         if debug: print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
             360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
         if debug: layeringimage.show()
+        # waitDialog.waitDialog.set(waitDialog, "Merging " + count.__str__() + " of " + len(images).__str__())
 
     print ""
     layeringimage.save(outfile)
