@@ -28,6 +28,7 @@ class myFrame(Frame):
     infile = None
     outfile = None
     outimage = None
+    url_doc = r"http://www.google.com"
 
     def __init__(self, parent):
         """
@@ -72,37 +73,30 @@ class myFrame(Frame):
         row = Frame(self)
         go = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
         quitButton = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
+        link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
+        link.bind("<Button-1>", lambda e, url=self.url_doc: self.open_url(url))
         row.pack(side=TOP, fill=X, padx=15, pady=15)
         go.pack(side=LEFT, expand = YES)
+
         quitButton.pack(side=RIGHT, expand=YES)
-
-        def open_url(url):
-            webbrowser.open_new(url)
-
-        def callback(url):
-            webbrowser.open_new(url)
-
-        self.butt = Button(row, command=lambda: callback(r"http://www.google.com"))
-        self.butt.pack()
+        link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
         label = Label(self, text = "Output:")
         label.pack()
-        label.bind("<Button-1>", lambda e, url=r"http://www.google.com": open_url(url))
 
         self.txt = ScrolledText(self)
         self.txt.pack(fill=NONE, expand=1)
 
-
-
-
-
     def applyTag(self, tag):
         self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0",
                          self.line_count.__str__() + "." + len(tag.__str__()).__str__())
-        if tag.__str__() == 'FINISHED':
+        if tag.__str__() == 'ERROR':
+            self.txt.tag_config(tag.__str__(), background="red", foreground="black")
+            self.line_count += 2
+        elif tag.__str__() == 'FINISHED':
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="black")
             self.line_count += 2
-        if tag.__str__() == 'URLS':
+        elif tag.__str__() == 'URLS':
             self.txt.tag_config(tag.__str__(), background="green", foreground="blue")
             self.line_count += 1
             self.txt.tag_add("http", self.line_count.__str__() + ".0",
@@ -125,6 +119,9 @@ class myFrame(Frame):
         self.txt.insert(END, message)
         self.applyTag(tag)
 
+    def open_url(self, url):
+        webbrowser.open_new(url)
+
     def start(self):
         """
         Author: Bob Seedorf
@@ -132,18 +129,22 @@ class myFrame(Frame):
         This is code executes the method that runs the processing procedures of the fasade, clipper, etc.
         """
 
-        for entry in self.entries:
-            field = entry[0]
-            text  = entry[1].get()
-            self.log("ENTRY", '%s: %s' % (field, text))
+        try:
+            for entry in self.entries:
+                field = entry[0]
+                text  = entry[1].get()
+                self.log("ENTRY", '%s: %s' % (field, text))
 
-        # class wide storage of necessary center of focus info
-        self.lat = float(self.entries[0][1].get())
-        self.lng = float(self.entries[1][1].get())
-        self.dist = float(self.entries[2][1].get())
-        self.size = float(self.entries[3][1].get())
+            # class wide storage of necessary center of focus info
+            self.lat = float(self.entries[0][1].get())
+            self.lng = float(self.entries[1][1].get())
+            self.dist = float(self.entries[2][1].get())
+            self.size = float(self.entries[3][1].get())
 
-        self.driver()
+            self.driver()
+        except:
+            e = sys.exc_info()[0]
+            self.log("ERROR", "%s" % e)
 
     def onQuit(self):
         """

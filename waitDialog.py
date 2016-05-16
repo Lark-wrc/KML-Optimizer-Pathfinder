@@ -34,7 +34,7 @@ class waitDialog(tk.Tk):
     def activate(self):
         tk.Tk.__init__(self)
         self.frame = tk.Frame(self)
-        self.frame.pack(side="top", fill="both", expand=True)
+        self.frame.pack(padx = 0, pady = 0, fill="both", expand=True)
         self.title("Please Wait")
 
         x = (self.winfo_screenwidth() // 2) - (self.winfo_width() // 2)
@@ -45,7 +45,7 @@ class waitDialog(tk.Tk):
 
         self.buttonView = tk.Button(self, text="View", bg='#4d79ff', command=self.view)
         self.buttonClose = tk.Button(self, text="Close", bg='#cc5933', command=self.close)
-        self.label = tk.Label(self, text="", wrap=self.w - 10)
+        self.label = tk.Label(self, text="", padx = 5, pady = 5, wrap=self.w - 10, relief = "groove")
 
         self.set("We are merging the downloaded URL images now. This may take a few minutes" + "\nA button will appear for you to close this when work is done")
 
@@ -65,4 +65,4 @@ def main(w, h):
     return 0
 
 if __name__ == '__main__':
-    main(350, 100)
+    main(350, 150)
