@@ -113,11 +113,14 @@ def convertPtoRGB(*images):
     `return`: A list of the new file locations, since the file names have been changed.
     """
     ret = []
+    count = 0
     for image in images:
         img = Image.open(image)
         im = img.convert("RGBA")
         ret.append(image[:-4]+'.con'+image[-4:])
         im.save(image[:-4]+'.con'+image[-4:])
+        wd.set("Converting " + count.__str__() + " of " + len(images).__str__())
+        count += 1
     return ret
 
 class MergeGenerator(object):

@@ -1,6 +1,7 @@
 
 import Tkinter
 from Tkinter import *
+import webbrowser
 from ScrolledText import *
 import tkFileDialog
 import tkMessageBox
@@ -75,11 +76,42 @@ class myFrame(Frame):
         go.pack(side=LEFT, expand = YES)
         quitButton.pack(side=RIGHT, expand=YES)
 
+        def open_url(url):
+            webbrowser.open_new(url)
+
+        def callback(url):
+            webbrowser.open_new(url)
+
+        self.butt = Button(row, command=lambda: callback(r"http://www.google.com"))
+        self.butt.pack()
+
         label = Label(self, text = "Output:")
         label.pack()
+        label.bind("<Button-1>", lambda e, url=r"http://www.google.com": open_url(url))
 
         self.txt = ScrolledText(self)
         self.txt.pack(fill=NONE, expand=1)
+
+
+
+
+
+    def applyTag(self, tag):
+        self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0",
+                         self.line_count.__str__() + "." + len(tag.__str__()).__str__())
+        if tag.__str__() == 'FINISHED':
+            self.txt.tag_config(tag.__str__(), background="yellow", foreground="black")
+            self.line_count += 2
+        if tag.__str__() == 'URLS':
+            self.txt.tag_config(tag.__str__(), background="green", foreground="blue")
+            self.line_count += 1
+            self.txt.tag_add("http", self.line_count.__str__() + ".0",
+                             self.line_count.__str__() + "." + len(tag.__str__()).__str__())
+            self.txt.tag_config("http", foreground="blue")
+            self.line_count += 1
+        else:
+            self.txt.tag_config(tag.__str__(), background="green", foreground="blue")
+            self.line_count += 1
 
     def log(self, tag, text):
         """
@@ -88,23 +120,10 @@ class myFrame(Frame):
         :param: text
         :return:
         """
-        message = tag.__str__() + ": " + text.__str__()
+        message = tag.__str__() +  ": " + text.__str__() + "\n"
         print message
-        if tag == "FINISHED":
-            self.txt.insert(END, message + "\n")
-            self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0", self.line_count.__str__() + "." + len(tag.__str__()).__str__())
-            self.txt.tag_config(tag.__str__(), background="yellow", foreground="black")
-            self.line_count += 2
-        if tag == "URLS":
-            self.txt.insert(END, message + "\n")
-            self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0", self.line_count.__str__() + "." + len(tag.__str__()).__str__())
-            self.txt.tag_config(tag.__str__(), background="green", foreground="blue")
-            self.line_count += 2
-        else:
-            self.txt.insert(END, message + "\n")
-            self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0", self.line_count.__str__() + "." + len(tag.__str__()).__str__())
-            self.txt.tag_config(tag.__str__(), background = "green", foreground = "blue")
-            self.line_count += 1
+        self.txt.insert(END, message)
+        self.applyTag(tag)
 
     def start(self):
         """
@@ -229,7 +248,7 @@ class myFrame(Frame):
         self.log("URLS", build.printUrls())
 
         if myFrame.outimage is None:
-            tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
+            tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
             myFrame.outimage = self.saveFileImg()
 
         # Merge the Url Images
