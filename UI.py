@@ -8,12 +8,13 @@ import os
 from GeometricDataStructures.KmlFasade import KmlFasade
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
-import StaticMapsConnections.ImageMerge as ImageMerge
-from PIL import Image
+import StaticMapsConnections
 import waitDialog
 
 class myFrame(Frame):
 
+    line_count = 1
+    wd = None
     ftypes = [('KML files', '*.kml'), ('KMZ files', '*.kmz'), ('All files', '*')]
     itypes = [('All files', '*'), ('PNG files', '*.png')]
     text = "KML Klipper"
@@ -80,14 +81,30 @@ class myFrame(Frame):
         self.txt = ScrolledText(self)
         self.txt.pack(fill=NONE, expand=1)
 
-    def log(self, text):
+    def log(self, tag, text):
         """
         This method is used to update the text area of the UI with the recent input, and notifications
-        :param text:
+        :param: tag
+        :param: text
         :return:
         """
-        print text
-        self.txt.insert(END, text.__str__() + "\n")
+        message = tag.__str__() + ": " + text.__str__()
+        print message
+        if tag == "FINISHED":
+            self.txt.insert(END, message + "\n")
+            self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0", self.line_count.__str__() + "." + len(tag.__str__()).__str__())
+            self.txt.tag_config(tag.__str__(), background="yellow", foreground="black")
+            self.line_count += 2
+        if tag == "URLS":
+            self.txt.insert(END, message + "\n")
+            self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0", self.line_count.__str__() + "." + len(tag.__str__()).__str__())
+            self.txt.tag_config(tag.__str__(), background="green", foreground="blue")
+            self.line_count += 2
+        else:
+            self.txt.insert(END, message + "\n")
+            self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0", self.line_count.__str__() + "." + len(tag.__str__()).__str__())
+            self.txt.tag_config(tag.__str__(), background = "green", foreground = "blue")
+            self.line_count += 1
 
     def start(self):
         """
@@ -99,7 +116,7 @@ class myFrame(Frame):
         for entry in self.entries:
             field = entry[0]
             text  = entry[1].get()
-            self.log('%s: %s' % (field, text))
+            self.log("ENTRY", '%s: %s' % (field, text))
 
         # class wide storage of necessary center of focus info
         self.lat = float(self.entries[0][1].get())
@@ -115,7 +132,7 @@ class myFrame(Frame):
 
         This is code that clears the running application upon  quit button
         """
-        if tkMessageBox.askokcancel("Quit", "Do you want to quit?"):
+        if tkMessageBox.askokcancel("Quit?", "Do you want to quit?"):
             self.master.destroy()
 
     def onOpen(self):
@@ -131,8 +148,7 @@ class myFrame(Frame):
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
             myFrame.infile = os.path.abspath(file)
-            message = "OPEN: Successfully chose " + myFrame.infile
-            self.log(message)
+            self.log("OPEN", "Successfully chose" + myFrame.infile)
         return myFrame.infile
 
     def saveFileKML(self):
@@ -146,8 +162,7 @@ class myFrame(Frame):
         file = tkFileDialog.asksaveasfilename(parent=self.root,filetypes=self.ftypes ,title="Save the file as", defaultextension=".kml")
         if file:
             myFrame.outfile = os.path.abspath(file)
-            message = "SAVE: Successfully chose " + myFrame.outfile
-            self.log(message)
+            self.log("SAVE", "Successfully chose" + myFrame.infile)
         return myFrame.outfile
 
     def saveFileImg(self):
@@ -161,8 +176,7 @@ class myFrame(Frame):
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, title="Save the image as", defaultextension=".png")
         if file:
             myFrame.outimage = os.path.abspath(file)
-            message = "IMAGE: Successfully stored image in " + myFrame.outimage
-            self.log(message)
+            self.log("IMAGE", "Successfully chose" + myFrame.infile)
         return myFrame.outimage
 
     def driver(self):
@@ -212,10 +226,7 @@ class myFrame(Frame):
                 build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
 
         build.addmarkers({"color": "blue"}, markerlist)
-        self.log(build.printUrls())
-
-        message = "Number of urls: ", len(build.urllist) + 2
-        self.log(message)
+        self.log("URLS", build.printUrls())
 
         if myFrame.outimage is None:
             tkMessageBox.showwarning("Write Img file", "Please Choose A png file to write to")
@@ -223,9 +234,10 @@ class myFrame(Frame):
 
         # Merge the Url Images
         # merges by downloading everything and merging everything.
-        waitDialog.waitDialog(350, 100, myFrame.outimage, build)      # calls and activates waitDialog to process image downloads
+        StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
+        StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
 
-        self.log("\nFinished\n------------------------------------------------------------\n")
+        self.log("FINISHED", "\n------------------------------------------------------------\n")
 
 def main(w, h):
     """
@@ -238,6 +250,7 @@ def main(w, h):
     frame= myFrame(root)
     frame.pack()
 
+    # find the center of the screen and then offset to open window at middle
     x = (root.winfo_screenwidth() // 2) - (root.winfo_width() // 2)
     y = (root.winfo_screenheight() // 2) - (root.winfo_height() // 2)
     offset_x = x - (w // 2)
