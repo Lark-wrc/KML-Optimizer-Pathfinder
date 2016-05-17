@@ -12,6 +12,8 @@ from RestrictionEngine.RestrictionEngine import RestrictionFactory
 import StaticMapsConnections
 import waitDialog
 import traceback
+import tkFont
+from UserInterfaces.HyperLinkManager import HyperLinkManager
 
 class myFrame(Frame):
 
@@ -19,6 +21,7 @@ class myFrame(Frame):
     wd = None
     ftypes = [('KML files', '*.kml'), ('KMZ files', '*.kmz'), ('All files', '*')]
     itypes = [('All files', '*'), ('PNG files', '*.png')]
+    sample_input = '../Inputs/KML Files/'
     text = "KML Klipper"
     root = Tkinter.Tk()
     root.withdraw()
@@ -76,6 +79,9 @@ class myFrame(Frame):
         quitButton = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
         link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
         link.bind("<Button-1>", lambda e, url=self.url_doc: self.open_url(url))
+        font = tkFont.Font(link, link.cget("font"))
+        font.configure(underline=True)
+        link.configure(font=font)
         row.pack(side=TOP, fill=X, padx=15, pady=15)
         go.pack(side=LEFT, expand = YES)
 
@@ -86,6 +92,7 @@ class myFrame(Frame):
         label.pack()
 
         self.txt = ScrolledText(self)
+        self.hyperlink = HyperLinkManager(self.txt)
         self.txt.pack(fill=NONE, expand=1)
 
     def applyTag(self, tag):
@@ -99,11 +106,7 @@ class myFrame(Frame):
             self.line_count += 2
         elif tag.__str__() == 'URLS':
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
-            self.line_count += 1
-            self.txt.tag_add("http", self.line_count.__str__() + ".0",
-                             self.line_count.__str__() + "." + len(tag.__str__()).__str__())
-            self.txt.tag_config("http", background = "black", foreground="blue")
-            self.line_count += 1
+            self.line_count += 2
         else:
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
             self.line_count += 1
@@ -120,6 +123,13 @@ class myFrame(Frame):
         self.txt.insert(END, message)
         self.applyTag(tag)              # comment out to turn off text area highlights
         self.txt.see(END)
+
+    def log_url(self, text):
+        message = "URLS: " + text.__str__() + "\n"
+        print message
+        self.txt.insert(END, "URLS:")
+        for url in text:
+            self.txt.insert(END, url.__str__(), self.hyperlink.add(lambda url: self.open_url(url)))
 
     def open_url(self, url):
         webbrowser.open_new(url)
@@ -148,6 +158,9 @@ class myFrame(Frame):
             e = sys.exc_info()
             tb = traceback.format_exc()
             self.log("ERROR", str(e) + str(tb))
+            if StaticMapsConnections.ImageMerge.wd != None:
+                StaticMapsConnections.ImageMerge.wd.set("An error has occurred.\nPlease close this dialog to continue.")
+
 
     def onQuit(self):
         """
@@ -168,7 +181,7 @@ class myFrame(Frame):
 
     # init pathname to local resource __file__ in case of erroneous choice
         myFrame.infile = os.path.join(os.path.dirname(__file__), '..')
-        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir='../Inputs/KML Files/', title = "Please choose a file to open", defaultextension=".kml")
+        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.sample_input, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
             myFrame.infile = os.path.abspath(file)
             self.log("OPEN", "Successfully chose" + myFrame.infile)
@@ -182,7 +195,7 @@ class myFrame(Frame):
         :param :
         """
         myFrame.outfile = os.path.join(os.path.dirname(__file__), '..')
-        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.ftypes , initialdir='../Inputs/KML Files/', title="Save the file as", defaultextension=".kml")
+        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.ftypes , initialdir=self.sample_input, title="Save the file as", defaultextension=".kml")
         if file:
             myFrame.outfile = os.path.abspath(file)
             self.log("SAVE", "Successfully chose" + myFrame.infile)
@@ -196,7 +209,7 @@ class myFrame(Frame):
         :param :
         """
         myFrame.outimage = os.path.join(os.path.dirname(__file__), '..')
-        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, initialdir='../Inputs/KML Files/', title="Save the image as", defaultextension=".png")
+        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, initialdir=self.sample_input, title="Save the image as", defaultextension=".png")
         if file:
             myFrame.outimage = os.path.abspath(file)
             self.log("IMAGE", "Successfully chose" + myFrame.infile)
@@ -249,7 +262,7 @@ class myFrame(Frame):
                 build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
 
         build.addmarkers({"color": "blue"}, markerlist)
-        self.log("URLS", build.printUrls())
+        self.log_url(build.printUrls())
 
         if myFrame.outimage is None:
             tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
