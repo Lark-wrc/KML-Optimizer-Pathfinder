@@ -1,8 +1,8 @@
 from lxml import etree, objectify
-from RestrictionEngine.RestrictionEngine import SquareRestriction
 from GeometricDataStructures.Geometrics import *
 from pykml.factory import KML_ElementMaker as KML
 import re
+import os
 
 debug = 0
 
@@ -142,6 +142,38 @@ class KmlFasade(object):
         self.geometrics = ret
         return ret
 
+    def extract_html_metadata(self):
+        if self.placemarks is None:
+            placemarks = self.pullPlacemarksAndGarbage()
+
+        skip = 0
+        directory = "C:\Users\Research\PycharmProjects\KML-Optimizer-Pathfinder\Output HTML\\" + os.path.basename(self.filepath)
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+        for place in placemarks:
+            filename = None
+            for element in place.iter():
+
+                if skip:
+                    skip += len(element)
+                    skip -= 1
+
+                else:
+                    if element.tag == "name":
+                        filename = element.text
+                        output = open(directory + "\\" + filename, 'w')
+                        output.write(self.html_entry("h1", element.tag, element.text))
+                        output.close()
+                        #output = open(directory + "\\" + element.text, 'w')
+                        #output.close()
+                    elif element.tag == "description":
+                        output = open(directory + "\\" + filename, 'a')
+                        output.write(self.html_entry("h2", element.tag, element.text))
+                        output.close()
+
+    def html_entry(self, html_tag, tag, text):
+        return "<" + html_tag + ">" + tag + "</" + html_tag + ">" + "\n\n" + text + "\n\n"
+
     def fasadeUpdate(self):
         """
         `Author`: Bill Clark
@@ -200,17 +232,3 @@ class KmlFasade(object):
             print 'Derp.'
 
         self.additionfolder.append(pm1)
-
-
-if __name__ == '__main__':
-    fasade = KmlFasade('Inputs\KML Files\\advancedexample1.kml')
-    fasade.pullPlacemarksAndGarbage()
-    z = SquareRestriction([-99.000000, 40.000000], 1000)
-    #z = SquareRestriction([-59.961617,-13.273476], 1000)
-    fasade.placemarkToGeometrics()
-    z.restrict(fasade.geometrics)
-    fasade.createAdditionsFolder()
-    fasade.createAdditionalGeometry("LinearRing", coordin="-100.000000,40.00000 -90.000000,30.00000 -100.000000,30.00000 -100.000000,40.00000")
-    fasade.fasadeUpdate()
-    fasade.rewrite('Inputs\KML Files\\advancedexample1copy.kml')
-
