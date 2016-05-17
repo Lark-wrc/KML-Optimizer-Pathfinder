@@ -102,7 +102,7 @@ class myFrame(Frame):
             self.line_count += 1
             self.txt.tag_add("http", self.line_count.__str__() + ".0",
                              self.line_count.__str__() + "." + len(tag.__str__()).__str__())
-            self.txt.tag_config("http", foreground="blue")
+            self.txt.tag_config("http", background = "black", foreground="blue")
             self.line_count += 1
         else:
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
@@ -115,10 +115,11 @@ class myFrame(Frame):
         :param: text
         :return:
         """
-        message = tag.__str__() +  ": " + text.__str__() + "\n"
+        message = tag.__str__() + ": " + text.__str__() + "\n"
         print message
         self.txt.insert(END, message)
         self.applyTag(tag)              # comment out to turn off text area highlights
+        self.txt.see(END)
 
     def open_url(self, url):
         webbrowser.open_new(url)
