@@ -22,6 +22,9 @@ class Parser():
                   z - set the zoom value for google static.
                   s - set the size for google static.
                   v - verbose output to the console.
+        Example arg list.
+        -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c
+                    40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
         """
         self.switches = {'wa':0, 'w':0, 'sr':0, 'm':0, 'c':None, 'z':None, 's':None, 'v':0}
 
