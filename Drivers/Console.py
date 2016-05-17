@@ -9,9 +9,32 @@ from StaticMapsConnections.UrlBuilder import UrlBuilder
 
 class Parser():
     def __init__(self):
+        """
+        `Author`: Bill Clark
+
+        This class parses command line switches. A variety are supported, and can be parsed
+        as flags with their data, or as the argv array provided by the sys module.
+        Switches: wa - use weiler atherton clipping.
+                  w - rewrite changes back to the file.
+                  sr - use a square restriction.
+                  m - use the static maps connections, to generate urls and merge the images.
+                  c - set the center point for the viewport and restrictions.
+                  z - set the zoom value for google static.
+                  s - set the size for google static.
+                  v - verbose output to the console.
+        """
         self.switches = {'wa':0, 'w':0, 'sr':0, 'm':0, 'c':None, 'z':None, 's':None, 'v':0}
 
     def parse(self, flag, data):
+        """
+        `Author`: Bill Clark
+
+        This is the method that parses a flag with it's data. It sets the class wide switches when provided.
+
+        `flag`: The flag being set. IE -v, -wa.
+
+        `data`: The data associated with the flag. paths, coordinates etc.
+        """
         flag = flag[1:]
         if flag in self.switches:
             if not (flag == 'wa' or flag == 'v'):
@@ -24,6 +47,15 @@ class Parser():
             return -1
 
     def parseArgs(self, args):
+        """
+        `Author`: Bill Clark
+
+        Parses the arguments passed in as a list. Usually this will be sys.argv. Calls parse on paired up args.
+        TODO is that if wa or v are at the end of the parameters, the kml input ends up as it's value.
+        TODO optional data arguments. I'll admit, not my smoothest code, but I didn't want a massive if chain.
+
+        `args`: The list of arguments from the command line.
+        """
         try:
             for x in range(1, len(args)-1):
                 if args[x][0] == '-' and args[x+1][0] == '-':
@@ -34,20 +66,34 @@ class Parser():
             print 'The input has an improper closing. Be sure to include a KML file.'
 
     def export(self):
+        """
+        `Author`: Bill Clark
+
+        Returns the switches set in the parse methods.
+
+        'return': the Switches dict.
+        """
         return self.switches
 
 
+def interface():
+    """
+    `Author`: Bill Clark
 
-if __name__ == "__main__":
+    This is a refined version of the driver. It parses command line args to run through the driver.
+    The code only executes what it needs to, saving cycles. Selective execution is based off the switches.
+    """
     parser = Parser()
     merc = MercatorProjection()
     f = RestrictionFactory()
 
+    # parse args.
     parser.parseArgs(sys.argv)
     switches = parser.export()
 
     if switches['v']: print 'Arguments parsed correctly.'
 
+    # processes the data values in the switches, c, z, and s.
     if switches['c'] is not None: center = LatLongPoint(float(switches['c'].split(',')[0]),float(switches['c'].split(',')[1]))
     else:
         print 'No center point.'
@@ -64,12 +110,14 @@ if __name__ == "__main__":
 
     if switches['v']: print 'Values have been set.'
 
+    # open the kml fasade.
     fasade = KmlFasade(sys.argv[-1])
     fasade.placemarkToGeometrics()
 
     if switches['w']: fasade.removeGarbageTags()
     if switches['v']: print 'garbage data removed.'
 
+    # clip if requested in the args.
     if switches['wa']:
         restrict = f.newWAClipping(merc.get_corners(center, zoom, size, size))
     if switches['sr']:
@@ -79,9 +127,11 @@ if __name__ == "__main__":
         fasade.fasadeUpdate()
     if switches['v']: print 'Clipping completed.'
 
+    # rewrite if requested.
     if switches['w']: fasade.rewrite(switches['w'])
     if switches['v']: print 'KML file rewritten.'
 
+    # Creates urls out of the geometrics, downloads and merges them.
     if switches['m']:
         build = UrlBuilder(size)
         build.centerparams(switches['c'],repr(zoom))
@@ -106,3 +156,6 @@ if __name__ == "__main__":
         ImageMerge.mergeModeRGB(switches['m'], *images)
         im = Image.open(switches['m'])
         im.show()
+
+if __name__ == "__main__":
+    interface()
