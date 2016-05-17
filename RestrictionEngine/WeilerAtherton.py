@@ -14,8 +14,8 @@ class WeilerClipping:
 
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, debug=0):
+        self.debug = debug
 
     def getLineIntersection(self, pointA, pointB, pointC, pointD):
         """
@@ -304,14 +304,14 @@ class WeilerClipping:
         # run me, in order
         # find P, Ie
         P, Ie = self.getP(subjectlines, viewportlines)
-        print "P :",P
-        print "Ie:", Ie.items
+        if self.debug: print "P :",P
+        if self.debug: print "Ie:", Ie.items
         if not Ie.items or Ie.items == []:
             return None
 
         # then find Q
         Q = self.getQ(viewportlines, Ie)
-        print "Q :",Q
+        if self.debug: print "Q :",Q
 
         # then get Clipped
         result = self.getClipped(P, Q, Ie)

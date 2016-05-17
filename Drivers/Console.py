@@ -9,18 +9,15 @@ from StaticMapsConnections.UrlBuilder import UrlBuilder
 
 class Parser():
     def __init__(self):
-        self.switches = {'wa':0, 'w':0, 'sr':0, 'm':0, 'c':None, 'z':None, 's':None}
+        self.switches = {'wa':0, 'w':0, 'sr':0, 'm':0, 'c':None, 'z':None, 's':None, 'v':0}
 
     def parse(self, flag, data):
         flag = flag[1:]
         if flag in self.switches:
-            if not flag == 'wa':
+            if not (flag == 'wa' or flag == 'v'):
                 self.switches[flag] = data
             else:
                 self.switches[flag] = 1
-            return 1
-        elif flag in self.switches:
-            self.switches[flag] = data
             return 1
         else:
             print "Error: flag", flag, 'not a valid input.'
@@ -49,6 +46,8 @@ if __name__ == "__main__":
     parser.parseArgs(sys.argv)
     switches = parser.export()
 
+    if switches['v']: print 'Arguments parsed correctly.'
+
     if switches['c'] is not None: center = LatLongPoint(float(switches['c'].split(',')[0]),float(switches['c'].split(',')[1]))
     else:
         print 'No center point.'
@@ -63,10 +62,13 @@ if __name__ == "__main__":
         print 'No size has been specified.'
         if switches['m'] or switches['wa']: exit()
 
+    if switches['v']: print 'Values have been set.'
+
     fasade = KmlFasade(sys.argv[-1])
     fasade.placemarkToGeometrics()
 
     if switches['w']: fasade.removeGarbageTags()
+    if switches['v']: print 'garbage data removed.'
 
     if switches['wa']:
         restrict = f.newWAClipping(merc.get_corners(center, zoom, size, size))
@@ -75,8 +77,10 @@ if __name__ == "__main__":
     if switches['wa'] or switches['sr']:
         restrict.restrict(fasade.geometrics)
         fasade.fasadeUpdate()
+    if switches['v']: print 'Clipping completed.'
 
     if switches['w']: fasade.rewrite(switches['w'])
+    if switches['v']: print 'KML file rewritten.'
 
     if switches['m']:
         build = UrlBuilder(size)
@@ -92,11 +96,12 @@ if __name__ == "__main__":
                 build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
         build.addmarkers({"color": "yellow"}, '41.3079222,-74.6096236')
 
-        build.printUrls()
-        print "Number of urls: ", len(build.urllist) + 2
+        if switches['v']:
+            build.printUrls()
+            print "Number of urls: ", len(build.urllist) + 2
 
         images = build.download()
-        print "Downloaded."
+        if switches['v']: print "All images downloaded."
         images = ImageMerge.convertPtoRGB(*images)
         ImageMerge.mergeModeRGB(switches['m'], *images)
         im = Image.open(switches['m'])
