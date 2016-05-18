@@ -124,13 +124,6 @@ class myFrame(Frame):
         self.applyTag(tag)              # comment out to turn off text area highlights
         self.txt.see(END)
 
-    def log_url(self, text):
-        message = "URLS: " + text.__str__() + "\n"
-        print message
-        self.txt.insert(END, "URLS:")
-        for url in text:
-            self.txt.insert(END, url.__str__(), self.hyperlink.add(lambda url: self.open_url(url)))
-
     def open_url(self, url):
         webbrowser.open_new(url)
 
@@ -262,7 +255,7 @@ class myFrame(Frame):
                 build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
 
         build.addmarkers({"color": "blue"}, markerlist)
-        self.log_url(build.printUrls())
+        self.log("URLS", build.printUrls())
 
         if myFrame.outimage is None:
             tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
