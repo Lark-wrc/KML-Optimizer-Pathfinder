@@ -14,6 +14,7 @@ import waitDialog
 import traceback
 import tkFont
 from UserInterfaces.HyperLinkManager import HyperLinkManager
+from GeometricDataStructures.Mercator import *
 
 class myFrame(Frame):
 
@@ -224,11 +225,15 @@ class myFrame(Frame):
         else:
             fasade = KmlFasade(myFrame.infile)
 
-        fasade.placemarkToGeometrics()
-        # fasade.garbageFilter()
+        merc = MercatorProjection()
+        centerPoint = LatLongPoint(self.lat, self.lng)
         f = RestrictionFactory()
-        f = f.newSquareRestriction([self.lng, self.lat], self.size)
-        f.restrict(fasade.geometrics)
+
+        clipped = f.newWAClipping(merc.get_corners(centerPoint, self.dist, self.size, self.size))
+        fasade.placemarkToGeometrics()
+        fasade.removeGarbageTags()
+
+        clipped.restrict(fasade.geometrics)
         fasade.fasadeUpdate()
 
         # code to indicate the user has not chosen an output kml and then requests one
