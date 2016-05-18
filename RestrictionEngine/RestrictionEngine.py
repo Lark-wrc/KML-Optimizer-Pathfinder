@@ -1,6 +1,5 @@
 from math import radians, sin, cos, asin, sqrt, log
 from WeilerAtherton import WeilerClipping
-import State
 
 ZOOM_CONSTANT = 10 + log(45, 2)  # Final Variable, Do Not Modify
 
@@ -243,37 +242,6 @@ class SquareRestriction(Restriction):
             if coordinates[1] <= self.NW[1] and coordinates[1] >= self.SE[1]:
                 return True
         return False
-
-
-    def intersect(self, start, end):
-        """
-        `Author`: Nick LaPosta
-
-        A function for determining the possible intersection of the segment between two points and the region
-        Warning! Does not properly function for a zone passing over the Anti-Prime Meridian, whatever that is called
-
-        `start`: List containing longitude and latitude of start point of segment
-
-        `end`: List containing longitude and latitude of end point of segment
-
-        `return`: If the segment created by start and end intersects this region then return True, else return False
-        """
-        State.init_state(self.NW, self.SE)
-        start_state = State(start[0], start[1])
-        end_state = State(end[0], end[1])
-        if cmp(start_state, end_state):
-            # Check if line intersects
-            if start_state.in_region() or end_state.in_region():
-                return True
-            else:
-                line_slope = (start[1] - end[1]) / (start[0] - end[0])
-                (min_slope, max_slope) = start_state.get_slope()
-                if line_slope < min_slope or line_slope > max_slope:
-                    return False
-                else:
-                    return True
-        else:
-            return False
 
 
 class CircleRadiusRestriction(Restriction):
