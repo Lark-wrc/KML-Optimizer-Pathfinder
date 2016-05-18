@@ -1,2 +1,0 @@
-python C:\Python27\Scripts\pdoc --overwrite --html --html-dir "C:\Users\bill\Documents\Code Repositiories\KML-Optimizer-Pathfinder\Outputs" "C:\Users\bill\Documents\Code Repositiories\KML-Optimizer-Pathfinder"
-"F:\\Documents Storage\\apps\pscp.exe" -r "C:\Users\\bill\\Documents\\Code Repositiories\\KML-Optimizer-Pathfinder\\Outputs\\KML-Optimizer-Pathfinder\\" clarkw26@elvis.rowan.edu:/home/clarkw26/public_html/KML
