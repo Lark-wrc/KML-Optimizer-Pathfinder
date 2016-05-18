@@ -1,10 +1,10 @@
 from lxml import etree, objectify
-from RestrictionEngine.RestrictionEngine import SquareRestriction
 from GeometricDataStructures.Geometrics import *
 from pykml.factory import KML_ElementMaker as KML
 import re
 
 debug = 0
+
 
 class KmlFasade(object):
 
@@ -201,14 +201,18 @@ class KmlFasade(object):
 
         self.additionfolder.append(pm1)
 
+    def yieldGeometrics(self):
+        """
+        `Author`: Bill Clark
+
+        Returns the geometrics contained in the class. Not really needed,
+        """
+        return self.geometrics
 
 if __name__ == '__main__':
     fasade = KmlFasade('Inputs\KML Files\\advancedexample1.kml')
     fasade.pullPlacemarksAndGarbage()
-    z = SquareRestriction([-99.000000, 40.000000], 1000)
-    #z = SquareRestriction([-59.961617,-13.273476], 1000)
     fasade.placemarkToGeometrics()
-    z.restrict(fasade.geometrics)
     fasade.createAdditionsFolder()
     fasade.createAdditionalGeometry("LinearRing", coordin="-100.000000,40.00000 -90.000000,30.00000 -100.000000,30.00000 -100.000000,40.00000")
     fasade.fasadeUpdate()

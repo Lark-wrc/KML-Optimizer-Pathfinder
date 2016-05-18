@@ -7,6 +7,7 @@ from GeometricDataStructures.Mercator import *
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 
+
 class Parser():
     def __init__(self):
         """
