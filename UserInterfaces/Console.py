@@ -28,7 +28,7 @@ class Parser():
             40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
         """
         self.switches = {'wa':0, 'v':0}
-        self.data = {'w':0, 'sr':0, 'm':0, 'c':None, 'z':None, 's':None}
+        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0}
 
     def parse(self, flag, data):
         """
@@ -52,8 +52,8 @@ class Parser():
         `Author`: Bill Clark
 
         Parses the arguments passed in as a list. Usually this will be sys.argv. Calls parse on paired up args.
-        TODO is that if wa or v are at the end of the parameters, the kml input ends up as it's value.
-        TODO optional data arguments. I'll admit, not my smoothest code, but I didn't want a massive if chain.
+        Following the parsing loop are some switch checks. These cause some switches to fail if things they
+        rely on aren't set. Mostly based on needing a center point.
 
         `args`: The list of arguments from the command line.
         """
@@ -62,15 +62,11 @@ class Parser():
             if args[0][1:] in self.switches: self.parse(args.pop(0), None)
             elif args[0][1:] in self.data: self.parse(args.pop(0), args.pop(0))
             else: print 'Bad parse.'
+        #Switch checks
+        self.switches['wa'] = self.switches['wa'] and self.data['c'] and self.data['z'] and self.data['s']
+        if not self.data['c']: self.data['sr'] = 0
+        if not (self.data['m'] and self.data['c'] and self.data['z'] and self.data['s']): self.data['m'] = 0
 
-        # try:
-        #     for x in range(1, len(args)-1):
-        #         if args[x][0] == '-' and args[x+1][0] == '-':
-        #             self.parse(args[x], None)
-        #         elif args[x][0] == '-':
-        #             self.parse(args[x], args[x+1])
-        # except IndexError:
-        #     print 'The input has an improper closing. Be sure to include a KML file.'
 
     def export(self):
         """
@@ -103,19 +99,15 @@ def interface():
     if switches['v']: print 'Arguments parsed correctly.'
 
     # processes the data values in the switches, c, z, and s.
-    if data['c'] is not None: center = LatLongPoint(float(data['c'].split(',')[0]),float(data['c'].split(',')[1]))
+    if data['c']: center = LatLongPoint(float(data['c'].split(',')[0]),float(data['c'].split(',')[1]))
     else:
-        print 'No center point.'
-        if data['m'] or switches['wa'] or data['sr']: exit()
-    if data['z'] is not None: zoom = int(data['z'])
+        print 'No center point. Cancelled restrictions and static maps.'
+    if data['z']: zoom = int(data['z'])
     else:
-        print 'No zoom value.'
-        if data['m'] or switches['wa']: exit()
-    if data['s'] is not None:
-        size = int(data['s'])
+        print 'No zoom value. Cancelled wa restriction and static maps.'
+    if data['s']: size = int(data['s'])
     else:
-        print 'No size has been specified.'
-        if data['m'] or switches['wa']: exit()
+        print 'No size has been specified. Cancelled wa restriction and static maps.'
 
     if switches['v']: print 'Values have been set.'
 
@@ -132,7 +124,8 @@ def interface():
     if data['sr']:
         restrict = f.newSquareRestriction([center.lat, center.lng], data['sr'])
     if switches['wa'] or data['sr']:
-        restrict.restrict(fasade.geometrics)
+        for geometrics in fasade.yieldGeometrics():
+            restrict.restrict(geometrics)
         fasade.fasadeUpdate()
     if switches['v']: print 'Clipping completed.'
 
@@ -146,13 +139,14 @@ def interface():
         build.centerparams(data['c'],repr(zoom))
 
         markerlist = []
-        for element in fasade.geometrics:
-            if element.tag == "Point":
-                markerlist.append(element.printCoordinates())
-            if element.tag == "Polygon":
-                build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
-            if element.tag == "LineString":
-                build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
+        for geometrics in fasade.yieldGeometrics():
+            for element in geometrics:
+                if element.tag == "Point":
+                    markerlist.append(element.printCoordinates())
+                if element.tag == "Polygon":
+                    build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
+                if element.tag == "LineString":
+                    build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
         build.addmarkers({"color": "yellow"}, '41.3079222,-74.6096236')
 
         if switches['v']:
