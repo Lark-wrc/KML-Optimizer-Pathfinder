@@ -318,12 +318,15 @@ class UrlBuilder(object):
         This method prints all the urls contained in the object in a readable manner. As readable as lines of character
         length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
         """
-
+        lim = 3
         print "Base Url: " + self.urlbase
         for url in self.urllist:
             print url
         print self.url
-        return self.urllist.__str__()
+        if len(self.urllist) > lim:
+            return self.urllist[0:lim].__str__() + "\n(...and " + (len(self.urllist) - lim).__str__() + " more)"
+        else:
+            return self.urllist.__str__()
 
     def __str__(self):
         """
