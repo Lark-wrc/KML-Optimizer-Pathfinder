@@ -54,7 +54,7 @@ class GeometricObject(object):
         """
         `Author`: Bill Clark
 
-        Overrides the tostring method of a geometic object.
+        Overrides the tostring method of a geometric object.
 
         `return`: This object as a string.
         """
