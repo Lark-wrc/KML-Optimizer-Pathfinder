@@ -225,7 +225,7 @@ class myFrame(Frame):
             fasade = KmlFasade(myFrame.infile)
 
         fasade.placemarkToGeometrics()
-        fasade.garbageFilter()
+        # fasade.garbageFilter()
         f = RestrictionFactory()
         f = f.newSquareRestriction([self.lng, self.lat], self.size)
         f.restrict(fasade.geometrics)
@@ -244,7 +244,7 @@ class myFrame(Frame):
 
         markerlist = []
         for element in fasade.geometrics:
-            element.switchCoordinates()
+            # element.switchCoordinates()
             # print element.printCoordinates()
             if element.tag == "Point":
                 markerlist.append(element.printCoordinates())

@@ -1,8 +1,9 @@
 from PIL import Image
-
+import StaticMapsConnections
 
 debug = 0
 diffnum = 50
+wd = None
 
 def mergeModeRGB(outfile, base, *images):
     """
@@ -28,7 +29,6 @@ def mergeModeRGB(outfile, base, *images):
     baseimage = Image.open(base)
     baseimage.save(outfile)
     layeringimage = Image.open(outfile)
-
     basedata = baseimage.load()
     layeringdata = layeringimage.load()
     count = 0
@@ -117,6 +117,7 @@ def convertPtoRGB(*images):
         ret.append(image[:-4]+'.con'+image[-4:])
         im.save(image[:-4]+'.con'+image[-4:])
         count += 1
+        StaticMapsConnections.ImageMerge.wd.set("Merging " + str(count) + " of " + str(len(images)))
     return ret
 
 class MergeGenerator(object):

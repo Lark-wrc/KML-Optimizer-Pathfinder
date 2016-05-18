@@ -83,8 +83,6 @@ print "Downloaded."
 images = ImageMerge.convertPtoRGB(*images)
 ImageMerge.mergeModeRGB('Outputs\Outfile.png', *images)
 
-
-
 #merges by downloading, merging, and repeating till none are left.
 
 # ImageMerge.debug = 0
