@@ -1,6 +1,6 @@
 from PIL import Image
-import waitDialog
-import UI
+from UserInterfaces import waitDialog
+from UserInterfaces import UI
 
 debug = 0
 diffnum = 50
