@@ -66,7 +66,7 @@ class KmlFasade(object):
             self.kmlTree.write(f, pretty_print=True)
             f.close()
 
-    def garbageFilter(self):
+    def removeGarbageTags(self):
         """
         `Author`: Bill Clark
 
@@ -79,7 +79,7 @@ class KmlFasade(object):
             parent = element.getparent()
             parent.remove(element)
 
-    def loadPlacemarks(self):
+    def pullPlacemarksAndGarbage(self):
         """
         `Author`: Bill Clark
 
@@ -117,7 +117,7 @@ class KmlFasade(object):
         """
 
         if(self.placemarks is None):
-            placemarks = self.loadPlacemarks()
+            placemarks = self.pullPlacemarksAndGarbage()
 
         factory = GeometricFactory()
         ret = []
@@ -131,9 +131,9 @@ class KmlFasade(object):
 
                 elif element.tag in factory.geometryTypes:
                     geo = factory.create(element)
-                    assert geo is not None #Checking an object actually got made.
+                    assert geo is not None  # Checking an object actually got made.
 
-                    if type(geo) is list: ret.extend(geo) #catches multigeometry returns.
+                    if type(geo) is list: ret.extend(geo)  # catches multigeometry returns.
                     else: ret.append(geo)
 
                     if element.tag == "Polygon" or element.tag == "MultiGeometry": skip = len(element)
@@ -152,7 +152,7 @@ class KmlFasade(object):
 
         for element in self.geometrics:
             element.applyEdits()
-        self.geometrics = [e for e in self.geometrics if not e.remove]
+        self.geometrics = [e for e in self.geometrics if not e.remove == len(e.coordinates)]
 
         if self.additionfolder is not None:
             for x in self.kmlRoot.iter():
@@ -204,8 +204,8 @@ class KmlFasade(object):
 
 if __name__ == '__main__':
     fasade = KmlFasade('Inputs\KML Files\\advancedexample1.kml')
-    fasade.loadPlacemarks()
-    z = SquareRestriction([-99.000000,40.000000], 1000)
+    fasade.pullPlacemarksAndGarbage()
+    z = SquareRestriction([-99.000000, 40.000000], 1000)
     #z = SquareRestriction([-59.961617,-13.273476], 1000)
     fasade.placemarkToGeometrics()
     z.restrict(fasade.geometrics)
