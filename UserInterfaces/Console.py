@@ -27,7 +27,8 @@ class Parser():
         -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c
             40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
         """
-        self.switches = {'wa':0, 'w':0, 'sr':0, 'm':0, 'c':None, 'z':None, 's':None, 'v':0}
+        self.switches = {'wa':0, 'v':0}
+        self.data = {'w':0, 'sr':0, 'm':0, 'c':None, 'z':None, 's':None}
 
     def parse(self, flag, data):
         """
@@ -40,15 +41,11 @@ class Parser():
         `data`: The data associated with the flag. paths, coordinates etc.
         """
         flag = flag[1:]
-        if flag in self.switches:
-            if not (flag == 'wa' or flag == 'v'):
-                self.switches[flag] = data
-            else:
-                self.switches[flag] = 1
-            return 1
+
+        if data is None:
+            self.switches[flag] = 1
         else:
-            print "Error: flag", flag, 'not a valid input.'
-            return -1
+            self.data[flag] = data
 
     def parseArgs(self, args):
         """
@@ -60,14 +57,20 @@ class Parser():
 
         `args`: The list of arguments from the command line.
         """
-        try:
-            for x in range(1, len(args)-1):
-                if args[x][0] == '-' and args[x+1][0] == '-':
-                    self.parse(args[x], None)
-                elif args[x][0] == '-':
-                    self.parse(args[x], args[x+1])
-        except IndexError:
-            print 'The input has an improper closing. Be sure to include a KML file.'
+        args.pop(0)
+        while args[0][0] == '-':
+            if args[0][1:] in self.switches: self.parse(args.pop(0), None)
+            elif args[0][1:] in self.data: self.parse(args.pop(0), args.pop(0))
+            else: print 'Bad parse.'
+
+        # try:
+        #     for x in range(1, len(args)-1):
+        #         if args[x][0] == '-' and args[x+1][0] == '-':
+        #             self.parse(args[x], None)
+        #         elif args[x][0] == '-':
+        #             self.parse(args[x], args[x+1])
+        # except IndexError:
+        #     print 'The input has an improper closing. Be sure to include a KML file.'
 
     def export(self):
         """
@@ -77,7 +80,7 @@ class Parser():
 
         'return': the Switches dict.
         """
-        return self.switches
+        return self.switches, self.data
 
 
 def interface():
@@ -93,24 +96,26 @@ def interface():
 
     # parse args.
     parser.parseArgs(sys.argv)
-    switches = parser.export()
+    switches, data = parser.export()
+
+    print switches, data
 
     if switches['v']: print 'Arguments parsed correctly.'
 
     # processes the data values in the switches, c, z, and s.
-    if switches['c'] is not None: center = LatLongPoint(float(switches['c'].split(',')[0]),float(switches['c'].split(',')[1]))
+    if data['c'] is not None: center = LatLongPoint(float(data['c'].split(',')[0]),float(data['c'].split(',')[1]))
     else:
         print 'No center point.'
-        if switches['m'] or switches['wa'] or switches['sr']: exit()
-    if switches['z'] is not None: zoom = int(switches['z'])
+        if data['m'] or switches['wa'] or data['sr']: exit()
+    if data['z'] is not None: zoom = int(data['z'])
     else:
         print 'No zoom value.'
-        if switches['m'] or switches['wa']: exit()
-    if switches['s'] is not None:
-        size = int(switches['s'])
+        if data['m'] or switches['wa']: exit()
+    if data['s'] is not None:
+        size = int(data['s'])
     else:
         print 'No size has been specified.'
-        if switches['m'] or switches['wa']: exit()
+        if data['m'] or switches['wa']: exit()
 
     if switches['v']: print 'Values have been set.'
 
@@ -118,27 +123,27 @@ def interface():
     fasade = KmlFasade(sys.argv[-1])
     fasade.placemarkToGeometrics()
 
-    if switches['w']: fasade.removeGarbageTags()
+    if data['w']: fasade.removeGarbageTags()
     if switches['v']: print 'garbage data removed.'
 
     # clip if requested in the args.
     if switches['wa']:
         restrict = f.newWAClipping(merc.get_corners(center, zoom, size, size))
-    if switches['sr']:
-        restrict = f.newSquareRestriction([center.lat, center.lng], switches['sr'])
-    if switches['wa'] or switches['sr']:
+    if data['sr']:
+        restrict = f.newSquareRestriction([center.lat, center.lng], data['sr'])
+    if switches['wa'] or data['sr']:
         restrict.restrict(fasade.geometrics)
         fasade.fasadeUpdate()
     if switches['v']: print 'Clipping completed.'
 
     # rewrite if requested.
-    if switches['w']: fasade.rewrite(switches['w'])
+    if data['w']: fasade.rewrite(data['w'])
     if switches['v']: print 'KML file rewritten.'
 
     # Creates urls out of the geometrics, downloads and merges them.
-    if switches['m']:
+    if data['m']:
         build = UrlBuilder(size)
-        build.centerparams(switches['c'],repr(zoom))
+        build.centerparams(data['c'],repr(zoom))
 
         markerlist = []
         for element in fasade.geometrics:
@@ -157,8 +162,8 @@ def interface():
         images = build.download()
         if switches['v']: print "All images downloaded."
         images = ImageMerge.convertPtoRGB(*images)
-        ImageMerge.mergeModeRGB(switches['m'], *images)
-        im = Image.open(switches['m'])
+        ImageMerge.mergeModeRGB(data['m'], *images)
+        im = Image.open(data['m'])
         im.show()
 
 if __name__ == "__main__":

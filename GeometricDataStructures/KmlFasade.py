@@ -205,9 +205,11 @@ class KmlFasade(object):
         """
         `Author`: Bill Clark
 
-        Returns the geometrics contained in the class. Not really needed,
+        Returns the geometrics contained in the class. Not really needed, but this helps for implementations using
+        the composite module. It uses yield instead of return so that it can be accessed in the same way of the
+        composite, for x in yield.
         """
-        return self.geometrics
+        yield self.geometrics
 
 if __name__ == '__main__':
     fasade = KmlFasade('Inputs\KML Files\\advancedexample1.kml')
