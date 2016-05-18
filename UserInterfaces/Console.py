@@ -94,8 +94,6 @@ def interface():
     parser.parseArgs(sys.argv)
     switches, data = parser.export()
 
-    print switches, data
-
     if switches['v']: print 'Arguments parsed correctly.'
 
     # processes the data values in the switches, c, z, and s.
