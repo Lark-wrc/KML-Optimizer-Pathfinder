@@ -1,7 +1,7 @@
 import sys
 from GeometricDataStructures.Geometrics import LatLongPoint
 from PIL import Image
-import StaticMapsConnections.ImageMerge as ImageMerge
+import StaticMapsConnections.ImageMerge
 from GeometricDataStructures.KmlFasade import KmlFasade
 from GeometricDataStructures.Mercator import *
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
