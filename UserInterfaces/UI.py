@@ -18,22 +18,23 @@ from GeometricDataStructures.Mercator import *
 
 class myFrame(Frame):
 
-    line_count = 1
-    wd = None
-    ftypes = [('KML files', '*.kml'), ('KMZ files', '*.kmz'), ('All files', '*')]
-    itypes = [('All files', '*'), ('PNG files', '*.png')]
-    sample_input = '../Inputs/KML Files/'
-    text = "KML Klipper"
+    line_count = 1                                              # count for lin e of entry in highlighting of text area
+    wd = None                                                   # variable state for the wait dialog to be created and then self-destroyed
+    ftypes = [('KML files', '.kml'), ('KMZ files', '.kmz')]     # default file types of kml save and open
+    itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
+    init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
+    url_doc = r"http://www.google.com"                          # resource of documentation TBD
+    div_string = "=*"                                           # string to be used to 'divide' separate execs in the text area
+
     root = Tkinter.Tk()
     root.withdraw()
 
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
     entries = []
-    infile = None
-    outfile = None
-    outimage = None
-    url_doc = r"http://www.google.com"      # change to destination of documentation
+    infile = None      # destination of KML file to be read
+    outfile = None     # destination of KML file to be written
+    outimage = None    # destination of Image file to be read
 
     def __init__(self, parent):
         """
@@ -56,12 +57,10 @@ class myFrame(Frame):
         This is the constructor for the ui which reads in and processes user input
         """
 
-        self.parent.title("Visual-Ice")
+        self.parent.title("KML Klipper")
         self.pack(fill=BOTH, expand=1)
-
         menubar = Menu(self.parent)
         self.parent.config(menu=menubar)
-
         menubar.add_command(label="Open KML", command=self.onOpen)
         menubar.add_command(label="Save KML", command=self.saveFileKML)
         menubar.add_command(label="Save Img", command=self.saveFileImg)
@@ -85,32 +84,36 @@ class myFrame(Frame):
         link.configure(font=font)
         row.pack(side=TOP, fill=X, padx=15, pady=15)
         go.pack(side=LEFT, expand = YES)
-
         quitButton.pack(side=RIGHT, expand=YES)
         link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
-
         label = Label(self, text = "Output:")
         label.pack()
 
-        self.txt = ScrolledText(self)
+        self.txt = ScrolledText(self, font = ("Consolas", 10))
         self.hyperlink = HyperLinkManager(self.txt)
         self.txt.pack(fill=NONE, expand=1)
 
     def applyTag(self, tag, text):
+        """
+        this method applies the tag configurations of the appropriate highlighting to the text area
+        :param tag:
+        :param text:
+        :return:
+        """
         self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0",
                          self.line_count.__str__() + "." + len(tag.__str__()).__str__())
         if tag.__str__() == 'ERROR':
             self.txt.tag_config(tag.__str__(), background="red", foreground="black")
-            self.line_count += 5
+            self.line_count += text.count('\n')
         elif tag.__str__() == 'FINISHED':
             self.txt.tag_config(tag.__str__(), background="green", foreground="black")
-            self.line_count += 2
+            self.line_count += text.count('\n')
         elif tag.__str__() == 'URLS':
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
             self.line_count += len(text) + 1
         else:
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
-            self.line_count += 1
+            self.line_count += text.count('\n')
 
     def log(self, tag, text):
         """
@@ -124,14 +127,19 @@ class myFrame(Frame):
         if tag.__str__() == 'URLS':
             self.txt.insert(END, tag.__str__() + ":\n")
             for url in text:
-                self.txt.insert(END, str(url)[0:65] + "\n", self.hyperlink.add(lambda: self.open_url(str(url))))
+                self.txt.insert(END, str(url)[0:58] + "\n", self.hyperlink.add(lambda: self.open_url(str(url))))
         else:
             self.txt.insert(END, message)
         self.applyTag(tag, text)              # comment out to turn off text area highlights
         self.txt.see(END)
 
     def open_url(self, url):
-        self.log('REDIRECTING', "redirecting to " + str(url) + "\n")
+        """
+        This method can be used to
+        :param url:
+        :return:
+        """
+        self.log('REDIRECTING', "\nRedirecting to " + str(url) + "\n")
         webbrowser.open_new(url)
 
     def start(self):
@@ -145,7 +153,7 @@ class myFrame(Frame):
             for entry in self.entries:
                 field = entry[0]
                 text  = entry[1].get()
-                self.log("ENTRY", '%s: %s' % (field, text))
+                self.log("ENTRY", '%s: %s \n' % (field, text))
 
             # class wide storage of necessary center of focus info
             self.lat = float(self.entries[0][1].get())
@@ -154,6 +162,7 @@ class myFrame(Frame):
             self.size = float(self.entries[3][1].get())
 
             self.driver()
+            
         except:
             e = sys.exc_info()
             tb = traceback.format_exc()
@@ -181,10 +190,10 @@ class myFrame(Frame):
 
     # init pathname to local resource __file__ in case of erroneous choice
         myFrame.infile = os.path.join(os.path.dirname(__file__), '..')
-        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.sample_input, title = "Please choose a file to open", defaultextension=".kml")
+        file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.init_dir, title = "Please choose a file to open", defaultextension='.kml')
         if file != '':
             myFrame.infile = os.path.abspath(file)
-            self.log("OPEN", "Successfully chose" + myFrame.infile + "\n")
+            self.log("OPEN", "Successfully chose " + myFrame.infile + "\n")
         return myFrame.infile
 
     def saveFileKML(self):
@@ -195,10 +204,10 @@ class myFrame(Frame):
         :param :
         """
         myFrame.outfile = os.path.join(os.path.dirname(__file__), '..')
-        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.ftypes , initialdir=self.sample_input, title="Save the file as", defaultextension=".kml")
+        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.ftypes , initialdir=self.init_dir, title="Save the file as", defaultextension='.kml')
         if file:
             myFrame.outfile = os.path.abspath(file)
-            self.log("SAVE", "Successfully chose" + myFrame.infile + "\n")
+            self.log("SAVE", "Successfully chose " + myFrame.infile + "\n")
         return myFrame.outfile
 
     def saveFileImg(self):
@@ -209,10 +218,10 @@ class myFrame(Frame):
         :param :
         """
         myFrame.outimage = os.path.join(os.path.dirname(__file__), '..')
-        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, initialdir=self.sample_input, title="Save the image as", defaultextension=".png")
+        file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, initialdir=self.init_dir, title="Save the image as", defaultextension='.png')
         if file:
             myFrame.outimage = os.path.abspath(file)
-            self.log("IMAGE", "Successfully chose" + myFrame.infile + "\n")
+            self.log("IMAGE", "Successfully chose " + myFrame.infile + "\n")
         return myFrame.outimage
 
     def driver(self):
@@ -255,12 +264,9 @@ class myFrame(Frame):
 
         markerlist = []
         for element in fasade.geometrics:
-            # element.switchCoordinates()
-            # print element.printCoordinates()
             if element.tag == "Point":
                 markerlist.append(element.printCoordinates())
             if element.tag == "Polygon":
-                # markerlist = element.coordinatesAsList()
                 build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
             if element.tag == "LineString":
                 build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
@@ -277,7 +283,7 @@ class myFrame(Frame):
         StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
         StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
 
-        self.log("FINISHED", "\n------------------------------------------------------------\n")
+        self.log("FINISHED", "\n" + str("-" * ((58/len("-"))+1))[:58] + "\n")
 
 def main(w, h):
     """
