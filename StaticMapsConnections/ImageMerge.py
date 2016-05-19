@@ -53,7 +53,7 @@ def mergeModeRGB(outfile, base, *images):
         if debug: print "Different Pixels:", counter, repr(round((counter/360000.)*100,2)) + '%', " Same Pixels:", \
             360000-counter, repr(round(((360000-counter)/360000.)*100,2)) + '%'
         if debug: layeringimage.show()
-        wd.set("Merging " + count.__str__() + " of " + len(images).__str__())
+        wd.set("Merging " + count.__str__() + " of " + len(images).__str__() + " Images")
         count += 1
 
     print ""
@@ -119,7 +119,7 @@ def convertPtoRGB(*images):
         im = img.convert("RGBA")
         ret.append(image[:-4]+'.con'+image[-4:])
         im.save(image[:-4]+'.con'+image[-4:])
-        wd.set("Converting " + count.__str__() + " of " + len(images).__str__())
+        wd.set("Converting " + count.__str__() + " of " + len(images).__str__() + " Images")
         count += 1
     return ret
 

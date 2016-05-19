@@ -33,7 +33,7 @@ class myFrame(Frame):
     infile = None
     outfile = None
     outimage = None
-    url_doc = r"http://www.google.com"
+    url_doc = r"http://www.google.com"      # change to destination of documentation
 
     def __init__(self, parent):
         """
@@ -96,7 +96,7 @@ class myFrame(Frame):
         self.hyperlink = HyperLinkManager(self.txt)
         self.txt.pack(fill=NONE, expand=1)
 
-    def applyTag(self, tag):
+    def applyTag(self, tag, text):
         self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0",
                          self.line_count.__str__() + "." + len(tag.__str__()).__str__())
         if tag.__str__() == 'ERROR':
@@ -107,7 +107,7 @@ class myFrame(Frame):
             self.line_count += 2
         elif tag.__str__() == 'URLS':
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
-            self.line_count += 2
+            self.line_count += len(text) + 1
         else:
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
             self.line_count += 1
@@ -119,13 +119,19 @@ class myFrame(Frame):
         :param: text
         :return:
         """
-        message = tag.__str__() + ": " + text.__str__() + "\n"
+        message = tag.__str__() + ": " + text.__str__()
         print message
-        self.txt.insert(END, message)
-        self.applyTag(tag)              # comment out to turn off text area highlights
+        if tag.__str__() == 'URLS':
+            self.txt.insert(END, tag.__str__() + ":\n")
+            for url in text:
+                self.txt.insert(END, str(url)[0:65] + "\n", self.hyperlink.add(lambda: self.open_url(str(url))))
+        else:
+            self.txt.insert(END, message)
+        self.applyTag(tag, text)              # comment out to turn off text area highlights
         self.txt.see(END)
 
     def open_url(self, url):
+        self.log('REDIRECTING', "redirecting to " + str(url) + "\n")
         webbrowser.open_new(url)
 
     def start(self):
@@ -151,7 +157,7 @@ class myFrame(Frame):
         except:
             e = sys.exc_info()
             tb = traceback.format_exc()
-            self.log("ERROR", str(e) + str(tb))
+            self.log("ERROR", str(e) + str(tb) + "\n")
             if StaticMapsConnections.ImageMerge.wd != None:
                 StaticMapsConnections.ImageMerge.wd.set("An error has occurred.\nPlease close this dialog to continue.")
 
@@ -178,7 +184,7 @@ class myFrame(Frame):
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.sample_input, title = "Please choose a file to open", defaultextension=".kml")
         if file != '':
             myFrame.infile = os.path.abspath(file)
-            self.log("OPEN", "Successfully chose" + myFrame.infile)
+            self.log("OPEN", "Successfully chose" + myFrame.infile + "\n")
         return myFrame.infile
 
     def saveFileKML(self):
@@ -192,7 +198,7 @@ class myFrame(Frame):
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.ftypes , initialdir=self.sample_input, title="Save the file as", defaultextension=".kml")
         if file:
             myFrame.outfile = os.path.abspath(file)
-            self.log("SAVE", "Successfully chose" + myFrame.infile)
+            self.log("SAVE", "Successfully chose" + myFrame.infile + "\n")
         return myFrame.outfile
 
     def saveFileImg(self):
@@ -206,7 +212,7 @@ class myFrame(Frame):
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, initialdir=self.sample_input, title="Save the image as", defaultextension=".png")
         if file:
             myFrame.outimage = os.path.abspath(file)
-            self.log("IMAGE", "Successfully chose" + myFrame.infile)
+            self.log("IMAGE", "Successfully chose" + myFrame.infile + "\n")
         return myFrame.outimage
 
     def driver(self):

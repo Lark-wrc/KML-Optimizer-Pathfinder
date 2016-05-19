@@ -1,5 +1,6 @@
 from urllib import urlretrieve
 from time import sleep
+import StaticMapsConnections
 from random import uniform
 from GeometricDataStructures.Mercator import LatLongPoint
 
@@ -228,6 +229,7 @@ class UrlBuilder(object):
             ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
             count+=1
             sleep(.5)
+            StaticMapsConnections.ImageMerge.wd.set("Downloading " + count.__str__() + " of " + len(self.urllist).__str__() + " URLS")
         ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
         return ret
 
@@ -317,16 +319,14 @@ class UrlBuilder(object):
 
         This method prints all the urls contained in the object in a readable manner. As readable as lines of character
         length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
+
+        `return`: side effect, return the list of urls for logging in UI
         """
-        lim = 3
         print "Base Url: " + self.urlbase
         for url in self.urllist:
             print url
-        print self.url
-        if len(self.urllist) > lim:
-            return self.urllist[0:lim].__str__() + "\n(...and " + (len(self.urllist) - lim).__str__() + " more)"
-        else:
-            return self.urllist.__str__()
+        print str(self.url)
+        return self.urllist
 
     def __str__(self):
         """

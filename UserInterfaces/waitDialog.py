@@ -45,7 +45,7 @@ class waitDialog(tk.Tk):
 
         self.buttonView = tk.Button(self, text="View", bg='#4d79ff', command=self.view)
         self.buttonClose = tk.Button(self, text="Close", bg='#cc5933', command=self.close)
-        self.label = tk.Label(self, text="", padx = 5, pady = 5, wrap=self.w - 10, relief = "groove")
+        self.label = tk.Label(self, text="", padx = 5, pady = 5, wrap=self.w - 10)
 
         self.set("We are merging the downloaded URL images now. This may take a few minutes" + "\nA button will appear for you to close this when work is done")
 
