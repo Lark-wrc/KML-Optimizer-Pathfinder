@@ -18,9 +18,9 @@ from GeometricDataStructures.Mercator import *
 
 class myFrame(Frame):
 
-    line_count = 1                                              # count for lin e of entry in highlighting of text area
+    line_count = 1                                              # count for line of entry in highlighting of text area
     wd = None                                                   # variable state for the wait dialog to be created and then self-destroyed
-    ftypes = [('KML files', '.kml'), ('KMZ files', '.kmz')]     # default file types of kml save and open
+    ftypes = [('KML files', '.kml')]     # default file types of kml save and open
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
     url_doc = r"http://www.google.com"                          # resource of documentation TBD
@@ -97,9 +97,17 @@ class myFrame(Frame):
         link.configure(font=font)
         link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
-        self.txt = ScrolledText(self, font = ("Consolas", 10))
+        self.txt = Text(self, font = ("Consolas", 10), wrap = NONE)
         self.hyperlink = HyperLinkManager(self.txt)              # used for generating hyper text links that redirect the local browser to the image of the link
-        self.txt.pack(fill=NONE, expand=1)
+        self.txt.pack(fill=BOTH, expand=True)
+
+        xscrollbar = Scrollbar(self.txt, orient=HORIZONTAL)
+        xscrollbar.pack(side=BOTTOM, fill=X)
+        yscrollbar = Scrollbar(self.txt)
+        yscrollbar.pack(side=RIGHT, fill=Y)
+        xscrollbar.config(command=self.txt.xview)
+        yscrollbar.config(command=self.txt.yview)
+
 
     def howTo(self):
         tkMessageBox.showinfo("How To", self.directions)
@@ -114,19 +122,23 @@ class myFrame(Frame):
         `tag`: this is the key that specifies which type of highlighting is applied to the current body of text in the console
         `text`: string to be inserted into the console
         """
+
         self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0",
                          self.line_count.__str__() + "." + len(tag.__str__()).__str__())
         if tag.__str__() == 'ERROR':
-            self.txt.tag_config(tag.__str__(), background="red", foreground="black")
-            self.line_count += text.count('\n')
+            for line in text.splitlines():
+                self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0",
+                                  self.line_count.__str__() + "." + len(line.__str__()).__str__())
+                self.line_count += 1
+            self.txt.tag_config(tag.__str__(), background="#ffb3b3", foreground="black")
         elif tag.__str__() == 'FINISHED':
             self.txt.tag_config(tag.__str__(), background="green", foreground="black")
             self.line_count += text.count('\n')
         elif tag.__str__() == 'URLS':
-            self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
+            self.txt.tag_config(tag.__str__(), background="yellow", foreground="#004d1a")
             self.line_count += len(text) + 1
         else:
-            self.txt.tag_config(tag.__str__(), background="yellow", foreground="blue")
+            self.txt.tag_config(tag.__str__(), background="yellow", foreground="#004d1a")
             self.line_count += text.count('\n')
 
     def log(self, tag, text):
@@ -144,7 +156,7 @@ class myFrame(Frame):
         if tag.__str__() == 'URLS':
             self.txt.insert(END, tag.__str__() + ":\n")
             for url in text:
-                self.txt.insert(END, str(url)[0:58] + "\n", self.hyperlink.add(lambda: self.open_url(str(url))))
+                self.txt.insert(END, str(url) + "\n", self.hyperlink.add(lambda link=url: self.open_url(str(link))))
         else:
             self.txt.insert(END, message)
         self.applyTag(tag, text)              # comment out to turn off text area highlights
@@ -187,7 +199,7 @@ class myFrame(Frame):
         except:
             e = sys.exc_info()
             tb = traceback.format_exc()
-            self.log("ERROR", str(e) + str(tb) + "\n")
+            self.log("ERROR", "\n" + str(e) + str(tb) + "\n")
             if StaticMapsConnections.ImageMerge.wd != None:
                 StaticMapsConnections.ImageMerge.wd.set("An error has occurred.\nPlease close this dialog to continue.")
 
@@ -300,7 +312,7 @@ class myFrame(Frame):
         StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
         StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
 
-        self.log("FINISHED", "\n" + str("-" * ((58/len("-"))+1))[:58] + "\n")
+        self.log("FINISHED", "\n" + str(self.div_string * ((58/len(self.div_string))+1))[:58] + "\n")
 
 def main(w, h):
     """
