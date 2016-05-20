@@ -25,6 +25,7 @@ class myFrame(Frame):
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
     url_doc = r"http://www.google.com"                          # resource of documentation TBD
     div_string = "=*"                                           # string to be used to 'divide' separate execs in the text area
+    directions = "To Begin first select the source KML file by clicking 'Open KML.'\n\n" + "Next choose the destination to which the new KML will be saved, by clicking, 'Save KML.'\n\n" +    "Then choose the destination to which the resulting image file will be saved by clicking, 'Save Image.'\n\n" +    "If no destination file is selected, then the choice of open kml will be overwritten during operation.\n\n" +    "If neither the destination of open, or save image is chosen, the procedure will prompted you to do so.\n\n" +    "Next, input the appropriate fields to be used in the procedure;\n" +    u'\u2022' + "  Latitude of Center: latitude of center point of focused sub-portion.\n" +    u'\u2022' + "  Longitude of Center: longitude of center point of focused sub-portion.\n" +    u'\u2022' + "  Zoom: Relative level of perspective zoom, google api depenedent.\n" +    u'\u2022' + "  Image Size: distance, in miles, spanning the desired region of restriction. \n\n" +    "Finally click run, and wait as the operations are executed."
 
     root = Tkinter.Tk()
     root.withdraw()
@@ -40,9 +41,11 @@ class myFrame(Frame):
         """
         Author: Bob Seedorf
 
-        This is the user interface from which a user is provided the ability to open a chosen file for processing,
-        apply filters for the processing functionality, and save a processed file to a location
-        :param parent:
+        This is the graphic user interface of the program. The goa is to provide a user the ability to open a chosen file for processing,
+        apply filters for the processing functionality, and save a processed file to a chosen location. In addition, the option to view the resulting file is allowed
+        as well as repeat the procedure, with different parameters and resources, and redirect to the resulting hyper text links.
+
+        `parent`: always tkinter's root field
         """
 
         Frame.__init__(self, parent)
@@ -54,16 +57,20 @@ class myFrame(Frame):
         """
         Author: Bob Seedorf
 
-        This is the constructor for the ui which reads in and processes user input
+        This is the constructor for the gui which reads in and processes user input
+        Using a list of 'entries', representing fields of input, and the run button, the attributed work can be executed repeatedly
+        The body of the text area (self.txt), to be kn onw as the console, is used to relay to the user the results of their actions.
+        Useful for debugging as well as updating interactive links used to render kml in a browser with google's api
         """
 
         self.parent.title("KML Klipper")
         self.pack(fill=BOTH, expand=1)
         menubar = Menu(self.parent)
         self.parent.config(menu=menubar)
-        menubar.add_command(label="Open KML", command=self.onOpen)
-        menubar.add_command(label="Save KML", command=self.saveFileKML)
-        menubar.add_command(label="Save Img", command=self.saveFileImg)
+        menubar.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
+        menubar.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
+        menubar.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
+        menubar.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
 
         for field in self.fields:
             row = Frame(self)
@@ -77,28 +84,35 @@ class myFrame(Frame):
         row = Frame(self)
         go = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
         quitButton = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
-        link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
-        link.bind("<Button-1>", lambda e, url=self.url_doc: self.open_url(url))
-        font = tkFont.Font(link, link.cget("font"))
-        font.configure(underline=True)
-        link.configure(font=font)
         row.pack(side=TOP, fill=X, padx=15, pady=15)
         go.pack(side=LEFT, expand = YES)
         quitButton.pack(side=RIGHT, expand=YES)
-        link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
         label = Label(self, text = "Output:")
         label.pack()
 
+        link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
+        link.bind("<Button-1>", lambda url=self.url_doc: self.open_url(url))
+        font = tkFont.Font(link, link.cget("font"))
+        font.configure(underline=True)
+        link.configure(font=font)
+        link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
+
         self.txt = ScrolledText(self, font = ("Consolas", 10))
-        self.hyperlink = HyperLinkManager(self.txt)
+        self.hyperlink = HyperLinkManager(self.txt)              # used for generating hyper text links that redirect the local browser to the image of the link
         self.txt.pack(fill=NONE, expand=1)
+
+    def howTo(self):
+        tkMessageBox.showinfo("How To", self.directions)
 
     def applyTag(self, tag, text):
         """
+        Author: Bob Seedorf
+
         this method applies the tag configurations of the appropriate highlighting to the text area
-        :param tag:
-        :param text:
-        :return:
+        this process can be used to augment the console for improved interpretation of user generated procedures
+
+        `tag`: this is the key that specifies which type of highlighting is applied to the current body of text in the console
+        `text`: string to be inserted into the console
         """
         self.txt.tag_add(tag.__str__(), self.line_count.__str__() + ".0",
                          self.line_count.__str__() + "." + len(tag.__str__()).__str__())
@@ -117,10 +131,13 @@ class myFrame(Frame):
 
     def log(self, tag, text):
         """
+        Author: Bob Seedorf
+
         This method is used to update the text area of the UI with the recent input, and notifications
-        :param: tag
-        :param: text
-        :return:
+        NOTE the case of the tag 'URLS' implies that the parameter text is an iterable list that can be processed using the hypertext manager
+
+        `tag`: this is the key that specifies which type of highlighting is applied to the current body of text in the console
+        `text`: string to be inserted into the console
         """
         message = tag.__str__() + ": " + text.__str__()
         print message
@@ -135,9 +152,11 @@ class myFrame(Frame):
 
     def open_url(self, url):
         """
-        This method can be used to
-        :param url:
-        :return:
+        Author: Bob Seedorf
+
+        This method can be used to open a viable URL in a web browser
+
+        'url': link to be opened using webbrowser package
         """
         self.log('REDIRECTING', "\nRedirecting to " + str(url) + "\n")
         webbrowser.open_new(url)
@@ -147,6 +166,8 @@ class myFrame(Frame):
         Author: Bob Seedorf
 
         This is code executes the method that runs the processing procedures of the fasade, clipper, etc.
+        This method is tied to the Run button's command
+        NOTE if an interruption in execution is triggered, in the form of an exception, or error, it is caught and reported to the console for debugging
         """
 
         try:
@@ -175,7 +196,7 @@ class myFrame(Frame):
         """
         Author: Bob Seedorf
 
-        This is code that clears the running application upon  quit button
+        This is code that clears the running application upon quit button
         """
         if tkMessageBox.askokcancel("Quit?", "Do you want to quit?"):
             self.master.destroy()
@@ -185,10 +206,9 @@ class myFrame(Frame):
         Author: Bob Seedorf
 
         This method will read in, at the request of the user, a file to be used for processing
-        :param :
         """
 
-    # init pathname to local resource __file__ in case of erroneous choice
+        # init pathname to local resource __file__ in case of erroneous choice
         myFrame.infile = os.path.join(os.path.dirname(__file__), '..')
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.init_dir, title = "Please choose a file to open", defaultextension='.kml')
         if file != '':
@@ -201,7 +221,6 @@ class myFrame(Frame):
         Author: Bob Seedorf
 
         This method will write, at the request of the user, the file after processing
-        :param :
         """
         myFrame.outfile = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.ftypes , initialdir=self.init_dir, title="Save the file as", defaultextension='.kml')
@@ -215,7 +234,6 @@ class myFrame(Frame):
         Author: Bob Seedorf
 
         This method will write, at the request of the user, the image file after processing
-        :param :
         """
         myFrame.outimage = os.path.join(os.path.dirname(__file__), '..')
         file = tkFileDialog.asksaveasfilename(parent=self.root, filetypes=self.itypes, initialdir=self.init_dir, title="Save the image as", defaultextension='.png')
@@ -229,8 +247,6 @@ class myFrame(Frame):
         Author Bob Seedorf
 
         This method executes the linear code of the former driver class, uniting the runtime states of the functionality and UI
-        :param arg: file to be used as read in
-        :return:
         """
 
         # Create the KmlFasade, force user input if not read file has been selected
@@ -251,6 +267,7 @@ class myFrame(Frame):
         clipped.restrict(fasade.geometrics)
         fasade.fasadeUpdate()
 
+        # CAN BE USED TO MANDATE KML DESTINATION SELECTION IF DESIRED
         # code to indicate the user has not chosen an output kml and then requests one
         # if (myFrame.outfile is None):
         #     tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
@@ -289,22 +306,36 @@ def main(w, h):
     """
     Author: Bob Seedorf
 
-    Run-Me method
-    param :
+    Run-Me method to start application
+
+    `w`: desired width of app window
+    `h`: desired width of app window
     """
     root= Tk()
     frame= myFrame(root)
     frame.pack()
-
+    offset_x, offset_y = center(root, w, h)
     # find the center of the screen and then offset to open window at middle
+    root.geometry('%sx%s+%s+%s' % (w, h, offset_x, offset_y))
+    root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
+    root.mainloop()
+
+def center(root, w, h):
+    """
+    Author: Bob Seedorf
+
+    find the center of the screen and then offset to open window at middle
+
+    `root`: 'screen' resource in which application is to be rendered
+    `w`: desired width of app window
+    `h`: desired width of app window
+    `offset_x, offset_y': return values for coordinate of beginning point of render (top left most corner) of frame
+    """
     x = (root.winfo_screenwidth() // 2) - (root.winfo_width() // 2)
     y = (root.winfo_screenheight() // 2) - (root.winfo_height() // 2)
     offset_x = x - (w // 2)
     offset_y = y - (h // 2)
-    root.geometry('%sx%s+%s+%s' % (550, 550, offset_x, offset_y))
-
-    root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
-    root.mainloop()
+    return offset_x, offset_y
 
 if __name__ == '__main__':
     main(550, 550)
