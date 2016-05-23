@@ -84,8 +84,9 @@ class waitDialog(tk.Tk):
         # taken from the linear execution in UI
         # first download URLS, then Image merge all of the images, finally then merge the results
         self.images = self.build.download('Inputs\Static Maps\\Mass\{} {}.png', 'image')
-        self.images = StaticMapsConnections.ImageMerge.convertPtoRGB(*self.images)
-        StaticMapsConnections.ImageMerge.mergeModeRGB(self.outimage, *self.images)
+        merger = StaticMapsConnections.ImageMerge.Merger(*self.images)
+        self.images = merger.convertAll(*self.images)
+        merger.mergeAll(self.outimage, *self.images)
 
         self.set("Finished. \nPlease hit View to view the image, or close to continue")
         self.buttonView.pack(side=LEFT, padx = 15, pady = 3, fill = BOTH, expand = YES)

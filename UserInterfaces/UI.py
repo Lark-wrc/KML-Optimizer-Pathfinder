@@ -26,7 +26,6 @@ class myFrame(Frame):
     div_string = ("_", 2048)                                     # string to be used to 'divide' separate execs in the text area, with length as width
     hypkey = 'hyper'                                            # USed by hyper text capabilities to add clickable links to console
     console_font_size = 8                                       # size of text for console
-
     root = Tkinter.Tk()
 
     root.withdraw()
@@ -52,6 +51,7 @@ class myFrame(Frame):
         Frame.__init__(self, parent)
 
         self.parent = parent
+        self.wd = None              # field to use for wait dialog when necessary
         self.initUI()
 
     def initUI(self):
@@ -218,8 +218,8 @@ class myFrame(Frame):
             e = sys.exc_info()
             tb = traceback.format_exc()
             self.log("ERROR", "\n" + str(e) + str(tb) + "\n")
-            if StaticMapsConnections.ImageMerge.wd != None:
-                StaticMapsConnections.ImageMerge.wd.set("An error has occurred.\nPlease close this dialog to continue.")
+            if self.wd != None:
+                self.wd.set("An error has occurred.\nPlease close this dialog to continue.")
 
     def onQuit(self):
         """
@@ -365,8 +365,8 @@ class myFrame(Frame):
         # Merge the Url Images
         # merges by downloading everything and merging everything.
         self.run.config(state=DISABLED)
-        StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
-        StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
+        self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
+        self.wd.activate()  # call activate in waitDialog to process image downloads
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
         self.run.config(state=NORMAL)
 

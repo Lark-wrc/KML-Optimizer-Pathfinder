@@ -220,7 +220,7 @@ class UrlBuilder(object):
                 self.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
         #self.addmarkers({"color": "yellow"}, markerlist)
 
-    def download(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
+    def download(self, path, prefix):
         """
         `Author`: Bill Clark
 
