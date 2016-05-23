@@ -23,7 +23,8 @@ class myFrame(Frame):
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
     url_doc = r"http://www.google.com"                          # resource of documentation TBD
-    div_string = "=*"                                           # string to be used to 'divide' separate execs in the text area
+    div_string = ("_", 2048)                                     # string to be used to 'divide' separate execs in the text area, with length as width
+    hypkey = 'hyper'                                            # USed by hyper text capabilities to add clickable links to console
     console_font_size = 8                                       # size of text for console
 
     root = Tkinter.Tk()
@@ -100,6 +101,7 @@ class myFrame(Frame):
         self.hyperlink = HyperLinkManager(self.txt)              # used for generating hyper text links that redirect the local browser to the image of the link
         self.txt.pack(fill=BOTH, expand=True)
 
+        # configure console for scrolling on entries
         xscrollbar = Scrollbar(self, orient=HORIZONTAL)
         xscrollbar.pack(side=BOTTOM, fill=X)
         yscrollbar = Scrollbar(self.txt)
@@ -107,14 +109,23 @@ class myFrame(Frame):
         xscrollbar.config(command=self.txt.xview)
         yscrollbar.config(command=self.txt.yview)
 
+        # configure tags for blue links in the console
+        self.txt.tag_config(self.hypkey, foreground="blue", underline=1)
+        self.txt.tag_bind(self.hypkey, "<Enter>", self.enter)
+        self.txt.tag_bind(self.hypkey, "<Leave>", self.leave)
+        self.txt.tag_bind(self.hypkey, "<Button-1>", self.click)
+        self.links = {}
 
     def howTo(self):
+        """
+        This method reads and renders the dialog with the 'how to' text for the user to read
+
+        """
         directions = []
-        with codecs.open ("../how_to.txt", "r", "utf-8") as file:
+        with open ("../how_to.txt", "r") as file:
             for line in file.readlines():
-                directions.append(line.encode('utf-8'))
+                directions.append(line)
         directions = ''.join(directions)
-        print 'e280a2'.encode('utf-8')
         tkMessageBox.showinfo("How To", directions)
 
     def applyTag(self, tag, text):
@@ -161,7 +172,7 @@ class myFrame(Frame):
         if tag.__str__() == 'URLS':
             self.txt.insert(END, tag.__str__() + ":\n")
             for url in text:
-                self.txt.insert(END, str(url) + "\n", self.hyperlink.add(lambda link=url: self.open_url(str(link))))
+                self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
         else:
             self.txt.insert(END, message)
         self.applyTag(tag, text)              # comment out to turn off text area highlights
@@ -200,7 +211,8 @@ class myFrame(Frame):
             self.size = float(self.entries[3][1].get())
 
             self.driver()
-            
+            self.run.config(state=NORMAL)
+
         except:
             self.run.config(state=NORMAL)
             e = sys.exc_info()
@@ -220,6 +232,42 @@ class myFrame(Frame):
             self.master.destroy()
             raise SystemExit
 
+    def enter(self, event):
+        """
+        this method changes the configuration of the cursor over the hypertext links upon hover
+
+        `event`: the action of the cursor's movement over the text
+        """
+        self.txt.config(cursor="hand2")
+
+    def leave(self, event):
+        """
+        this method changes the configuration of the cursor over the hypertext links upon hover
+
+        `event`: the action of the cursor's movement off the text
+        """
+        self.txt.config(cursor="")
+
+    def click(self, event):
+        """
+        this method allows the links to e used as urls
+
+        `event`: click action
+        """
+        for tag in self.txt.tag_names(CURRENT):
+            if tag[:6] == "hyper-":
+                self.links[tag]()
+                return
+
+    def add_hyper(self, action):
+        """
+        This method adds the links to a list so that their reference is stable for future use
+
+        `action` : the method desired to be used upon event with the action, must be callable
+        """
+        tag = self.hypkey + '-%d' % len(self.links)
+        self.links[tag] = action
+        return "hyper", tag
 
     def onOpen(self):
         """
@@ -320,7 +368,7 @@ class myFrame(Frame):
         self.run.config(state=DISABLED)
         StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
         StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
-        self.log("FINISHED", "\n" + str(self.div_string * ((58/len(self.div_string))+1))[:58] + "\n")
+        self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
 
 def main(w, h):
     """
