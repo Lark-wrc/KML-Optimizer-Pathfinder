@@ -100,7 +100,7 @@ class myFrame(Frame):
         self.hyperlink = HyperLinkManager(self.txt)              # used for generating hyper text links that redirect the local browser to the image of the link
         self.txt.pack(fill=BOTH, expand=True)
 
-        xscrollbar = Scrollbar(self.txt, orient=HORIZONTAL)
+        xscrollbar = Scrollbar(self, orient=HORIZONTAL)
         xscrollbar.pack(side=BOTTOM, fill=X)
         yscrollbar = Scrollbar(self.txt)
         yscrollbar.pack(side=RIGHT, fill=Y)
@@ -202,6 +202,7 @@ class myFrame(Frame):
             self.driver()
             
         except:
+            self.run.config(state=NORMAL)
             e = sys.exc_info()
             tb = traceback.format_exc()
             self.log("ERROR", "\n" + str(e) + str(tb) + "\n")
@@ -319,7 +320,6 @@ class myFrame(Frame):
         self.run.config(state=DISABLED)
         StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
         StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
-        self.run.config(state=NORMAL)
         self.log("FINISHED", "\n" + str(self.div_string * ((58/len(self.div_string))+1))[:58] + "\n")
 
 def main(w, h):
