@@ -207,7 +207,7 @@ class UrlBuilder(object):
         self.retireUrl(self.url)
         return curr
 
-    def download(self, path, prefix):
+    def download(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
         """
         `Author`: Bill Clark
 
