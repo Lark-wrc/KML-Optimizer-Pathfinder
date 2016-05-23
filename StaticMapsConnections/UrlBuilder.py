@@ -1,6 +1,5 @@
 from urllib import urlretrieve
 from time import sleep
-import StaticMapsConnections
 from random import uniform
 from GeometricDataStructures.Mercator import LatLongPoint
 
@@ -19,6 +18,9 @@ class UrlBuilder(object):
         `size`: the size of the returned image in pixels. [0-640]x[0-640]
         """
 
+        self.observers = []
+        self.dcount = 1
+        self.status = 'Initialized.'
         self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
         self.urlbase += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
         self.url = self.urlbase
@@ -207,6 +209,17 @@ class UrlBuilder(object):
         self.retireUrl(self.url)
         return curr
 
+    def addGeometrics(self, geometrics):
+        markerlist = []
+        for element in geometrics:
+            if element.tag == "Point":
+                markerlist.append(element.printCoordinates())
+            if element.tag == "Polygon":
+                self.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
+            if element.tag == "LineString":
+                self.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
+        #self.addmarkers({"color": "yellow"}, markerlist)
+
     def download(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
         """
         `Author`: Bill Clark
@@ -227,35 +240,13 @@ class UrlBuilder(object):
         ret.append(urlretrieve(self.urlbase, path.format(prefix, '0'))[0])
         for url in self.urllist:
             ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
-            count+=1
-            sleep(.5)
-            StaticMapsConnections.ImageMerge.wd.set("Downloading " + count.__str__() + " of " + len(self.urllist).__str__() + " URLS")
+            count += 1
+            self.setStatus('Downloaded {} of {} Images.'.format(count, len(self.urllist)+2))
+            sleep(.3)
         ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
+        self.dcount = count+1
+        self.setStatus('Downloaded {} Images Successfully.'.format(self.dcount+1))
         return ret
-
-    def downloadGenerator(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
-        """
-        `Author`: Bill Clark
-
-        This downloads urls in the same manner as the download method. However, this functions as a python
-        generator. In simple terms, the method can be iterated over like a collection. Each iteration will return
-        the file path of the download from the url. This can be used to download urls and run methods in between each.
-        Invented in order to increase the space between downloads to prevent google from blocking us.
-
-        `path`: a file path to save the generated image to.
-
-        `prefix`: The prefix to the count in the file name. Defaults to image.
-
-        'return' a url's saved location.
-        """
-
-        count = 1
-        #yield urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
-        for url in self.urllist:
-            yield urlretrieve(url, path.format(prefix, repr(count)))[0]
-            count+=1
-            #sleep(.5)
-        yield urlretrieve(self.url, path.format(prefix, repr(count)))[0]
 
     def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
         """
@@ -328,6 +319,15 @@ class UrlBuilder(object):
         print str(self.url)
         return self.urllist
 
+    def setStatus(self, string=None):
+        if string is not None: self.status = string
+        if self.observers:
+            for observer in self.observers:
+                observer.update(self.status, self.dcount)
+
+    def register(self, object):
+        self.observers.append(object)
+
     def __str__(self):
         """
         `Author`: Bill Clark
@@ -342,14 +342,3 @@ class UrlBuilder(object):
             ret += url + '\n'
         ret += self.url
         return ret
-
-if __name__ == "__main__":
-    url = UrlBuilder('600x600')
-    url.centerparams('40.714728,-73.998672', '17')
-    loc = ['40.714728,-73.998372', '40.715728,-73.999672', '40.715728,-73.998372', '40.714728,-73.998372']
-    #locmini = {'40.714728,-73.998372', '40.715728,-73.999672'}
-    url.addparam('scale', '2')
-    url.addmarkers({'color': 'red'}, loc)
-    url.addpath({'weight':'1', 'fillcolor': 'yellow'}, loc)
-    url.printUrls()
-    url.download()

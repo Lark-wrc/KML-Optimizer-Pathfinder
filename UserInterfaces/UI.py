@@ -8,6 +8,7 @@ import os
 from GeometricDataStructures.KmlFasade import KmlFasade
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
+#from StaticMapsConnections import ImageMerge
 import StaticMapsConnections
 import waitDialog
 import traceback

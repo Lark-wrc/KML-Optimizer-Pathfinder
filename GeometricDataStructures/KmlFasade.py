@@ -1,5 +1,5 @@
 from lxml import etree, objectify
-from GeometricDataStructures.Geometrics import *
+from GeometricDataStructures.Geometrics import GeometricFactory
 from pykml.factory import KML_ElementMaker as KML
 import re
 

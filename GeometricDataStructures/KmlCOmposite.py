@@ -1,6 +1,5 @@
-from KmlFasade import KmlFasade
 
-class KmlComposite():
+class KmlComposite:
 
     def __init__(self, *fasades):
         """

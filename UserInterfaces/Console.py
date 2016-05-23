@@ -1,11 +1,12 @@
 import sys
 from GeometricDataStructures.Geometrics import LatLongPoint
 from PIL import Image
-import StaticMapsConnections.ImageMerge
+import StaticMapsConnections.ImageMerge as ImageMerge
 from GeometricDataStructures.KmlFasade import KmlFasade
 from GeometricDataStructures.Mercator import *
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
+from StaticMapsConnections.Observer import Observer
 
 
 class Parser():
@@ -134,18 +135,14 @@ def interface():
     # Creates urls out of the geometrics, downloads and merges them.
     if data['m']:
         build = UrlBuilder(size)
-        build.centerparams(data['c'],repr(zoom))
+        build.centerparams(data['c'], repr(zoom))
 
         markerlist = []
         for geometrics in fasade.yieldGeometrics():
-            for element in geometrics:
-                if element.tag == "Point":
-                    markerlist.append(element.printCoordinates())
-                if element.tag == "Polygon":
-                    build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
-                if element.tag == "LineString":
-                    build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
-        build.addmarkers({"color": "yellow"}, '41.3079222,-74.6096236')
+            build.addGeometrics(geometrics)
+
+        #Mark the center point.
+        build.addmarkers({"color": "yellow"}, repr(center))
 
         if switches['v']:
             build.printUrls()
@@ -153,8 +150,11 @@ def interface():
 
         images = build.download()
         if switches['v']: print "All images downloaded."
-        images = ImageMerge.convertPtoRGB(*images)
-        ImageMerge.mergeModeRGB(data['m'], *images)
+        merger = ImageMerge.Merger(data['m'], images[0])
+        o = Observer()
+        merger.register(o)
+        images = merger.convertAll(*images)
+        merger.mergeAll(data['m'], *images)
         im = Image.open(data['m'])
         im.show()
 
