@@ -13,7 +13,6 @@ import StaticMapsConnections
 import waitDialog
 import traceback
 import tkFont
-from UserInterfaces.HyperLinkManager import HyperLinkManager
 from GeometricDataStructures.Mercator import *
 
 class myFrame(Frame):
@@ -29,6 +28,7 @@ class myFrame(Frame):
     console_font_size = 8                                       # size of text for console
 
     root = Tkinter.Tk()
+
     root.withdraw()
 
     # fields for user input, stored along with their respective entries
@@ -99,7 +99,6 @@ class myFrame(Frame):
         link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
         self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE)
-        self.hyperlink = HyperLinkManager(self.txt)              # used for generating hyper text links that redirect the local browser to the image of the link
         self.txt.pack(fill=BOTH, expand=True)
 
         # configure console for scrolling on entries
@@ -221,7 +220,6 @@ class myFrame(Frame):
             self.log("ERROR", "\n" + str(e) + str(tb) + "\n")
             if StaticMapsConnections.ImageMerge.wd != None:
                 StaticMapsConnections.ImageMerge.wd.set("An error has occurred.\nPlease close this dialog to continue.")
-
 
     def onQuit(self):
         """
@@ -370,6 +368,7 @@ class myFrame(Frame):
         StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
         StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
+        self.run.config(state=NORMAL)
 
 def main(w, h):
     """
