@@ -1,12 +1,10 @@
 import sys
-from GeometricDataStructures.Geometrics import LatLongPoint
 from PIL import Image
 import StaticMapsConnections.ImageMerge as ImageMerge
 from GeometricDataStructures.KmlFasade import KmlFasade
 from GeometricDataStructures.Mercator import *
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
-from StaticMapsConnections.Observer import Observer
 
 
 class Parser():
@@ -80,19 +78,26 @@ class Parser():
         return self.switches, self.data
 
 
-def interface():
+def interface(args=None, imObserve=None, urlObserve=None):
     """
     `Author`: Bill Clark
 
     This is a refined version of the driver. It parses command line args to run through the driver.
     The code only executes what it needs to, saving cycles. Selective execution is based off the switches.
+
+    `args`: A list of command line style parameters. Pulled from argv if not defined.
+
+    `imObserve`: An observer for the image merging.
+
+    `urlObserve`: An observer for the url downloads.
     """
     parser = Parser()
     merc = MercatorProjection()
     f = RestrictionFactory()
 
     # parse args.
-    parser.parseArgs(sys.argv)
+    if not args: parser.parseArgs(sys.argv)
+    else: parser.parseArgs(args)
     switches, data = parser.export()
 
     if switches['v']: print 'Arguments parsed correctly.'
@@ -135,6 +140,7 @@ def interface():
     # Creates urls out of the geometrics, downloads and merges them.
     if data['m']:
         build = UrlBuilder(size)
+        if urlObserve: build.register(urlObserve)
         build.centerparams(data['c'], repr(zoom))
 
         markerlist = []
@@ -151,8 +157,7 @@ def interface():
         images = build.download()
         if switches['v']: print "All images downloaded."
         merger = ImageMerge.Merger(data['m'], images[0])
-        o = Observer()
-        merger.register(o)
+        if imObserve: merger.register(imObserve)
         images = merger.convertAll(*images)
         merger.mergeAll(data['m'], *images)
         im = Image.open(data['m'])
