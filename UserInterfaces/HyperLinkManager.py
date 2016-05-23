@@ -2,28 +2,22 @@ from Tkinter import *
 
 class HyperLinkManager:
     """
+    This code has been adapted from effbot.org
     src: http://effbot.org/zone/tkinter-text-hyperlink.htm
     """
 
     def __init__(self, text):
 
+        self.title = 'hyper'
         self.text = text
-
-        self.text.tag_config("hyper", foreground="blue", underline=1)
-
-        self.text.tag_bind("hyper", "<Enter>", self._enter)
-        self.text.tag_bind("hyper", "<Leave>", self._leave)
-        self.text.tag_bind("hyper", "<Button-1>", self._click)
-
-        self.reset()
-
-    def reset(self):
+        self.text.tag_config(self.title, foreground="blue", underline=1)
+        self.text.tag_bind(self.title, "<Enter>", self._enter)
+        self.text.tag_bind(self.title, "<Leave>", self._leave)
+        self.text.tag_bind(self.title, "<Button-1>", self._click)
         self.links = {}
 
     def add(self, action):
-        # add an action to the manager.  returns tags to use in
-        # associated text widget
-        tag = "hyper-%d" % len(self.links)
+        tag = self.title + '-%d' % len(self.links)
         self.links[tag] = action
         return "hyper", tag
 

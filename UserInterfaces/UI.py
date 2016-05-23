@@ -25,7 +25,6 @@ class myFrame(Frame):
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
     url_doc = r"http://www.google.com"                          # resource of documentation TBD
     div_string = "=*"                                           # string to be used to 'divide' separate execs in the text area
-    directions = "To Begin first select the source KML file by clicking 'Open KML.'\n\n" + "Next choose the destination to which the new KML will be saved, by clicking, 'Save KML.'\n\n" +    "Then choose the destination to which the resulting image file will be saved by clicking, 'Save Image.'\n\n" +    "If no destination file is selected, then the choice of open kml will be overwritten during operation.\n\n" +    "If neither the destination of open, or save image is chosen, the procedure will prompted you to do so.\n\n" +    "Next, input the appropriate fields to be used in the procedure;\n" +    u'\u2022' + "  Latitude of Center: latitude of center point of focused sub-portion.\n" +    u'\u2022' + "  Longitude of Center: longitude of center point of focused sub-portion.\n" +    u'\u2022' + "  Zoom: Relative level of perspective zoom, google api depenedent.\n" +    u'\u2022' + "  Image Size: distance, in miles, spanning the desired region of restriction. \n\n" +    "Finally click run, and wait as the operations are executed."
 
     root = Tkinter.Tk()
     root.withdraw()
@@ -110,7 +109,12 @@ class myFrame(Frame):
 
 
     def howTo(self):
-        tkMessageBox.showinfo("How To", self.directions)
+        directions = []
+        with open ("../how_to.txt", "r") as file:
+            for line in file.readlines():
+                directions.append(line)
+        directions = ''.join(directions)
+        tkMessageBox.showinfo("How To", directions)
 
     def applyTag(self, tag, text):
         """
@@ -330,6 +334,8 @@ def main(w, h):
     # find the center of the screen and then offset to open window at middle
     root.geometry('%sx%s+%s+%s' % (w, h, offset_x, offset_y))
     root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
+    root.wm_protocol("WM_DEICONIFY")
+    # root.iconify()
     root.mainloop()
 
 def center(root, w, h):
