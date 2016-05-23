@@ -217,7 +217,8 @@ class myFrame(Frame):
         """
         if tkMessageBox.askokcancel("Quit?", "Do you want to quit?"):
             self.master.destroy()
-            return 0
+            raise SystemExit
+
 
     def onOpen(self):
         """
