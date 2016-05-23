@@ -1,7 +1,7 @@
 import Tkinter
 from Tkinter import *
 import webbrowser
-from ScrolledText import *
+import codecs
 import tkFileDialog
 import tkMessageBox
 import os
@@ -24,6 +24,7 @@ class myFrame(Frame):
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
     url_doc = r"http://www.google.com"                          # resource of documentation TBD
     div_string = "=*"                                           # string to be used to 'divide' separate execs in the text area
+    console_font_size = 8                                       # size of text for console
 
     root = Tkinter.Tk()
     root.withdraw()
@@ -80,11 +81,11 @@ class myFrame(Frame):
             self.entries.append((field, entry))
 
         row = Frame(self)
-        go = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
-        quitButton = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
+        self.run = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
+        self.quit = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
         row.pack(side=TOP, fill=X, padx=15, pady=15)
-        go.pack(side=LEFT, expand = YES)
-        quitButton.pack(side=RIGHT, expand=YES)
+        self.run.pack(side=LEFT, expand = YES)
+        self.quit.pack(side=RIGHT, expand=YES)
         label = Label(self, text = "Output:")
         label.pack()
 
@@ -95,7 +96,7 @@ class myFrame(Frame):
         link.configure(font=font)
         link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
-        self.txt = Text(self, font = ("Consolas", 10), wrap = NONE)
+        self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE)
         self.hyperlink = HyperLinkManager(self.txt)              # used for generating hyper text links that redirect the local browser to the image of the link
         self.txt.pack(fill=BOTH, expand=True)
 
@@ -109,10 +110,11 @@ class myFrame(Frame):
 
     def howTo(self):
         directions = []
-        with open ("../how_to.txt", "r") as file:
+        with codecs.open ("../how_to.txt", "r", "utf-8") as file:
             for line in file.readlines():
-                directions.append(line)
+                directions.append(line.encode('utf-8'))
         directions = ''.join(directions)
+        print 'e280a2'.encode('utf-8')
         tkMessageBox.showinfo("How To", directions)
 
     def applyTag(self, tag, text):
@@ -215,6 +217,7 @@ class myFrame(Frame):
         """
         if tkMessageBox.askokcancel("Quit?", "Do you want to quit?"):
             self.master.destroy()
+            return 0
 
     def onOpen(self):
         """
@@ -312,9 +315,10 @@ class myFrame(Frame):
 
         # Merge the Url Images
         # merges by downloading everything and merging everything.
+        self.run.config(state=DISABLED)
         StaticMapsConnections.ImageMerge.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
         StaticMapsConnections.ImageMerge.wd.activate()  # call activate in waitDialog to process image downloads
-
+        self.run.config(state=NORMAL)
         self.log("FINISHED", "\n" + str(self.div_string * ((58/len(self.div_string))+1))[:58] + "\n")
 
 def main(w, h):
@@ -334,7 +338,6 @@ def main(w, h):
     root.geometry('%sx%s+%s+%s' % (w, h, offset_x, offset_y))
     root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
     root.wm_protocol("WM_DEICONIFY")
-    # root.iconify()
     root.mainloop()
 
 def center(root, w, h):
