@@ -1,8 +1,6 @@
 import Tkinter as tk
 from Tkinter import *
-import StaticMapsConnections.ImageMerge
 from PIL import Image
-import UI
 
 class waitDialog(tk.Tk):
 
