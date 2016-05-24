@@ -14,6 +14,8 @@ import waitDialog
 import traceback
 import tkFont
 from GeometricDataStructures.Mercator import *
+import Console
+from WaitObserver import WaitObserver
 
 class myFrame(Frame):
 
@@ -207,10 +209,10 @@ class myFrame(Frame):
             # class wide storage of necessary center of focus info
             self.lat = float(self.entries[0][1].get())
             self.lng = float(self.entries[1][1].get())
-            self.dist = int(self.entries[2][1].get())
-            self.size = float(self.entries[3][1].get())
+            self.zoom = int(self.entries[2][1].get())
+            self.size = int(self.entries[3][1].get())
 
-            self.driver()
+            self.interfaceConsole()
             self.run.config(state=NORMAL)
 
         except:
@@ -309,66 +311,100 @@ class myFrame(Frame):
             self.log("IMAGE", "Successfully chose " + myFrame.infile + "\n")
         return myFrame.outimage
 
-    def driver(self):
-        """
-        Author Bob Seedorf
+    def interfaceConsole(self):
+        lat = self.lat
+        lng = self.lng
+        zoom = self.zoom
+        size = self.size
 
-        This method executes the linear code of the former driver class, uniting the runtime states of the functionality and UI
-        """
-
-        # Create the KmlFasade, force user input if not read file has been selected
         if myFrame.infile is None:
             tkMessageBox.showwarning("Open file", "Please Choose A KML file to Open")
-            fasade = KmlFasade(self.onOpen())
+            infile = self.onOpen()
         else:
-            fasade = KmlFasade(myFrame.infile)
-
-        merc = MercatorProjection()
-        centerPoint = LatLongPoint(self.lat, self.lng)
-        f = RestrictionFactory()
-
-        clipped = f.newWAClipping(merc.get_corners(centerPoint, self.dist, self.size, self.size))
-        fasade.placemarkToGeometrics()
-        fasade.removeGarbageTags()
-
-        clipped.restrict(fasade.geometrics)
-        fasade.fasadeUpdate()
-
-        # CAN BE USED TO MANDATE KML DESTINATION SELECTION IF DESIRED
-        # code to indicate the user has not chosen an output kml and then requests one
-        # if (myFrame.outfile is None):
-        #     tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
-        #     fasade.rewrite(self.saveFileKML())
-        # else:
-        #     fasade.rewrite(myFrame.outfile)
-
-        # Build the Url
-        build = UrlBuilder(600)
-        build.centerparams('%s,%s' % (self.lat, self.lng), repr(self.dist))
-
-        markerlist = []
-        for element in fasade.geometrics:
-            if element.tag == "Point":
-                markerlist.append(element.printCoordinates())
-            if element.tag == "Polygon":
-                build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
-            if element.tag == "LineString":
-                build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
-
-        build.addmarkers({"color": "blue"}, markerlist)
-        self.log("URLS", build.printUrls())
-
+            infile = myFrame.infile
         if myFrame.outimage is None:
             tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
-            myFrame.outimage = self.saveFileImg()
+            outimage = self.saveFileImg()
+        else:
+            outimage = myFrame.outimage
+        if (myFrame.outfile is None):
+            tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
+            outfile = self.saveFileKML()
+        else:
+            outfile = myFrame.outfile
 
-        # Merge the Url Images
-        # merges by downloading everything and merging everything.
+        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile, outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
+
         self.run.config(state=DISABLED)
-        self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
+        self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage)
         self.wd.activate()  # call activate in waitDialog to process image downloads
+        imobserver = WaitObserver(self.wd)
+        urlobserver = WaitObserver(self.wd)
+        Console.interface(sampleLine.split(' '), imobserver, urlobserver)
+        self.wd.end()
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
         self.run.config(state=NORMAL)
+
+    # def driver(self):
+    #     """
+    #     Author Bob Seedorf
+    #
+    #     This method executes the linear code of the former driver class, uniting the runtime states of the functionality and UI
+    #     """
+    #
+    #     # Create the KmlFasade, force user input if not read file has been selected
+    #     if myFrame.infile is None:
+    #         tkMessageBox.showwarning("Open file", "Please Choose A KML file to Open")
+    #         fasade = KmlFasade(self.onOpen())
+    #     else:
+    #         fasade = KmlFasade(myFrame.infile)
+    #
+    #     merc = MercatorProjection()
+    #     centerPoint = LatLongPoint(self.lat, self.lng)
+    #     f = RestrictionFactory()
+    #
+    #     clipped = f.newWAClipping(merc.get_corners(centerPoint, self.zoom, self.size, self.size))
+    #     fasade.placemarkToGeometrics()
+    #     fasade.removeGarbageTags()
+    #
+    #     clipped.restrict(fasade.geometrics)
+    #     fasade.fasadeUpdate()
+    #
+    #     # CAN BE USED TO MANDATE KML DESTINATION SELECTION IF DESIRED
+    #     # code to indicate the user has not chosen an output kml and then requests one
+    #     # if (myFrame.outfile is None):
+    #     #     tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
+    #     #     fasade.rewrite(self.saveFileKML())
+    #     # else:
+    #     #     fasade.rewrite(myFrame.outfile)
+    #
+    #     # Build the Url
+    #     build = UrlBuilder(600)
+    #     build.centerparams('%s,%s' % (self.lat, self.lng), repr(self.zoom))
+    #
+    #     markerlist = []
+    #     for element in fasade.geometrics:
+    #         if element.tag == "Point":
+    #             markerlist.append(element.printCoordinates())
+    #         if element.tag == "Polygon":
+    #             build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
+    #         if element.tag == "LineString":
+    #             build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
+    #
+    #     build.addmarkers({"color": "blue"}, markerlist)
+    #     self.log("URLS", build.printUrls())
+    #
+    #     if myFrame.outimage is None:
+    #         tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
+    #         myFrame.outimage = self.saveFileImg()
+    #
+    #     # Merge the Url Images
+    #     # merges by downloading everything and merging everything.
+    #     self.run.config(state=DISABLED)
+    #     self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
+    #     self.wd.activate()  # call activate in waitDialog to process image downloads
+    #     self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
+    #     self.run.config(state=NORMAL)
 
 def main(w, h):
     """

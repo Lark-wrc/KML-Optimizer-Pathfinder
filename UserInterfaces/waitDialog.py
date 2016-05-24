@@ -6,7 +6,7 @@ import UI
 
 class waitDialog(tk.Tk):
 
-    def __init__(self, w, h, outimage, build):
+    def __init__(self, w, h, outimage):
         """
         This class encapsulates the functionality of the dialog box, specially designed to inform the user to wait during extended execution.
         Its job also serves to update the text of dialog as the execution of persitently extended work
@@ -18,7 +18,6 @@ class waitDialog(tk.Tk):
         self.w = w
         self.h = h
         self.outimage = outimage
-        self.build = build
 
     def set(self, format, *args):
         """
@@ -81,16 +80,11 @@ class waitDialog(tk.Tk):
 
         self.set("We are merging the downloaded URL images now. This may take a few minutes" + "\nA button will appear for you to close this when work is done")
 
-        # taken from the linear execution in UI
-        # first download URLS, then Image merge all of the images, finally then merge the results
-        self.images = self.build.download()
-        merger = StaticMapsConnections.ImageMerge.Merger(self.outimage, self.images[0])
-        self.images = merger.convertAll(*self.images)
-        merger.mergeAll(self.outimage, *self.images)
-
+    def end(self):
         self.set("Finished. \nPlease hit View to view the image, or close to continue")
         self.buttonView.pack(side=LEFT, padx = 15, pady = 3, fill = BOTH, expand = YES)
         self.buttonClose.pack(side=RIGHT, padx = 15, pady = 3, fill = BOTH, expand = YES)
+
 
 def main(w, h):
     """

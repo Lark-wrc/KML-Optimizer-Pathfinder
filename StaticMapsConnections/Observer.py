@@ -1,4 +1,4 @@
-class Observer():
+class Observer:
 
     def __init__(self):
         self.status = ''

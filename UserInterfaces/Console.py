@@ -56,7 +56,6 @@ class Parser():
 
         `args`: The list of arguments from the command line.
         """
-        args.pop(0)
         while args[0][0] == '-':
             if args[0][1:] in self.switches: self.parse(args.pop(0), None)
             elif args[0][1:] in self.data: self.parse(args.pop(0), args.pop(0))
@@ -96,8 +95,8 @@ def interface(args=None, imObserve=None, urlObserve=None):
     f = RestrictionFactory()
 
     # parse args.
-    if not args: parser.parseArgs(sys.argv)
-    else: parser.parseArgs(args)
+    if not args: args = sys.argv
+    parser.parseArgs(args)
     switches, data = parser.export()
 
     if switches['v']: print 'Arguments parsed correctly.'
@@ -116,7 +115,7 @@ def interface(args=None, imObserve=None, urlObserve=None):
     if switches['v']: print 'Values have been set.'
 
     # open the kml fasade.
-    fasade = KmlFasade(sys.argv[-1])
+    fasade = KmlFasade(args[-1])
     fasade.placemarkToGeometrics()
 
     if data['w']: fasade.removeGarbageTags()
@@ -140,7 +139,7 @@ def interface(args=None, imObserve=None, urlObserve=None):
     # Creates urls out of the geometrics, downloads and merges them.
     if data['m']:
         build = UrlBuilder(size)
-        if urlObserve: build.register(urlObserve)
+        if urlObserve is not None: build.register(urlObserve)
         build.centerparams(data['c'], repr(zoom))
 
         markerlist = []
@@ -157,11 +156,11 @@ def interface(args=None, imObserve=None, urlObserve=None):
         images = build.download()
         if switches['v']: print "All images downloaded."
         merger = ImageMerge.Merger(data['m'], images[0])
-        if imObserve: merger.register(imObserve)
+        if imObserve is not None: merger.register(imObserve)
         images = merger.convertAll(*images)
         merger.mergeAll(data['m'], *images)
         im = Image.open(data['m'])
-        im.show()
+        if __name__ == "__main__": im.show()
 
 if __name__ == "__main__":
     interface()
