@@ -274,7 +274,6 @@ class myFrame(Frame):
 
         This method will read in, at the request of the user, a file to be used for processing
         """
-
         # init pathname to local resource __file__ in case of erroneous choice
         myFrame.infile = os.path.join(os.path.dirname(__file__), '..')
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.init_dir, title = "Please choose a file to open", defaultextension='.kml')
@@ -310,6 +309,10 @@ class myFrame(Frame):
         return myFrame.outimage
 
     def interfaceConsole(self):
+        """
+        Some Comment
+
+        """
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
