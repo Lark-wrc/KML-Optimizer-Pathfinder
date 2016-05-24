@@ -1,7 +1,6 @@
 import Tkinter
 from Tkinter import *
 import webbrowser
-import codecs
 import tkFileDialog
 import tkMessageBox
 import os
@@ -16,15 +15,15 @@ class myFrame(Frame):
 
     line_count = 1                                              # count for line of entry in highlighting of text area
     wd = None                                                   # variable state for the wait dialog to be created and then self-destroyed
-    ftypes = [('KML files', '.kml')]     # default file types of kml save and open
+    ftypes = [('KML files', '.kml')]                            # default file types of kml save and open
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
-    url_doc = r"http://www.google.com"                          # resource of documentation TBD
-    div_string = ("_", 2048)                                     # string to be used to 'divide' separate execs in the text area, with length as width
+    doc_url = "http://www.google.com"                           # resource of documentation TBD
+    div_string = ("_", 2048)                                    # string to be used to 'divide' separate execs in the text area, with length as width
     hypkey = 'hyper'                                            # USed by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
-    root = Tkinter.Tk()
 
+    root = Tkinter.Tk()
     root.withdraw()
 
     # fields for user input, stored along with their respective entries
@@ -62,6 +61,7 @@ class myFrame(Frame):
         """
 
         self.parent.title("KML Klipper")
+
         self.pack(fill=BOTH, expand=1)
         menubar = Menu(self.parent)
         self.parent.config(menu=menubar)
@@ -89,7 +89,7 @@ class myFrame(Frame):
         label.pack()
 
         link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
-        link.bind("<Button-1>", lambda url=self.url_doc: self.open_url(url))
+        link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
         font = tkFont.Font(link, link.cget("font"))
         font.configure(underline=True)
         link.configure(font=font)
@@ -185,7 +185,7 @@ class myFrame(Frame):
         'url': link to be opened using webbrowser package
         """
         self.log('REDIRECTING', "\nRedirecting to " + str(url) + "\n")
-        webbrowser.open_new(url)
+        webbrowser.open_new_tab(url)
 
     def start(self):
         """
@@ -226,9 +226,12 @@ class myFrame(Frame):
         This is code that clears the running application upon quit button
         """
         if tkMessageBox.askokcancel("Quit?", "Do you want to quit?"):
-            self.master.destroy()
             if self.wd != None:     # close dialog, in case it has been left open
-                self.wd.close()
+                try:
+                    self.wd.close()
+                except:
+                    pass
+            self.master.destroy()
             raise SystemExit
 
     def enter(self, event):
