@@ -10,7 +10,7 @@ import traceback
 import tkFont
 
 import Console
-from WaitObserver import WaitObserver
+from UserInterfaces import WaitObserver
 
 class myFrame(Frame):
 
@@ -21,7 +21,7 @@ class myFrame(Frame):
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
     url_doc = r"http://www.google.com"                          # resource of documentation TBD
     div_string = ("_", 2048)                                     # string to be used to 'divide' separate execs in the text area, with length as width
-    hypkey = 'hyper'                                            # USed by hyper text capabilities to add clickable links to console
+    hypkey = 'hyper'                                            # USed by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
     root = Tkinter.Tk()
 
@@ -115,8 +115,9 @@ class myFrame(Frame):
 
     def howTo(self):
         """
-        This method reads and renders the dialog with the 'how to' text for the user to read
+        Author: Bob Seedorf
 
+        This method reads and renders the simple dialog with the 'how to' text for the user to read
         """
         directions = []
         with open ("../how_to.txt", "r") as file:
@@ -226,6 +227,8 @@ class myFrame(Frame):
         """
         if tkMessageBox.askokcancel("Quit?", "Do you want to quit?"):
             self.master.destroy()
+            if self.wd != None:     # close dialog, in case it has been left open
+                self.wd.close()
             raise SystemExit
 
     def enter(self, event):
@@ -317,24 +320,27 @@ class myFrame(Frame):
             infile = self.onOpen()
         else:
             infile = myFrame.infile
+        if myFrame.outfile is None:
+            tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
+            outfile = self.saveFileKML()
+        else:
+            outfile = myFrame.outfile
         if myFrame.outimage is None:
             tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
             outimage = self.saveFileImg()
         else:
             outimage = myFrame.outimage
-        if (myFrame.outfile is None):
-            tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
-            outfile = self.saveFileKML()
-        else:
-            outfile = myFrame.outfile
 
-        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile, outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
+        # sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile, outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
+        sampleLine = """-wa -w \"{}\" -m \"{}\" -v -z {} -c {},{} -s {} \"{}\"""".format(outfile, outimage, repr(zoom),
+                                                                                         repr(lat), repr(lng),
+                                                                                         repr(size), infile)
 
         self.run.config(state=DISABLED)
         self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage)
         self.wd.activate()  # call activate in waitDialog to process image downloads
-        imobserver = WaitObserver(self.wd)
-        urlobserver = WaitObserver(self.wd)
+        imobserver = WaitObserver.WaitObserver(self.wd)
+        urlobserver = WaitObserver.WaitObserver(self.wd)
         Console.interface(sampleLine.split(' '), imobserver, urlobserver)
         self.wd.end()
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
@@ -408,7 +414,7 @@ def main(w, h):
     Run-Me method to start application
 
     `w`: desired width of app window
-    `h`: desired width of app window
+    `h`: desired height of app window
     """
     root= Tk()
     frame= myFrame(root)
