@@ -83,7 +83,7 @@ class waitDialog(tk.Tk):
 
         # taken from the linear execution in UI
         # first download URLS, then Image merge all of the images, finally then merge the results
-        self.images = self.build.download()
+        self.images = self.build.download('Inputs\Static Maps\\Mass\{} 0.png')
         merger = StaticMapsConnections.ImageMerge.Merger(self.outimage, self.images[0])
         self.images = merger.convertAll(*self.images)
         merger.mergeAll(self.outimage, *self.images)

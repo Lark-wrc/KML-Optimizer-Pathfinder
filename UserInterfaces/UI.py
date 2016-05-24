@@ -208,7 +208,7 @@ class myFrame(Frame):
             self.lat = float(self.entries[0][1].get())
             self.lng = float(self.entries[1][1].get())
             self.dist = int(self.entries[2][1].get())
-            self.size = float(self.entries[3][1].get())
+            self.size = int(self.entries[3][1].get())
 
             self.driver()
             self.run.config(state=NORMAL)
