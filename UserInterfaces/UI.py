@@ -207,7 +207,7 @@ class myFrame(Frame):
             # class wide storage of necessary center of focus info
             self.lat = float(self.entries[0][1].get())
             self.lng = float(self.entries[1][1].get())
-            self.dist = float(self.entries[2][1].get())
+            self.dist = int(self.entries[2][1].get())
             self.size = float(self.entries[3][1].get())
 
             self.driver()
@@ -344,7 +344,7 @@ class myFrame(Frame):
 
         # Build the Url
         build = UrlBuilder(600)
-        build.centerparams('%s,%s' % (self.lat, self.lng), '%s' % (self.dist))
+        build.centerparams('%s,%s' % (self.lat, self.lng), repr(self.dist))
 
         markerlist = []
         for element in fasade.geometrics:
