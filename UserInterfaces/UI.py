@@ -16,15 +16,15 @@ class myFrame(Frame):
 
     line_count = 1                                              # count for line of entry in highlighting of text area
     wd = None                                                   # variable state for the wait dialog to be created and then self-destroyed
-    ftypes = [('KML files', '.kml')]     # default file types of kml save and open
+    ftypes = [('KML files', '.kml')]                            # default file types of kml save and open
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
-    url_doc = r"http://www.google.com"                          # resource of documentation TBD
-    div_string = ("_", 2048)                                     # string to be used to 'divide' separate execs in the text area, with length as width
-    hypkey = 'hyper'                                            # USed by hyper text capabilities to add clickable links to console
+    doc_url = "http://www.google.com"                           # resource of documentation TBD
+    div_string = ("_", 2048)                                    # string to be used to 'divide' separate execs in the text area, with length as width
+    hypkey = 'hyper'                                            # USed by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
-    root = Tkinter.Tk()
 
+    root = Tkinter.Tk()
     root.withdraw()
 
     # fields for user input, stored along with their respective entries
@@ -62,6 +62,7 @@ class myFrame(Frame):
         """
 
         self.parent.title("KML Klipper")
+
         self.pack(fill=BOTH, expand=1)
         menubar = Menu(self.parent)
         self.parent.config(menu=menubar)
@@ -89,7 +90,7 @@ class myFrame(Frame):
         label.pack()
 
         link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
-        link.bind("<Button-1>", lambda url=self.url_doc: self.open_url(url))
+        link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
         font = tkFont.Font(link, link.cget("font"))
         font.configure(underline=True)
         link.configure(font=font)
@@ -115,8 +116,9 @@ class myFrame(Frame):
 
     def howTo(self):
         """
-        This method reads and renders the dialog with the 'how to' text for the user to read
+        Author: Bob Seedorf
 
+        This method reads and renders the simple dialog with the 'how to' text for the user to read
         """
         directions = []
         with open ("../how_to.txt", "r") as file:
@@ -184,7 +186,7 @@ class myFrame(Frame):
         'url': link to be opened using webbrowser package
         """
         self.log('REDIRECTING', "\nRedirecting to " + str(url) + "\n")
-        webbrowser.open_new(url)
+        webbrowser.open_new_tab(url)
 
     def start(self):
         """
@@ -225,6 +227,11 @@ class myFrame(Frame):
         This is code that clears the running application upon quit button
         """
         if tkMessageBox.askokcancel("Quit?", "Do you want to quit?"):
+            if self.wd != None:     # close dialog, in case it has been left open
+                try:
+                    self.wd.close()
+                except:
+                    pass
             self.master.destroy()
             raise SystemExit
 
@@ -271,7 +278,6 @@ class myFrame(Frame):
 
         This method will read in, at the request of the user, a file to be used for processing
         """
-
         # init pathname to local resource __file__ in case of erroneous choice
         myFrame.infile = os.path.join(os.path.dirname(__file__), '..')
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.init_dir, title = "Please choose a file to open", defaultextension='.kml')
@@ -307,6 +313,10 @@ class myFrame(Frame):
         return myFrame.outimage
 
     def interfaceConsole(self):
+        """
+        Some Comment
+
+        """
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
@@ -317,16 +327,16 @@ class myFrame(Frame):
             infile = self.onOpen()
         else:
             infile = myFrame.infile
+        if myFrame.outfile is None:
+            tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
+            outfile = self.saveFileKML()
+        else:
+            outfile = myFrame.outfile
         if myFrame.outimage is None:
             tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
             outimage = self.saveFileImg()
         else:
             outimage = myFrame.outimage
-        if (myFrame.outfile is None):
-            tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
-            outfile = self.saveFileKML()
-        else:
-            outfile = myFrame.outfile
 
         # if ' ' in infile: infile = '"'+infile+'"'
         # if ' ' in outimage: outimage = '"'+outimage+'"'
@@ -417,7 +427,7 @@ def main(w, h):
     Run-Me method to start application
 
     `w`: desired width of app window
-    `h`: desired width of app window
+    `h`: desired height of app window
     """
     root= Tk()
     frame= myFrame(root)

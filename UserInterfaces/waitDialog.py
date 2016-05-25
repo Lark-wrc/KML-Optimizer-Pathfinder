@@ -1,6 +1,7 @@
 import Tkinter as tk
 from Tkinter import *
 from PIL import Image
+import UI
 
 class waitDialog(tk.Tk):
 
@@ -65,11 +66,8 @@ class waitDialog(tk.Tk):
         self.frame.pack(padx = 0, pady = 0, fill="both", expand=True)
         self.title("Please Wait")
 
-        x = (self.winfo_screenwidth() // 2) - (self.winfo_width() // 2)
-        y = (self.winfo_screenheight() // 2) - (self.winfo_height() // 2)
-        self.offset_x = x - (self.w // 2)
-        self.offset_y = y - (self.h // 2)
-        self.geometry('%sx%s+%s+%s' % (self.w, self.h, self.offset_x, self.offset_y))
+        offset_x , offset_y = UI.center(self, self.w, self.h)
+        self.geometry('%sx%s+%s+%s' % (self.w, self.h, offset_x, offset_y))
 
         # generate buttons to be used as View and Close
         self.buttonView = tk.Button(self, text="View", bg='#4d79ff', command=self.view)
