@@ -328,14 +328,23 @@ class myFrame(Frame):
         else:
             outfile = myFrame.outfile
 
-        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile, outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
+        # if ' ' in infile: infile = '"'+infile+'"'
+        # if ' ' in outimage: outimage = '"'+outimage+'"'
+        # if ' ' in outfile: outfile = '"'+outfile+'"'
+
+
+        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
+            outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
+        args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
+                '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
+
 
         self.run.config(state=DISABLED)
         self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage)
         self.wd.activate()  # call activate in waitDialog to process image downloads
         imobserver = WaitObserver(self.wd)
         urlobserver = WaitObserver(self.wd)
-        Console.interface(sampleLine.split(' '), imobserver, urlobserver)
+        Console.interface(args, imobserver, urlobserver)
         self.wd.end()
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
         self.run.config(state=NORMAL)

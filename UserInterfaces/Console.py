@@ -23,8 +23,7 @@ class Parser():
                   s - set the size for google static.
                   v - verbose output to the console.
         Example arg list.
-        -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c
-            40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
+        -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c 40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
         """
         self.switches = {'wa':0, 'v':0}
         self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0}
