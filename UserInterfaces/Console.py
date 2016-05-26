@@ -75,7 +75,7 @@ class Parser():
         return self.switches, self.data
 
 
-def interface(args=None, consoleObserve=None, imObserve=None, urlObserve=None):
+def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     """
     `Author`: Bill Clark
 
@@ -83,6 +83,8 @@ def interface(args=None, consoleObserve=None, imObserve=None, urlObserve=None):
     The code only executes what it needs to, saving cycles. Selective execution is based off the switches.
 
     `args`: A list of command line style parameters. Pulled from argv if not defined.
+
+    `uiObserve`: An observer for the ui and the ui's console.
 
     `imObserve`: An observer for the image merging.
 
@@ -147,11 +149,12 @@ def interface(args=None, consoleObserve=None, imObserve=None, urlObserve=None):
         #Mark the center point.
         build.addmarkers({"color": "yellow"}, repr(center))
 
+        # allows logging to ui's console for accessible urls
+        if uiObserve is not None: build.uiObserve = uiObserve
         if switches['v']:
             build.printUrls()
             print "Number of urls: ", len(build.urllist) + 2
 
-        if consoleObserve is not None: build.register(consoleObserve)
         images = build.download()
         if switches['v']: print "All images downloaded."
         merger = ImageMerge.Merger(data['m'], images[0])

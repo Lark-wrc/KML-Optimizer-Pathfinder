@@ -10,7 +10,7 @@ import tkFont
 
 import Console
 from waitObserver import WaitObserver
-from consoleObserver import consoleObserver
+from uiObserver import UiObserver
 
 class myFrame(Frame):
 
@@ -89,6 +89,7 @@ class myFrame(Frame):
         label = Label(self, text = "Output:")
         label.pack()
 
+        #TODO -- add files for appropriate redirect/link here --
         link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
         link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
         font = tkFont.Font(link, link.cget("font"))
@@ -96,10 +97,9 @@ class myFrame(Frame):
         link.configure(font=font)
         link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
+        # configure console with scrolling on entries
         self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE)
         self.txt.pack(fill=BOTH, expand=True)
-
-        # configure console for scrolling on entries
         xscrollbar = Scrollbar(self, orient=HORIZONTAL)
         xscrollbar.pack(side=BOTTOM, fill=X)
         yscrollbar = Scrollbar(self.txt)
@@ -146,6 +146,9 @@ class myFrame(Frame):
                                   self.line_count.__str__() + "." + len(line.__str__()).__str__())
                 self.line_count += 1
             self.txt.tag_config(tag.__str__(), background="#ffb3b3", foreground="black")
+        if tag.__str__() == 'REDIRECTING':
+            self.txt.tag_config(tag.__str__(), background="orange", foreground="black")
+            self.line_count += text.count('\n')
         elif tag.__str__() == 'FINISHED':
             self.txt.tag_config(tag.__str__(), background="green", foreground="black")
             self.line_count += text.count('\n')
@@ -320,6 +323,7 @@ class myFrame(Frame):
         Some Comment
 
         """
+        #TODO -- finsih this doc --
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
@@ -345,7 +349,6 @@ class myFrame(Frame):
         # if ' ' in outimage: outimage = '"'+outimage+'"'
         # if ' ' in outfile: outfile = '"'+outfile+'"'
 
-
         sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
             outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
@@ -355,14 +358,15 @@ class myFrame(Frame):
         self.run.config(state=DISABLED)
         self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage)
         self.wd.activate()  # call activate in waitDialog to process image downloads
-        consoleObserve = consoleObserver(self)
+        uiobserver = UiObserver(self)
         imobserver = WaitObserver(self.wd)
         urlobserver = WaitObserver(self.wd)
-        Console.interface(args, consoleObserve, imobserver, urlobserver)
+        Console.interface(args, uiobserver, imobserver, urlobserver)
         self.wd.end()
-        self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
+        self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n\n")
         self.run.config(state=NORMAL)
 
+    # TODO -- store or remove this code --
     # def driver(self):
     #     """
     #     Author Bob Seedorf

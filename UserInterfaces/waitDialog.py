@@ -82,6 +82,7 @@ class waitDialog(tk.Tk):
         self.buttonClose.pack(side=RIGHT, padx = 15, pady = 3, fill = BOTH, expand = YES)
 
 
+# TODO -- keep or not keep this driver? (its useless)
 def main(w, h):
     """
     This method generates the dialog body, the rendering is done via the activate method

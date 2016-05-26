@@ -1,6 +1,6 @@
 from StaticMapsConnections.Observer import Observer
 
-class consoleObserver(Observer):
+class UiObserver(Observer):
 
     def __init__(self, text):
         self.status = []

@@ -18,6 +18,7 @@ class UrlBuilder(object):
         """
 
         self.observers = []
+        self.uiObserve = None
         self.dcount = 1
         self.status = 'Initialized.'
         self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
@@ -316,7 +317,8 @@ class UrlBuilder(object):
         for url in self.urllist:
             print url
         print str(self.urllist)
-        self.setStatus(self.urllist)
+        self.status = self.urllist
+        self.uiObserve.update(self.status, self.dcount)
 
     def setStatus(self, string=None):
         if string is not None: self.status = string
