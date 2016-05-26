@@ -19,9 +19,10 @@ class myFrame(Frame):
     ftypes = [('KML files', '.kml')]                            # default file types of kml save and open
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
+    how_to_path = os.getcwd() + "\how_to.txt"                   # path to the readme txt file of concise directions for use
     doc_url = "http://www.google.com"                           # resource of documentation TBD
     div_string = ("_", 2048)                                    # string to be used to 'divide' separate execs in the text area, with length as width
-    hypkey = 'hyper'                                            # USed by hyper text capabilities to add click-able links to console
+    hypkey = 'hyper'                                            # Constant used by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
 
     root = Tkinter.Tk()
@@ -29,7 +30,7 @@ class myFrame(Frame):
 
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
-    entries = []
+    entries = []       # list of values assigned to fields (see above) upon entry by user
     infile = None      # destination of KML file to be read
     outfile = None     # destination of KML file to be written
     outimage = None    # destination of Image file to be read
@@ -100,10 +101,14 @@ class myFrame(Frame):
         # configure console with scrolling on entries
         self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE)
         self.txt.pack(fill=BOTH, expand=True)
+         # self.txt.grid(row=1, column=1)
         xscrollbar = Scrollbar(self, orient=HORIZONTAL)
+        # xscrollbar.grid(row=1, column=0, sticky=E + W)
         xscrollbar.pack(side=BOTTOM, fill=X)
         yscrollbar = Scrollbar(self.txt)
+        # yscrollbar.grid(row=0, column=1, sticky=N + S)
         yscrollbar.pack(side=RIGHT, fill=Y)
+
         xscrollbar.config(command=self.txt.xview)
         yscrollbar.config(command=self.txt.yview)
 
@@ -118,10 +123,10 @@ class myFrame(Frame):
         """
         Author: Bob Seedorf
 
-        This method reads and renders the simple dialog with the 'how to' text for the user to read
+        This method reads and renders the simple dialog with the 'how to' text to inform user
         """
         directions = []
-        with open ("../how_to.txt", "r") as file:
+        with open (self.how_to_path, "r") as file:
             for line in file.readlines():
                 directions.append(line)
         directions = ''.join(directions)
@@ -171,14 +176,16 @@ class myFrame(Frame):
         """
         message = tag.__str__() + ": " + text.__str__()
         print message
-        if tag.__str__() == 'URLS':
-            self.txt.insert(END, tag.__str__() + ":\n")
-            for url in text:
-                self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
-        else:
-            self.txt.insert(END, message)
+        self.txt.insert(END, message)
         self.applyTag(tag, text)              # comment out to turn off text area highlights
         self.txt.see(END)
+
+    def log_urls(self, urls):
+        tag  = 'URLS'
+        self.txt.insert(END, tag.__str__() + ":\n")
+        for url in urls:
+            self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
+        self.applyTag(tag, urls)
 
     def set(self):
         self.log('URLS', 'test')
@@ -451,7 +458,8 @@ def center(root, w, h):
     """
     Author: Bob Seedorf
 
-    find the center of the screen and then offset to open window at middle
+    This method finds the center of the screen and then offsets the window to be rendered,
+    so that is will open at the middle of screen
 
     `root`: 'screen' resource in which application is to be rendered
     `w`: desired width of app window
