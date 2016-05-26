@@ -6,7 +6,6 @@ from GeometricDataStructures.Mercator import *
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 
-
 class Parser():
     def __init__(self):
         """
@@ -76,7 +75,7 @@ class Parser():
         return self.switches, self.data
 
 
-def interface(args=None, imObserve=None, urlObserve=None):
+def interface(args=None, consoleObserve=None, imObserve=None, urlObserve=None):
     """
     `Author`: Bill Clark
 
@@ -152,6 +151,7 @@ def interface(args=None, imObserve=None, urlObserve=None):
             build.printUrls()
             print "Number of urls: ", len(build.urllist) + 2
 
+        if consoleObserve is not None: build.register(consoleObserve)
         images = build.download()
         if switches['v']: print "All images downloaded."
         merger = ImageMerge.Merger(data['m'], images[0])

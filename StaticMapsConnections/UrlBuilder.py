@@ -3,7 +3,6 @@ from time import sleep
 from random import uniform
 from GeometricDataStructures.Mercator import LatLongPoint
 
-
 class UrlBuilder(object):
 
     def __init__(self, height, width=0):
@@ -316,8 +315,8 @@ class UrlBuilder(object):
         print "Base Url: " + self.urlbase
         for url in self.urllist:
             print url
-        print str(self.url)
-        return self.urllist
+        print str(self.urllist)
+        self.setStatus(self.urllist)
 
     def setStatus(self, string=None):
         if string is not None: self.status = string

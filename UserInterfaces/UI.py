@@ -1,7 +1,6 @@
 import Tkinter
 from Tkinter import *
 import webbrowser
-import codecs
 import tkFileDialog
 import tkMessageBox
 import os
@@ -10,7 +9,8 @@ import traceback
 import tkFont
 
 import Console
-from WaitObserver import WaitObserver
+from waitObserver import WaitObserver
+from consoleObserver import consoleObserver
 
 class myFrame(Frame):
 
@@ -176,6 +176,9 @@ class myFrame(Frame):
             self.txt.insert(END, message)
         self.applyTag(tag, text)              # comment out to turn off text area highlights
         self.txt.see(END)
+
+    def set(self):
+        self.log('URLS', 'test')
 
     def open_url(self, url):
         """
@@ -352,9 +355,10 @@ class myFrame(Frame):
         self.run.config(state=DISABLED)
         self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage)
         self.wd.activate()  # call activate in waitDialog to process image downloads
+        consoleObserve = consoleObserver(self)
         imobserver = WaitObserver(self.wd)
         urlobserver = WaitObserver(self.wd)
-        Console.interface(args, imobserver, urlobserver)
+        Console.interface(args, consoleObserve, imobserver, urlobserver)
         self.wd.end()
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
         self.run.config(state=NORMAL)
