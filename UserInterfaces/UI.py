@@ -1,16 +1,17 @@
 import Tkinter
-from Tkinter import *
-import webbrowser
-import tkFileDialog
-import tkMessageBox
 import os
-import waitDialog
-import traceback
+import tkFileDialog
 import tkFont
+import tkMessageBox
+import traceback
+import webbrowser
+from Tkinter import *
 
 import Console
-from waitObserver import WaitObserver
-from uiObserver import UiObserver
+import waitDialog
+from Observations.WaitObserver import WaitObserver
+from Observations.uiObserver import UiObserver
+
 
 class myFrame(Frame):
 
@@ -181,7 +182,7 @@ class myFrame(Frame):
         self.txt.see(END)
 
     def log_urls(self, urls):
-        tag  = 'URLS'
+        tag = 'URLS'
         self.txt.insert(END, tag.__str__() + ":\n")
         for url in urls:
             self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))

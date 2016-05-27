@@ -1,9 +1,10 @@
 from PIL import Image
+from Observations.Observer import Observable
 
 debug = 0
 diffnum = 50
 
-class Merger(object):
+class Merger(Observable):
     
     def __init__(self, outfile, base):
         """
@@ -22,7 +23,7 @@ class Merger(object):
                         as this image, or else.
         """
 
-        self.observers = []
+        super(Merger, self).__init__()
         self.mcount = 0
         base = self.convertAll(base)
         self.baseimage = Image.open(base[0])
@@ -30,7 +31,7 @@ class Merger(object):
         self.baseimage.save(outfile)
         self.outfile = outfile
         self.base = base
-        self.status = "Initialized."
+        self.setStatus("Initialized.")
 
     def merge(self, new):
         """
@@ -182,12 +183,3 @@ class Merger(object):
 
         if debug: print ""
         trackedimage.save(outfile)
-
-    def setStatus(self, string=None):
-        if string is not None: self.status = string
-        if self.observers:
-            for observer in self.observers:
-                observer.update(self.status, self.mcount)
-
-    def register(self, object):
-        self.observers.append(object)
