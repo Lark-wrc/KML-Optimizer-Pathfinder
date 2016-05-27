@@ -147,7 +147,7 @@ class KmlFasade(object):
             placemarks = self.pullPlacemarksAndGarbage()
 
         skip = 0
-        directory = "C:\Users\Research\PycharmProjects\KML-Optimizer-Pathfinder\Output HTML\\" + os.path.basename(self.filepath)
+        directory = os.path.dirname(os.path.dirname(__file__)) + "\Output HTML\\" + os.path.basename(self.filepath)
         if not os.path.exists(directory):
             os.mkdir(directory)
         for place in placemarks:
