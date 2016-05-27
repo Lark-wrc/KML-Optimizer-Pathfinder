@@ -20,7 +20,7 @@ class myFrame(Frame):
     ftypes = [('KML files', '.kml')]                            # default file types of kml save and open
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
-    how_to_path = os.getcwd() + "\how_to.txt"                   # path to the readme txt file of concise directions for use
+    how_to_path = os.path.dirname(os.path.dirname(__file__)) + "\how_to.txt"                   # path to the readme txt file of concise directions for use
     doc_url = "http://www.google.com"                           # resource of documentation TBD
     div_string = ("_", 2048)                                    # string to be used to 'divide' separate execs in the text area, with length as width
     hypkey = 'hyper'                                            # Constant used by hyper text capabilities to add click-able links to console
@@ -32,6 +32,7 @@ class myFrame(Frame):
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
     entries = []       # list of values assigned to fields (see above) upon entry by user
+    ifextract = 0      # switch to denote extraction of html metadata
     infile = None      # destination of KML file to be read
     outfile = None     # destination of KML file to be written
     outimage = None    # destination of Image file to be read
@@ -82,12 +83,20 @@ class myFrame(Frame):
             entry.pack(side=RIGHT, expand=YES, fill=X)
             self.entries.append((field, entry))
 
+        # check box for html extraction
+        # TODO -- use a flag for the console so that the extraction occurs on check --
+        c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
+        c.pack()
+
         row = Frame(self)
         self.run = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
         self.quit = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
         row.pack(side=TOP, fill=X, padx=15, pady=15)
         self.run.pack(side=LEFT, expand = YES)
         self.quit.pack(side=RIGHT, expand=YES)
+
+
+
         label = Label(self, text = "Output:")
         label.pack()
 
@@ -331,7 +340,7 @@ class myFrame(Frame):
         Some Comment
 
         """
-        #TODO -- finsih this doc --
+        #TODO -- finsish this doc --
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
@@ -362,10 +371,11 @@ class myFrame(Frame):
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
                 '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
 
-
+        # disable run button, to disallow too many running applications
         self.run.config(state=DISABLED)
+
         self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage)
-        self.wd.activate()  # call activate in waitDialog to process image downloads
+        self.wd.activate()
         uiobserver = UiObserver(self)
         imobserver = WaitObserver(self.wd)
         urlobserver = WaitObserver(self.wd)
