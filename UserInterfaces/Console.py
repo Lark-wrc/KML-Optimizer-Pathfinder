@@ -23,9 +23,10 @@ class Parser():
                   z - set the zoom value for google static.
                   s - set the size for google static.
                   v - verbose output to the console.
+                  co - paired with the number of kml files provided, allows for multi file functionality.
+                  h - exports the metadata to outputs\metadata
         Example arg list.
-        -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c 40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
-        """
+        -c 1 -wa -w "Outputs/Console Rewrite.kml" -h -m Outputs/Outfile.png -z 8 -c 40.0583,-74.4057 -s 600 -v "Inputs/KML Files/us_states.kml"        """
         self.switches = {'wa':0, 'v':0, 'h':0}
         self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0, 'co':0}
 
