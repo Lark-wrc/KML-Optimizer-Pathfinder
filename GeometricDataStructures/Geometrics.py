@@ -2,7 +2,7 @@ from lxml import etree
 
 class LatLongPoint:
     """
-    Author: Nick LaPosta
+    Author: Nick LaPosta, Bob Seedorf, Bill Clark
 
     Container for the lat/lon coordinate for a point on a Mercator map projection.
     GeoLatLng has a wrap around for the anti-meridian so that it never has a longitude > 180 or < -180
@@ -10,11 +10,62 @@ class LatLongPoint:
     NOTE this implementation may not work, I am changing it to suit a test -Bob 4-23-16
     """
     def __init__(self, lt, ln):
+        """
+        Initializes the lat long point with the given lat and long, rounded to seven places.
+
+        :param lt: Latitude of the modeled point.
+
+        :param ln: Longitude of the modeled point.
+        """
         self.lat = round(lt, 7)
         self.lng = round(ln, 7)
         self.rewrap()
 
+    def __str__(self):
+        """
+        Overrides the default python string method. returns a string representation of the point.
+
+        :return: lat,long as a string.
+        """
+        return repr(self.lat) + "," + repr(self.lng)
+
+    def __repr__(self):
+        """
+        Repr is an alternate string presentation of an object, ours returns the __str__ representation.
+        :return:
+        """
+        return self.__str__()
+
+    def __cmp__(self, other):
+        """
+        The inbuilt python comparator method. Our implementation return two objects are equal if the
+        lat and long each contain are equal.
+
+        :param other: Another latlongPoint.
+
+        :return: True if this object equals the other object.
+        """
+        return (self.lat == other.lat and self.lng == other.lng)
+
+    def __eq__(self, other):
+        """
+        Inbuilt equality check. checks the contained lat long values to be equal to the other object.
+        This, as opposed to cmp, reinforces each value is rounded to 7 digits.
+
+        :param other: Another LatLongPoint.
+
+        :return: True if the points are equal.
+        """
+        return (round(self.lat,7) == round(other.lat,7) and round(self.lng,7) == round(other.lng,7))
+
+    def __getitem__(self, item):
+        return self;
+
     def rewrap(self):
+        """
+        Makes sure the longitude value is a valid longitude, wrapping it around to the -180 to 180 range.
+
+        """
         if self.lng < -360 and self.lng > 360:
             raise Exception("\"Invalid directional directions\" - Nick")
         elif self.lng < -180:
@@ -25,28 +76,31 @@ class LatLongPoint:
             self.lng = self.lng
 
     def getTup(self):
+        """
+        Returns a tuple of the lng and lat values, in that order.
+
+        :return: Tuple of lng, lat.
+        """
         return (self.lng, self.lat)
 
-    def __str__(self):
-        return repr(self.lat) + "," + repr(self.lng)
-
-    def __repr__(self):
-        return self.__str__()
 
     def rewriteStr(self):
+        """
+        Returns a string representation with the numbers reversed, lng lat order. Used for
+        rewriting to kml.
+
+        :return: lng,lat as a string.
+        """
         return repr(self.lng) + "," + repr(self.lat)
 
     def listed(self):
+        """
+        Returns a list with lat and long as it's values, in that order.
+
+        :return: list of lat, long.
+        """
         return [self.lat, self.lng]
 
-    def __cmp__(self, other):
-        return (self.lat == other.lat and self.lng == other.lng)
-
-    def __eq__(self, other):
-        return (round(self.lat,7) == round(other.lat,7) and round(self.lng,7) == round(other.lng,7))
-
-    def __getitem__(self, item):
-        return self;
 
 class GeometricObject(object):
 
@@ -54,7 +108,8 @@ class GeometricObject(object):
         """
         `Author`: Bill Clark
 
-        Overrides the tostring method of a geometic object.
+        Overrides the tostring method of a geometic object. This is a debugging style print,
+        the user will rarely see this representation of the object.
 
         `return`: This object as a string.
         """
@@ -94,30 +149,22 @@ class GeometricObject(object):
         `Author`: Bill Clark
 
         This is the super method for all applyEdit methods. This method and it's children are used to take the changes
-        made to the pulled out xml values and apply them back to the file object.
+        made to the pulled out xml values and apply them back to the file object. Here we slat ee the geometrics with their
+        remove flag set being removed from the tag above them, and the lat long coordinates being rewritten.
         """
         if self.remove == len(self.coordinates):
             y = self.element.getparent()
             if y is not None: y.remove(self.element)
-            return 0
-        self.element.find('coordinates').text = '\n'.join([x.rewriteStr() for x in self.coordinates])
+        else:
+            self.element.find('coordinates').text = '\n'.join([x.rewriteStr() for x in self.coordinates])
 
-    # def switchCoordinates(self):
-    #     """
-    #     Switches the coordinates from lat long. This is used for the google maps static map api, which wants long lat
-    #     as opposed to lat long as our files provide. This modifies the file in place.
-    #
-    #     `return`: the tostring of the coordinate swap. This a side effect, useful for script building.
-    #     """
-    #     for coordin in self.coordinates:
-    #         coordin.lat, coordin.lng = coordin.lng, coordin.lat
-    #     return self.printCoordinates()
 
     def printCoordinates(self):
         """
         `Author`: Bill Clark
 
         Makes a string out of the coordinates contained in the object. Multiple coordinates are seperated by |.
+        This method is used by urlbuilder to get the coordinates into one of it's urls.
 
         `return`: String of the coordinates in the object.
         """
@@ -162,20 +209,9 @@ class Point(GeometricObject):
         super(Point,self).applyEdits()
 
     def printCoordinates(self):
-        """
-        `Author` Bill Clark
-
-        `return`: The string representation of the coordinate in the point.
-        """
         return str(self.coordinates[0])
 
     def coordinatesAsListStrings(self):
-        """
-        `Author` Bill Clark
-
-        `return` The coordinate that makes up the point as a list of a string. Used for url builder.
-        """
-
         return [str(self.coordinates[0])]
 
 
@@ -190,13 +226,6 @@ class LinearRing(GeometricObject):
         super(LinearRing, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
-        """
-        `Author`: Bill Clark
-
-        See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
-        removal. This is done from the placemark above the LinearRing.
-        """
-
         super(LinearRing,self).applyEdits()
 
 
@@ -211,13 +240,6 @@ class LineString(GeometricObject):
         super(LineString, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
-        """
-        `Author`: Bill Clark
-
-        See geometric object. This calls the super applyEdits, then removes the xml object if it is marked for
-        removal. This is done from the placemark above the LineString.
-        """
-
         super(LineString,self).applyEdits()
 
 class Polygon(GeometricObject):
@@ -233,13 +255,6 @@ class Polygon(GeometricObject):
         super(Polygon, self).__init__(element, tag, coordinates)
 
     def applyEdits(self):
-        """
-        `Author`: Bill Clark
-
-        See geometric object. This calls the super applyEdits,then removes the xml object if it is marked for
-        removal. This is done from the placemark above the Polygon.
-        """
-
         super(Polygon,self).applyEdits()
 
 
@@ -249,7 +264,7 @@ class GeometricFactory(object):
         """
         `Author`: Bill Clark
 
-        Simple factory object to produce geometric objects. Can be extended to do input checking and other
+        Factory object to produce geometric objects. Can be extended to do input checking and other
         such utility functions.
         """
         self.geometryTypes = ('Point', 'LineString', 'LinearRing', 'Polygon', 'MultiGeometry')
@@ -277,7 +292,7 @@ class GeometricFactory(object):
         elif tag == 'LineString':
             return LineString(element, tag, coordinates)
         else:
-            print 'derpy'
+            print 'Bad tag.'
 
     def create(self, element):
         """
@@ -341,22 +356,3 @@ class GeometricFactory(object):
                 return LineString(element, element.tag, element[child].text)
             else:
                 print 'derpy'
-
-def elementPrint(element, bool=0):
-    """
-    `Author`: Bill Clark
-
-    Version = 1.0
-    Quick method to print an lxml element. For quicker writing.
-    `element`: lxml element.
-
-    `bool`: To pretty print or to compress to a single line.
-
-    `return`: the tostring of the element.
-
-    """
-
-    if bool:
-        return etree.tostring(element, pretty_print=False)
-    else:
-        return etree.tostring(element, pretty_print=True)
