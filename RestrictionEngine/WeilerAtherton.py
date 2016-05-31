@@ -147,7 +147,7 @@ class WeilerClipping:
             index = P.index(location)
             while not location == end:
                 location.rewrap()
-                result.push(location)
+                result.append(location)
                 index = (index+1) % len(P)
                 location = P[index]
             Ie.pop()
@@ -161,7 +161,7 @@ class WeilerClipping:
             index = Q.index(location)
             while not location == end:
                 location.rewrap()
-                result.push(location)
+                result.append(location)
                 index = (index+1) % len(Q)
                 location = Q[index]
         return result
@@ -187,7 +187,7 @@ class WeilerClipping:
                 if self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1]):
                     poi = self.getLineIntersection(subjectline[0], subjectline[1], viewportline[0], viewportline[1])
                     P.append(poi)
-                    Ie.insert(0, poi)
+                    Ie.append(poi)
                     crossCount += 1
                 if crossCount > 1:
                     if Ie[-1] == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
@@ -305,8 +305,8 @@ class WeilerClipping:
         # find P, Ie
         P, Ie = self.getP(subjectlines, viewportlines)
         if self.debug: print "P :",P
-        if self.debug: print "Ie:", Ie.items
-        if not Ie.items or Ie.items == []:
+        if self.debug: print "Ie:", Ie
+        if not Ie or Ie == []:
             return None
 
         # then find Q
@@ -315,7 +315,7 @@ class WeilerClipping:
 
         # then get Clipped
         result = self.getClipped(P, Q, Ie)
-        result.items.append(result[0])
+        result.append(result[0])
         return result
 
 
