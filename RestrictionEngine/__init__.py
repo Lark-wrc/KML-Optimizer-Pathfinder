@@ -1,3 +1,4 @@
 import RestrictionEngine
+import WeilerAtherton
 
-__all__ = ["RestrictionEngine"]
+__all__ = ["RestrictionEngine",  "WeilerAtherton"]

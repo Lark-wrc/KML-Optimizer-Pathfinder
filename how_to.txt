@@ -1,0 +1,17 @@
+To Begin first select the source KML file by clicking 'Open KML.'
+
+Next choose the destination to which the new KML will be saved, by clicking, 'Save KML.'
+
+Then choose the destination to which the resulting image file will be saved by clicking, 'Save Image.'
+
+If no destination file is selected, then the choice of open kml will be overwritten during operation.
+
+If neither the destination of open, or save image is chosen, the procedure will prompted you to do so.
+
+Next, input the appropriate fields to be used in the procedure;
+     >    Latitude of Center: latitude of center point of focused sub-portion.
+     >    Longitude of Center: longitude of center point of focused sub-portion.
+     >    Zoom: Relative level of perspective zoom, google api depenedent.
+     >    Image Size: distance, in miles, spanning the desired region of restriction.
+
+Finally click run, and wait as the operations are executed.
