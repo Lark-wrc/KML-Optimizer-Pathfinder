@@ -5,6 +5,7 @@ from GeometricDataStructures.KmlFasade import KmlFasade
 from GeometricDataStructures.Mercator import *
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
+from Observations.ObservableConsole import ObservableConsole
 
 class Parser():
     def __init__(self):
@@ -90,36 +91,40 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
 
     `urlObserve`: An observer for the url downloads.
     """
+    observe = ObservableConsole()
+    if uiObserve is not None:
+        observe.register(uiObserve)
+
     parser = Parser()
     merc = MercatorProjection()
     f = RestrictionFactory()
 
     # parse args.
-    if not args: args = sys.argv
+    if not args: args = sys.argv[1:]
     parser.parseArgs(args)
     switches, data = parser.export()
 
-    if switches['v']: print 'Arguments parsed correctly.'
+    if switches['v']: observe.setStatus('Arguments parsed correctly.\n', 'CONSOLE')
 
     # processes the data values in the switches, c, z, and s.
     if data['c']: center = LatLongPoint(float(data['c'].split(',')[0]),float(data['c'].split(',')[1]))
     else:
-        print 'No center point. Cancelled restrictions and static maps.'
+        observe.setStatus('No center point. Cancelled restrictions and static maps.\n', 'ERROR')
     if data['z']: zoom = int(data['z'])
     else:
-        print 'No zoom value. Cancelled wa restriction and static maps.'
+        observe.setStatus('No zoom value. Cancelled wa restriction and static maps.\n', 'ERROR')
     if data['s']: size = int(data['s'])
     else:
-        print 'No size has been specified. Cancelled wa restriction and static maps.'
+        observe.setStatus('No size has been specified. Cancelled wa restriction and static maps.\n', 'ERROR')
 
-    if switches['v']: print 'Values have been set.'
+    if switches['v']: observe.setStatus('Values have been set.\n', 'CONSOLE')
 
     # open the kml fasade.
     fasade = KmlFasade(args[-1])
     fasade.placemarkToGeometrics()
 
     if data['w']: fasade.removeGarbageTags()
-    if switches['v']: print 'garbage data removed.'
+    if switches['v']: observe.setStatus('Garbage data removed.\n', 'CONSOLE')
 
     # clip if requested in the args.
     if switches['wa']:
@@ -130,11 +135,11 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
         for geometrics in fasade.yieldGeometrics():
             restrict.restrict(geometrics)
         fasade.fasadeUpdate()
-    if switches['v']: print 'Clipping completed.'
+    if switches['v']: observe.setStatus('Clipping completed.\n', 'CONSOLE')
 
     # rewrite if requested.
     if data['w']: fasade.rewrite(data['w'])
-    if switches['v']: print 'KML file rewritten.'
+    if switches['v']: observe.setStatus('KML file rewritten.\n', 'CONSOLE')
 
     # Creates urls out of the geometrics, downloads and merges them.
     if data['m']:
@@ -142,7 +147,6 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
         if urlObserve is not None: build.register(urlObserve)
         build.centerparams(data['c'], repr(zoom))
 
-        markerlist = []
         for geometrics in fasade.yieldGeometrics():
             build.addGeometrics(geometrics)
 
@@ -150,13 +154,11 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
         build.addmarkers({"color": "yellow"}, repr(center))
 
         # allows logging to ui's console for accessible urls
-        if uiObserve is not None: build.uiObserve = uiObserve
         if switches['v']:
-            build.printUrls()
-            print "Number of urls: ", len(build.urllist) + 2
+            observe.setStatus(build.printUrls(), 'URLS')
 
         images = build.download()
-        if switches['v']: print "All images downloaded."
+        if switches['v']: observe.setStatus("All images downloaded.\n", 'CONSOLE')
         merger = ImageMerge.Merger(data['m'], images[0])
         if imObserve is not None: merger.register(imObserve)
         images = merger.convertAll(*images)
