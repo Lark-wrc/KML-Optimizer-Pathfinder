@@ -137,13 +137,13 @@ class WeilerClipping:
 
         """
 
-        result = Stack()
-        reserve = Ie.peek()
+        result = []
+        reserve = Ie[-1]
         location = reserve
         flag = 1
         while flag:
             Ie.pop()
-            end = Ie.peek()
+            end = Ie[-1]
             index = P.index(location)
             while not location == end:
                 location.rewrap()
@@ -152,11 +152,11 @@ class WeilerClipping:
                 location = P[index]
             Ie.pop()
 
-            if Ie.isEmpty():
+            if len(Ie) == 0:
                 end = reserve
                 flag = 0
             else:
-                end = Ie.peek()
+                end = Ie[-1]
 
             index = Q.index(location)
             while not location == end:
@@ -178,7 +178,7 @@ class WeilerClipping:
 
         """
         P = []
-        Ie = Stack()
+        Ie = []
         for subjectline in reversed(subjectlines):
             P.append(subjectline[1])
             crossCount = 0
@@ -187,12 +187,12 @@ class WeilerClipping:
                 if self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1]):
                     poi = self.getLineIntersection(subjectline[0], subjectline[1], viewportline[0], viewportline[1])
                     P.append(poi)
-                    Ie.push(poi)
+                    Ie.insert(0, poi)
                     crossCount += 1
                 if crossCount > 1:
-                    if Ie.peek() == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
+                    if Ie[-1] == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
                         # perform swap
-                        Ie.items[-1], Ie.items[-2] = Ie.items[-2], Ie.items[-1]
+                        Ie[-1], Ie[-2] = Ie[-2], Ie[-1]
                         P[-1], P[-2] = P[-2], P[-1]
                 if crossCount == 2:
                     break
@@ -318,40 +318,6 @@ class WeilerClipping:
         result.items.append(result[0])
         return result
 
-
-class Stack():
-     """
-     'Author' Bob S.
-
-     this class is used only to ensure the proper procedures of the getClipped algorithm are executed appropriately
-
-     TODO remove this implementation in favor of a python list
-
-     """
-     def __init__(self):
-         self.items = []
-
-     def isEmpty(self):
-         return self.items == []
-
-     def push(self, item):
-         self.items.append(item)
-
-     def pop(self):
-         if(len(self.items)-1 < 0):
-             raise Exception
-         return self.items.pop()
-
-     def peek(self):
-         if(self.isEmpty()):
-             raise Exception
-         return self.items[len(self.items)-1]
-
-     def size(self):
-         return len(self.items)
-
-     def __getitem__(self, int):
-         return self.items[int]
 
 if __name__ == '__main__':
 
