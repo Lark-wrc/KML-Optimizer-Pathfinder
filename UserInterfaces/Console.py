@@ -3,6 +3,7 @@ from PIL import Image
 import StaticMapsConnections.ImageMerge as ImageMerge
 from GeometricDataStructures.KmlFasade import KmlFasade
 from GeometricDataStructures.Mercator import *
+from GeometricDataStructures.KmlCOmposite import KmlComposite
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 from Observations.ObservableConsole import ObservableConsole
@@ -26,7 +27,7 @@ class Parser():
         -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c 40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
         """
         self.switches = {'wa':0, 'v':0, 'h':0}
-        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0,}
+        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0, 'co':0}
 
     def parse(self, flag, data):
         """
@@ -120,7 +121,9 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     if switches['v']: observe.setStatus('Values have been set.\n', 'CONSOLE')
 
     # open the kml fasade.
-    fasade = KmlFasade(args[-1])
+    if data['co']: fasade = KmlComposite(*[KmlFasade(file) for file in args[-(data['co']):]])
+    else: fasade = KmlFasade(args[-1])
+
     fasade.placemarkToGeometrics(switches['h'])
 
     if data['w']: fasade.removeGarbageTags()
