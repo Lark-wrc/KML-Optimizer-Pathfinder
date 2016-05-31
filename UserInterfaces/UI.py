@@ -6,7 +6,7 @@ import tkMessageBox
 import traceback
 import webbrowser
 from Tkinter import *
-
+import ntpath
 import Console
 import waitDialog
 from Observations.WaitObserver import WaitObserver
@@ -20,15 +20,20 @@ class myFrame(Frame):
     ftypes = [('KML files', '.kml')]                            # default file types of kml save and open
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
-    how_to_path = os.path.dirname(os.path.dirname(__file__)) + "\how_to.txt"                   # path to the readme txt file of concise directions for use
+    local_path = os.path.dirname(os.path.dirname(__file__))     # Used to designate the location of the project within the relative machine file system being used
+    how_to_path = local_path + "\how_to.txt"                    # path to the readme txt file of concise directions for use
     doc_url = "http://www.google.com"                           # resource of documentation TBD
     div_string = ("_", 2048)                                    # string to be used to 'divide' separate execs in the text area, with length as width
     hypkey = 'hyper'                                            # Constant used by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
 
     recent_inputs = set()                                      # construct recent inputs with debug test
-    inp = (41, -103, 4, 500)
-    inp2 = (37, -72, 4, 250)
+    inp = (41, -103, 4, 500, local_path + '\\Inputs\\KML Files\\us_states.kml',
+           local_path + '\\Inputs\\KML Files\\dump.kml',
+           local_path + '\\Inputs\\KML Files\\test.png',)
+    inp2 = (37, -72, 4, 250, local_path + '\\Inputs\\KML Files\\us_states.kml',
+           local_path + '\\Inputs\\KML Files\\dump.kml',
+           local_path + '\\Inputs\\KML Files\\test.png',)
     recent_inputs.add(inp)
     recent_inputs.add(inp2)
 
@@ -94,11 +99,16 @@ class myFrame(Frame):
         c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
         c.pack()
 
+        label = Label(self, text="\nRecent Inputs:")
+        label.pack()
+
         list_recent = Listbox(self)
-        for inps in list(self.recent_inputs):
-            list_recent.insert(END, inps)
+        for input in list(self.recent_inputs):
+            input = (input[0], input[1], input[2], input[3], self.path_leaf(input[4]), self.path_leaf(input[5]), self.path_leaf(input[6]))
+            list_recent.insert(END, str(input))
         list_recent.bind('<Double-Button-1>', self.populate_fields)
-        list_recent.pack()
+        list_recent.config(height = list_recent.size())
+        list_recent.pack(fill=X, expand = YES, padx= 100)
 
         row = Frame(self)
         self.run = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
@@ -304,20 +314,33 @@ class myFrame(Frame):
 
         # Gather the values of the selected entry stored in history
         # Repaint the fields of entries with pre-decided entry
-
         self.lat = value[0]
         self.lng = value[1]
         self.zoom = value[2]
         self.size = value[3]
+        myFrame.infile = value[4]
+        myFrame.outfile = value[5]
+        myFrame.outimage = value[6]
 
-
-        self.entries[0][1].insert(0, END,  self.lat)
-        self.entries[1][1].insert(0, END,  self.lng)
-        self.entries[2][1].insert(0, END, self.zoom)
-        self.entries[3][1].insert(0, END, self.size)
+        # Repaint the fields of entries with pre-decided entry
+        for i in range(0, 4):
+            self.entries[i][1].delete(0, END)
+            self.entries[i][1].insert(0, value[i])
 
         # Log the selection by the user
         self.log("RECENT SELECTION", str(value) + "\n")
+
+    def path_leaf(self, path):
+        """
+        Used to obtain only the leaf, or the filename, of any pathname, path
+
+        `path`: full path to be parse for only terminal leaf
+
+        `return`: file at the end of the path
+
+        """
+        head, tail = ntpath.split(path)
+        return tail or ntpath.basename(head)
 
     def add_hyper(self, action):
         """
