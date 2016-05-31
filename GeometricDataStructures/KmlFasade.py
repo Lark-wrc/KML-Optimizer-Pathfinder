@@ -1,7 +1,8 @@
 from lxml import etree, objectify
-from GeometricDataStructures.Geometrics import GeometricFactory
+from GeometricDataStructures.Geometrics import *
 from pykml.factory import KML_ElementMaker as KML
 import re
+import os
 
 debug = 0
 
@@ -105,7 +106,7 @@ class KmlFasade(object):
         # self.placemarks = ret
         return ret
 
-    def placemarkToGeometrics(self):
+    def placemarkToGeometrics(self, extract=0):
         """
         `Author`: Bill Clark
 
@@ -122,8 +123,25 @@ class KmlFasade(object):
         factory = GeometricFactory()
         ret = []
         skip = 0
+
+        if extract:
+            directory = "Outputs\Metadata\\" + os.path.basename(self.filepath)[:-3]
+            if not os.path.exists(directory):
+                os.mkdir(directory)
+
         for place in placemarks:
             for element in place.iter():
+
+                if extract:
+                    if element.tag == "name":
+                        filename = element.text
+                        output = open(directory + "\\" + filename, 'a')
+                        output.write(self.html_entry("h1", element.tag, element.text))
+                        output.close()
+                    elif element.tag == "description":
+                        output = open(directory + "\\" + filename, 'a')
+                        output.write(self.html_entry("h2", element.tag, element.text))
+                        output.close()
 
                 if skip:
                     skip += len(element)
@@ -141,6 +159,9 @@ class KmlFasade(object):
                     pass
         self.geometrics = ret
         return ret
+
+    def html_entry(self, html_tag, tag, text):
+        return "<" + html_tag + ">" + tag + "</" + html_tag + ">" + "\n\n" + text + "\n\n"
 
     def fasadeUpdate(self):
         """
@@ -210,13 +231,3 @@ class KmlFasade(object):
         composite, for x in yield.
         """
         yield self.geometrics
-
-if __name__ == '__main__':
-    fasade = KmlFasade('Inputs\KML Files\\advancedexample1.kml')
-    fasade.pullPlacemarksAndGarbage()
-    fasade.placemarkToGeometrics()
-    fasade.createAdditionsFolder()
-    fasade.createAdditionalGeometry("LinearRing", coordin="-100.000000,40.00000 -90.000000,30.00000 -100.000000,30.00000 -100.000000,40.00000")
-    fasade.fasadeUpdate()
-    fasade.rewrite('Inputs\KML Files\\advancedexample1copy.kml')
-

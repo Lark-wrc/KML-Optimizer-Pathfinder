@@ -3,9 +3,10 @@ from PIL import Image
 import StaticMapsConnections.ImageMerge as ImageMerge
 from GeometricDataStructures.KmlFasade import KmlFasade
 from GeometricDataStructures.Mercator import *
+from GeometricDataStructures.KmlCOmposite import KmlComposite
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
-
+from Observations.ObservableConsole import ObservableConsole
 
 class Parser():
     def __init__(self):
@@ -22,12 +23,12 @@ class Parser():
                   z - set the zoom value for google static.
                   s - set the size for google static.
                   v - verbose output to the console.
+                  co - paired with the number of kml files provided, allows for multi file functionality.
+                  h - exports the metadata to outputs\metadata
         Example arg list.
-        -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c
-            40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
-        """
-        self.switches = {'wa':0, 'v':0}
-        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0}
+        -c 1 -wa -w "Outputs/Console Rewrite.kml" -h -m Outputs/Outfile.png -z 8 -c 40.0583,-74.4057 -s 600 -v "Inputs/KML Files/us_states.kml"        """
+        self.switches = {'wa':0, 'v':0, 'h':0}
+        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0, 'co':0}
 
     def parse(self, flag, data):
         """
@@ -56,7 +57,6 @@ class Parser():
 
         `args`: The list of arguments from the command line.
         """
-        args.pop(0)
         while args[0][0] == '-':
             if args[0][1:] in self.switches: self.parse(args.pop(0), None)
             elif args[0][1:] in self.data: self.parse(args.pop(0), args.pop(0))
@@ -78,7 +78,7 @@ class Parser():
         return self.switches, self.data
 
 
-def interface(args=None, imObserve=None, urlObserve=None):
+def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     """
     `Author`: Bill Clark
 
@@ -87,40 +87,48 @@ def interface(args=None, imObserve=None, urlObserve=None):
 
     `args`: A list of command line style parameters. Pulled from argv if not defined.
 
+    `uiObserve`: An observer for the ui and the ui's console.
+
     `imObserve`: An observer for the image merging.
 
     `urlObserve`: An observer for the url downloads.
     """
+    observe = ObservableConsole()
+    if uiObserve is not None:
+        observe.register(uiObserve)
+
     parser = Parser()
     merc = MercatorProjection()
     f = RestrictionFactory()
 
     # parse args.
-    if not args: parser.parseArgs(sys.argv)
-    else: parser.parseArgs(args)
+    if not args: args = sys.argv[1:]
+    parser.parseArgs(args)
     switches, data = parser.export()
 
-    if switches['v']: print 'Arguments parsed correctly.'
+    if switches['v']: observe.setStatus('Arguments parsed correctly.\n', 'CONSOLE')
 
     # processes the data values in the switches, c, z, and s.
     if data['c']: center = LatLongPoint(float(data['c'].split(',')[0]),float(data['c'].split(',')[1]))
     else:
-        print 'No center point. Cancelled restrictions and static maps.'
+        observe.setStatus('No center point. Cancelled restrictions and static maps.\n', 'ERROR')
     if data['z']: zoom = int(data['z'])
     else:
-        print 'No zoom value. Cancelled wa restriction and static maps.'
+        observe.setStatus('No zoom value. Cancelled wa restriction and static maps.\n', 'ERROR')
     if data['s']: size = int(data['s'])
     else:
-        print 'No size has been specified. Cancelled wa restriction and static maps.'
+        observe.setStatus('No size has been specified. Cancelled wa restriction and static maps.\n', 'ERROR')
 
-    if switches['v']: print 'Values have been set.'
+    if switches['v']: observe.setStatus('Values have been set.\n', 'CONSOLE')
 
     # open the kml fasade.
-    fasade = KmlFasade(sys.argv[-1])
-    fasade.placemarkToGeometrics()
+    if data['co']: fasade = KmlComposite(*[KmlFasade(file) for file in args[-(data['co']):]])
+    else: fasade = KmlFasade(args[-1])
+
+    fasade.placemarkToGeometrics(switches['h'])
 
     if data['w']: fasade.removeGarbageTags()
-    if switches['v']: print 'garbage data removed.'
+    if switches['v']: observe.setStatus('Garbage data removed.\n', 'CONSOLE')
 
     # clip if requested in the args.
     if switches['wa']:
@@ -131,37 +139,36 @@ def interface(args=None, imObserve=None, urlObserve=None):
         for geometrics in fasade.yieldGeometrics():
             restrict.restrict(geometrics)
         fasade.fasadeUpdate()
-    if switches['v']: print 'Clipping completed.'
+    if switches['v']: observe.setStatus('Clipping completed.\n', 'CONSOLE')
 
     # rewrite if requested.
     if data['w']: fasade.rewrite(data['w'])
-    if switches['v']: print 'KML file rewritten.'
+    if switches['v']: observe.setStatus('KML file rewritten.\n', 'CONSOLE')
 
     # Creates urls out of the geometrics, downloads and merges them.
     if data['m']:
         build = UrlBuilder(size)
-        if urlObserve: build.register(urlObserve)
+        if urlObserve is not None: build.register(urlObserve)
         build.centerparams(data['c'], repr(zoom))
 
-        markerlist = []
         for geometrics in fasade.yieldGeometrics():
             build.addGeometrics(geometrics)
 
         #Mark the center point.
         build.addmarkers({"color": "yellow"}, repr(center))
 
+        # allows logging to ui's console for accessible urls
         if switches['v']:
-            build.printUrls()
-            print "Number of urls: ", len(build.urllist) + 2
+            observe.setStatus(build.printUrls(), 'URLS')
 
         images = build.download()
-        if switches['v']: print "All images downloaded."
+        if switches['v']: observe.setStatus("All images downloaded.\n", 'CONSOLE')
         merger = ImageMerge.Merger(data['m'], images[0])
-        if imObserve: merger.register(imObserve)
+        if imObserve is not None: merger.register(imObserve)
         images = merger.convertAll(*images)
         merger.mergeAll(data['m'], *images)
         im = Image.open(data['m'])
-        im.show()
+        if __name__ == "__main__": im.show()
 
 if __name__ == "__main__":
     interface()

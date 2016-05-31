@@ -1,10 +1,9 @@
 from urllib import urlretrieve
 from time import sleep
-from random import uniform
-from GeometricDataStructures.Mercator import LatLongPoint
+from Observations.Observer import Observable
 
 
-class UrlBuilder(object):
+class UrlBuilder(Observable):
 
     def __init__(self, height, width=0):
         """
@@ -18,9 +17,9 @@ class UrlBuilder(object):
         `size`: the size of the returned image in pixels. [0-640]x[0-640]
         """
 
-        self.observers = []
+        super(UrlBuilder, self).__init__()
         self.dcount = 1
-        self.status = 'Initialized.'
+        self.setStatus('Initialized.')
         self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
         self.urlbase += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
         self.url = self.urlbase
@@ -220,7 +219,7 @@ class UrlBuilder(object):
                 self.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
         #self.addmarkers({"color": "yellow"}, markerlist)
 
-    def download(self, path='Inputs\Static Maps\\Mass\{} {}.png', prefix='image'):
+    def download(self, path="""Inputs\Static Maps\Mass\{} {}.png""", prefix='image'):
         """
         `Author`: Bill Clark
 
@@ -304,7 +303,7 @@ class UrlBuilder(object):
         else:
             return 0
 
-    def printUrls(self):
+    def printUrls(self, prin=0):
         """
         `Author`: Bill Clark
 
@@ -313,20 +312,13 @@ class UrlBuilder(object):
 
         `return`: side effect, return the list of urls for logging in UI
         """
-        print "Base Url: " + self.urlbase
+        ret = ""
+        ret += "Base Url: " + self.urlbase + '\n'
         for url in self.urllist:
-            print url
-        print str(self.url)
-        return self.urllist
-
-    def setStatus(self, string=None):
-        if string is not None: self.status = string
-        if self.observers:
-            for observer in self.observers:
-                observer.update(self.status, self.dcount)
-
-    def register(self, object):
-        self.observers.append(object)
+            ret += url + '\n'
+        ret += self.url + '\n'
+        if prin: print ret
+        return ret
 
     def __str__(self):
         """
