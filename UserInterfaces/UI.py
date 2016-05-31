@@ -26,6 +26,12 @@ class myFrame(Frame):
     hypkey = 'hyper'                                            # Constant used by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
 
+    recent_inputs = set()                                      # construct recent inputs with debug test
+    inp = (41, -103, 4, 500)
+    inp2 = (37, -72, 4, 250)
+    recent_inputs.add(inp)
+    recent_inputs.add(inp2)
+
     root = Tkinter.Tk()
     root.withdraw()
 
@@ -88,14 +94,18 @@ class myFrame(Frame):
         c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
         c.pack()
 
+        list_recent = Listbox(self)
+        for inps in list(self.recent_inputs):
+            list_recent.insert(END, inps)
+        list_recent.bind('<Double-Button-1>', self.populate_fields)
+        list_recent.pack()
+
         row = Frame(self)
         self.run = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
         self.quit = Button(row, width = 20, text = "QUIT", command = self.onQuit, bg = '#cc5933')
         row.pack(side=TOP, fill=X, padx=15, pady=15)
         self.run.pack(side=LEFT, expand = YES)
         self.quit.pack(side=RIGHT, expand=YES)
-
-
 
         label = Label(self, text = "Output:")
         label.pack()
@@ -111,12 +121,9 @@ class myFrame(Frame):
         # configure console with scrolling on entries
         self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE)
         self.txt.pack(fill=BOTH, expand=True)
-         # self.txt.grid(row=1, column=1)
         xscrollbar = Scrollbar(self, orient=HORIZONTAL)
-        # xscrollbar.grid(row=1, column=0, sticky=E + W)
         xscrollbar.pack(side=BOTTOM, fill=X)
         yscrollbar = Scrollbar(self.txt)
-        # yscrollbar.grid(row=0, column=1, sticky=N + S)
         yscrollbar.pack(side=RIGHT, fill=Y)
 
         xscrollbar.config(command=self.txt.xview)
@@ -187,18 +194,21 @@ class myFrame(Frame):
         message = tag.__str__() + ": " + text.__str__()
         print message
         self.txt.insert(END, message)
-        self.applyTag(tag, text)              # comment out to turn off text area highlights
+        self.applyTag(tag, text)
         self.txt.see(END)
 
     def log_urls(self, urls):
+        """
+        This method is used to log and format the url entries into the console, while applying the appropriate method to redirect the user to the related image
+
+        `urls`: the string, representing the url to which we apply the hypertext format and bind the hypertext link
+
+        """
         tag = 'URLS'
         self.txt.insert(END, tag.__str__() + ":\n")
         for url in urls:
             self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
         self.applyTag(tag, urls)
-
-    def set(self):
-        self.log('URLS', 'test')
 
     def open_url(self, url):
         """
@@ -231,6 +241,9 @@ class myFrame(Frame):
             self.lng = float(self.entries[1][1].get())
             self.zoom = int(self.entries[2][1].get())
             self.size = int(self.entries[3][1].get())
+
+            inputs = (self.lat, self.lng, self.zoom, self.size)
+            self.recent_inputs.add(inputs)
 
             self.interfaceConsole()
             self.run.config(state=NORMAL)
@@ -284,6 +297,27 @@ class myFrame(Frame):
             if tag[:6] == "hyper-":
                 self.links[tag]()
                 return
+
+    def populate_fields(self, event):
+        selection = event.widget.curselection()
+        value = event.widget.get(selection[0])
+
+        # Gather the values of the selected entry stored in history
+        # Repaint the fields of entries with pre-decided entry
+
+        self.lat = value[0]
+        self.lng = value[1]
+        self.zoom = value[2]
+        self.size = value[3]
+
+
+        self.entries[0][1].insert(0, END,  self.lat)
+        self.entries[1][1].insert(0, END,  self.lng)
+        self.entries[2][1].insert(0, END, self.zoom)
+        self.entries[3][1].insert(0, END, self.size)
+
+        # Log the selection by the user
+        self.log("RECENT SELECTION", str(value) + "\n")
 
     def add_hyper(self, action):
         """
