@@ -25,8 +25,8 @@ class Parser():
         Example arg list.
         -wa -w "Outputs/Driver Rewrite.kml" -m Outputs/Outfile.png -v -z 8 -c 40.0583,-74.4057 -s 600 "Inputs/KML Files/us_states.kml"
         """
-        self.switches = {'wa':0, 'v':0}
-        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0}
+        self.switches = {'wa':0, 'v':0, 'h':0}
+        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0,}
 
     def parse(self, flag, data):
         """
@@ -121,7 +121,7 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
 
     # open the kml fasade.
     fasade = KmlFasade(args[-1])
-    fasade.placemarkToGeometrics()
+    fasade.placemarkToGeometrics(switches['h'])
 
     if data['w']: fasade.removeGarbageTags()
     if switches['v']: observe.setStatus('Garbage data removed.\n', 'CONSOLE')

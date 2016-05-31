@@ -303,7 +303,7 @@ class UrlBuilder(Observable):
         else:
             return 0
 
-    def printUrls(self):
+    def printUrls(self, prin=0):
         """
         `Author`: Bill Clark
 
@@ -317,7 +317,7 @@ class UrlBuilder(Observable):
         for url in self.urllist:
             ret += url + '\n'
         ret += self.url + '\n'
-        print ret
+        if prin: print ret
         return ret
 
     def __str__(self):
