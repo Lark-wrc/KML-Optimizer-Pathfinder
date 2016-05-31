@@ -125,7 +125,7 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     if data['co']: fasade = KmlComposite(*[KmlFasade(file) for file in args[-(data['co']):]])
     else: fasade = KmlFasade(args[-1])
 
-    fasade.placemarkToGeometrics(switches['h'])
+    fasade.process(switches['h'])
 
     if data['w']: fasade.removeGarbageTags()
     if switches['v']: observe.setStatus('Garbage data removed.\n', 'CONSOLE')
