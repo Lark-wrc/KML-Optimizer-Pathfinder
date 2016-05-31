@@ -1,7 +1,7 @@
 from PIL import Image
 
 debug = 0
-diffnum = 50
+diffnum = 125
 
 class Merger(object):
     
@@ -144,7 +144,7 @@ class Merger(object):
         self.setStatus("{} Images Converted Successfully.".format(count))
         return ret
 
-    def blkDiff(self, outfile="DifferenceFile.png"):
+    def blkDiff(self, images, outfile="DifferenceFile.png"):
         """
         `Author`: Bill Clark
 
@@ -159,17 +159,15 @@ class Merger(object):
         `outfile`: The file to write the color marked image to.
         """
 
-        self.baseimage.save(self.outfile)
         trackedimage = Image.open(self.outfile)
-
         trackeddata = trackedimage.load()
 
         topimage = Image.open(images)
         topdata = topimage.load()
         counter = 0
 
-        for x in range(baseimage.size[0]):
-            for y in range(baseimage.size[1]):
+        for x in range(self.baseimage.size[0]):
+            for y in range(self.baseimage.size[1]):
                 bpix = self.basedata[x,y]
                 tpix = topdata[x,y]
                 if abs(bpix[0] - tpix[0]) > diffnum or abs(bpix[1] - tpix[1]) > diffnum or abs(bpix[2] - tpix[2]) > diffnum:
@@ -191,3 +189,7 @@ class Merger(object):
 
     def register(self, object):
         self.observers.append(object)
+
+if __name__ == "__main__":
+    im = Merger('test.png', 'C:\Users\\bill\Desktop\Example 2 Picture 1.jpg')
+    im.blkDiff('C:\Users\\bill\Desktop\Example 2 Picture 2.jpg')
