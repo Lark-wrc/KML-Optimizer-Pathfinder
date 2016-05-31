@@ -102,13 +102,13 @@ class myFrame(Frame):
         label = Label(self, text="\nRecent Inputs:")
         label.pack()
 
-        list_recent = Listbox(self)
+        self.list_recent = Listbox(self, selectmode = SINGLE)
         for input in list(self.recent_inputs):
             input = (input[0], input[1], input[2], input[3], self.path_leaf(input[4]), self.path_leaf(input[5]), self.path_leaf(input[6]))
-            list_recent.insert(END, str(input))
-        list_recent.bind('<Double-Button-1>', self.populate_fields)
-        list_recent.config(height = list_recent.size())
-        list_recent.pack(fill=X, expand = YES, padx= 100)
+            self.list_recent.insert(END, input)
+        self.list_recent.bind('<Double-Button-1>', self.populate_fields)
+        self.list_recent.config(height = self.list_recent.size())
+        self.list_recent.pack(fill=X, expand = YES, padx= 100)
 
         row = Frame(self)
         self.run = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
@@ -252,8 +252,7 @@ class myFrame(Frame):
             self.zoom = int(self.entries[2][1].get())
             self.size = int(self.entries[3][1].get())
 
-            inputs = (self.lat, self.lng, self.zoom, self.size)
-            self.recent_inputs.add(inputs)
+            self.update_recent()
 
             self.interfaceConsole()
             self.run.config(state=NORMAL)
@@ -318,9 +317,9 @@ class myFrame(Frame):
         self.lng = value[1]
         self.zoom = value[2]
         self.size = value[3]
-        myFrame.infile = value[4]
-        myFrame.outfile = value[5]
-        myFrame.outimage = value[6]
+        myFrame.infile = self.local_path + '\\Inputs\\KML Files\\' +value[4]
+        myFrame.outfile = self.local_path + '\\Inputs\\KML Files\\' + value[5]
+        myFrame.outimage = self.local_path + '\\Inputs\\KML Files\\' + value[6]
 
         # Repaint the fields of entries with pre-decided entry
         for i in range(0, 4):
@@ -341,6 +340,12 @@ class myFrame(Frame):
         """
         head, tail = ntpath.split(path)
         return tail or ntpath.basename(head)
+
+    def update_recent(self):
+        input = (self.lat, self.lng, self.zoom, self.size, self.path_leaf(myFrame.infile), self.path_leaf(myFrame.outfile),
+                 self.path_leaf(myFrame.outimage))
+        self.list_recent.insert(END, input)
+        self.list_recent.config(height=self.list_recent.size())
 
     def add_hyper(self, action):
         """
