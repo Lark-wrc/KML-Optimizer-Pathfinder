@@ -11,5 +11,5 @@ class UiObserver(Observer):
         """
         This method logs the appropriate state of the url list
         """
-        self.ui.log(self.op, self.status)
+        self.ui.log_urls(self.status)
 

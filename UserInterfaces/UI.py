@@ -28,15 +28,15 @@ class myFrame(Frame):
     hypkey = 'hyper'                                            # Constant used by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
 
-    set_recent_inputs = OrderedSet()                                # construct recent inputs with debug test
-    inp = (41.0, -103.0, 4, 500, local_path + '\\Inputs\\KML Files\\us_states.kml',
+    set_recent_inputs = OrderedSet()         # construct recent inputs with debug test
+    test_inp = (41.0, -103.0, 4, 500, local_path + '\\Inputs\\KML Files\\us_states.kml',
            local_path + '\\Inputs\\KML Files\\dump.kml',
            local_path + '\\Inputs\\KML Files\\test.png',)
-    inp2 = (37.0, -72.0, 4, 250, local_path + '\\Inputs\\KML Files\\us_states.kml',
+    set_recent_inputs.add(test_inp)
+    test_inp = (37.0, -72.0, 4, 250, local_path + '\\Inputs\\KML Files\\us_states.kml',
            local_path + '\\Inputs\\KML Files\\dump.kml',
            local_path + '\\Inputs\\KML Files\\test.png',)
-    set_recent_inputs.add(inp)
-    set_recent_inputs.add(inp2)
+    set_recent_inputs.add(test_inp)
 
     root = Tkinter.Tk()
     root.withdraw()
@@ -98,10 +98,10 @@ class myFrame(Frame):
         # check box for html extraction
         # TODO -- use a flag for the console so that the extraction occurs on check --
         c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
-        c.pack()
+        c.pack(pady=5)
 
-        label = Label(self, text="\nRecent Inputs:")
-        label.pack()
+        label = Label(self, text="\nRecent Inputs:", anchor='n')
+        label.pack(pady=5, side = TOP)
 
         self.list_recent = Listbox(self, selectmode = SINGLE)
         for input in self.set_recent_inputs:
@@ -111,7 +111,7 @@ class myFrame(Frame):
             self.list_recent.config(height=self.list_recent.size())
         self.list_recent.bind('<Double-Button-1>', self.populate_fields)
         self.list_recent.config(height = self.list_recent.size())
-        self.list_recent.pack(fill=X, expand = YES, padx= 100, side = TOP)
+        self.list_recent.pack(fill=X, expand = YES, padx= 100, pady=5)
 
         row = Frame(self)
         self.run = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
@@ -120,8 +120,8 @@ class myFrame(Frame):
         self.run.pack(side=LEFT, expand = YES)
         self.quit.pack(side=RIGHT, expand=YES)
 
-        label = Label(self, text = "Output:")
-        label.pack()
+        label = Label(self, text = "Output:", anchor='n')
+        label.pack(pady=5)
 
         #TODO -- add files for appropriate redirect/link here --
         link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
@@ -137,7 +137,7 @@ class myFrame(Frame):
         xscrollbar = Scrollbar(self, orient=HORIZONTAL)
         xscrollbar.pack(side=BOTTOM, fill=X)
         yscrollbar = Scrollbar(self.txt)
-        yscrollbar.pack(side=RIGHT, fill=Y)
+        yscrollbar.pack(side=RIGHT, fill=Y, pady=5)
 
         xscrollbar.config(command=self.txt.xview)
         yscrollbar.config(command=self.txt.yview)
@@ -206,9 +206,12 @@ class myFrame(Frame):
         """
         message = tag.__str__() + ": " + text.__str__()
         print message
-        self.txt.insert(END, message)
-        self.applyTag(tag, text)
-        self.txt.see(END)
+        if tag.__str__() == 'URLS':
+            self.log_urls(text)
+        else:
+            self.txt.insert(END, message)
+            self.applyTag(tag, text)
+            self.txt.see(END)
 
     def log_urls(self, urls):
         """
