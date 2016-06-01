@@ -6,6 +6,7 @@ import tkMessageBox
 import traceback
 import webbrowser
 from Tkinter import *
+from ordered_set import OrderedSet
 import ntpath
 import Console
 import waitDialog
@@ -27,15 +28,15 @@ class myFrame(Frame):
     hypkey = 'hyper'                                            # Constant used by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
 
-    recent_inputs = set()                                      # construct recent inputs with debug test
-    inp = (41, -103, 4, 500, local_path + '\\Inputs\\KML Files\\us_states.kml',
+    set_recent_inputs = OrderedSet()                                # construct recent inputs with debug test
+    inp = (41.0, -103.0, 4, 500, local_path + '\\Inputs\\KML Files\\us_states.kml',
            local_path + '\\Inputs\\KML Files\\dump.kml',
            local_path + '\\Inputs\\KML Files\\test.png',)
-    inp2 = (37, -72, 4, 250, local_path + '\\Inputs\\KML Files\\us_states.kml',
+    inp2 = (37.0, -72.0, 4, 250, local_path + '\\Inputs\\KML Files\\us_states.kml',
            local_path + '\\Inputs\\KML Files\\dump.kml',
            local_path + '\\Inputs\\KML Files\\test.png',)
-    recent_inputs.add(inp)
-    recent_inputs.add(inp2)
+    set_recent_inputs.add(inp)
+    set_recent_inputs.add(inp2)
 
     root = Tkinter.Tk()
     root.withdraw()
@@ -103,12 +104,14 @@ class myFrame(Frame):
         label.pack()
 
         self.list_recent = Listbox(self, selectmode = SINGLE)
-        for input in list(self.recent_inputs):
-            input = (input[0], input[1], input[2], input[3], self.path_leaf(input[4]), self.path_leaf(input[5]), self.path_leaf(input[6]))
-            self.list_recent.insert(END, input)
+        for input in self.set_recent_inputs:
+            inp = (input[0], input[1], input[2], input[3], self.path_leaf(input[4]), self.path_leaf(input[5]),
+                     self.path_leaf(input[6]))
+            self.list_recent.insert(END, str(inp))
+            self.list_recent.config(height=self.list_recent.size())
         self.list_recent.bind('<Double-Button-1>', self.populate_fields)
         self.list_recent.config(height = self.list_recent.size())
-        self.list_recent.pack(fill=X, expand = YES, padx= 100)
+        self.list_recent.pack(fill=X, expand = YES, padx= 100, side = TOP)
 
         row = Frame(self)
         self.run = Button(row, width = 20, text = "RUN", command = self.start, bg = '#59cc33')
@@ -129,7 +132,7 @@ class myFrame(Frame):
         link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
         # configure console with scrolling on entries
-        self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE)
+        self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE, height = 350)
         self.txt.pack(fill=BOTH, expand=True)
         xscrollbar = Scrollbar(self, orient=HORIZONTAL)
         xscrollbar.pack(side=BOTTOM, fill=X)
@@ -309,25 +312,24 @@ class myFrame(Frame):
 
     def populate_fields(self, event):
         selection = event.widget.curselection()
-        value = event.widget.get(selection[0])
 
         # Gather the values of the selected entry stored in history
         # Repaint the fields of entries with pre-decided entry
-        self.lat = value[0]
-        self.lng = value[1]
-        self.zoom = value[2]
-        self.size = value[3]
-        myFrame.infile = self.local_path + '\\Inputs\\KML Files\\' +value[4]
-        myFrame.outfile = self.local_path + '\\Inputs\\KML Files\\' + value[5]
-        myFrame.outimage = self.local_path + '\\Inputs\\KML Files\\' + value[6]
+        self.lat = self.set_recent_inputs[selection[0]][0]
+        self.lng = self.set_recent_inputs[selection[0]][1]
+        self.zoom = self.set_recent_inputs[selection[0]][2]
+        self.size = self.set_recent_inputs[selection[0]][3]
+        myFrame.infile = self.set_recent_inputs[selection[0]][4]
+        myFrame.outfile = self.set_recent_inputs[selection[0]][5]
+        myFrame.outimage = self.set_recent_inputs[selection[0]][6]
 
         # Repaint the fields of entries with pre-decided entry
         for i in range(0, 4):
             self.entries[i][1].delete(0, END)
-            self.entries[i][1].insert(0, value[i])
+            self.entries[i][1].insert(0, self.set_recent_inputs[selection[0]][i])
 
         # Log the selection by the user
-        self.log("RECENT SELECTION", str(value) + "\n")
+        self.log("RECENT SELECTION", str(self.set_recent_inputs[selection[0]]) + "\n")
 
     def path_leaf(self, path):
         """
@@ -342,10 +344,10 @@ class myFrame(Frame):
         return tail or ntpath.basename(head)
 
     def update_recent(self):
-        input = (self.lat, self.lng, self.zoom, self.size, self.path_leaf(myFrame.infile), self.path_leaf(myFrame.outfile),
-                 self.path_leaf(myFrame.outimage))
-        self.list_recent.insert(END, input)
-        self.list_recent.config(height=self.list_recent.size())
+        input = (self.lat, self.lng, self.zoom, self.size, self.path_leaf(myFrame.infile), self.path_leaf(myFrame.outfile),self.path_leaf(myFrame.outimage))
+        if self.set_recent_inputs.add(input):
+            self.list_recent.insert(END, str(input))
+            self.list_recent.config(height=self.list_recent.size())
 
     def add_hyper(self, action):
         """
@@ -546,4 +548,4 @@ def center(root, w, h):
     return offset_x, offset_y
 
 if __name__ == '__main__':
-    main(550, 550)
+    main(550, 700)
