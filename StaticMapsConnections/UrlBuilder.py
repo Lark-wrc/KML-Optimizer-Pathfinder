@@ -7,7 +7,7 @@ class UrlBuilder(Observable):
 
     def __init__(self, height, width=0):
         """
-        `Author`: Bill Clark, Nick Laposta
+        `Author`: Bill Clark
 
         The UrlBuilder Class should be created anew for each url the user wants to build.
         Using the methods contained, the user may create a valid google maps static api url.
@@ -52,7 +52,7 @@ class UrlBuilder(Observable):
         """
         `Author`: Bill Clark
 
-        Allows for a list of parameters to be added to the static map. This is applied to all urls in a split scenerio.
+        Allows for a list of parameters to be added to the static map. This is applied to all urls in a split scenario.
 
         `dict: a dictionary of features`:values from the addparam method.
 
@@ -72,7 +72,7 @@ class UrlBuilder(Observable):
         `Author`: Bill Clark
 
         This method adds two parameters to the url that are required for a consistent image. In order to merge
-        images, these parameters are required to keep the image displaying the same area. In a split scenerio,
+        images, these parameters are required to keep the image displaying the same area. In a split scenario,
         these are applied to each url. Multiple calls are unnecessary.
 
         `center`: The center point the map will display. latitude and longitude coordinates.
@@ -209,6 +209,15 @@ class UrlBuilder(Observable):
         return curr
 
     def addGeometrics(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        Exported from the original driver. This code takes a list of geometrics and adds their data to the urls.
+        Points are  NOT included, the line is commented out. Linestrings are drawn in red, Polygons in blue, and
+        if markers are uncommented they will be yellow.
+
+        `geometrics`: A list of geometrics from a KmlFasade.
+        """
         markerlist = []
         for element in geometrics:
             if element.tag == "Point":
@@ -309,8 +318,10 @@ class UrlBuilder(Observable):
 
         This method prints all the urls contained in the object in a readable manner. As readable as lines of character
         length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
+        The print is actually optional now, because we now have proper handlers that can print the string in better
+        places. Now the generated string is returned by default.
 
-        `return`: side effect, return the list of urls for logging in UI
+        `return`: the list of urls for logging in UI
         """
         ret = ""
         ret += "Base Url: " + self.urlbase + '\n'
@@ -328,9 +339,4 @@ class UrlBuilder(Observable):
 
         `return`: ToString of the url's contained in the object.
         """
-        ret = ""
-        ret += self.urlbase + '\n'
-        for url in self.urllist:
-            ret += url + '\n'
-        ret += self.url
-        return ret
+        return self.printUrls()

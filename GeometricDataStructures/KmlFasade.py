@@ -116,6 +116,10 @@ class KmlFasade(object):
         stored in the Outputs\metadata folder for later access. Both functions are done within a single iteration
         of the placemarks for efficiency.
 
+        `extract`: flag to turn on the HTML metadata extraction function of the loop. Defaults to off.
+
+        `geos`: flag to turn on the geometric conversion part of the loop. Defaults to on.
+
         `return`: List of geometric objects for each placemark in this object's placemark list. This is stored in class
                   as well.
         """
@@ -165,6 +169,19 @@ class KmlFasade(object):
         return ret
 
     def html_entry(self, html_tag, tag, text):
+        """
+        `Author`: Nick Laposta
+
+        Formats a string to an html entry for logging purposes. Used by the processPlacemarks when extract is set to 1.
+
+        `html_tag`: The html style tag to be used.
+
+        `tag`: The tag of the xml element being logged.
+
+        `text`: The text value of the xml element.
+
+        `return`: A formatted html string of the tag and text.
+        """
         return "<" + html_tag + ">" + tag + "</" + html_tag + ">" + "\n\n" + text + "\n\n"
 
     def fasadeUpdate(self):

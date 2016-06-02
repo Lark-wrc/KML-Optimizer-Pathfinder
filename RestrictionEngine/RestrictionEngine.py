@@ -68,7 +68,7 @@ class Restriction(object):
         """
         `Author`: Nick LaPosta
 
-        Determines the proper zoom level and filter range for the given frame size
+        Determines the proper  zoom level and filter range for the given frame size.
 
         `width`: The desired size in miles for the view port.
 
@@ -77,36 +77,6 @@ class Restriction(object):
         zoom_level = ZOOM_CONSTANT - log(width, 2)
         filter_range = sqrt(width)
         return zoom_level, filter_range
-
-    def haversine(self, start, end):
-        """
-        `Author`: Nick LaPosta, Bill Clark
-
-        Uses the mathematical function of the same name to find the distance between two long lat coordinates.
-
-        `start`: The first coordinate, a lat long value pair in a list.
-
-        `end`: The second coordinate, a lat long value pair in a list.
-
-        `return`: The distance in the given metric system.
-        """
-
-        start = [start[1], start[0]]
-        end = [end[1], end[0]]
-
-        if self.metric:
-            r = 6371  # Earth radius in kilometers
-        else:
-            r = 3959  # Earth radius in miles
-
-        d_lat = radians(end[0] - start[0])
-        d_lon = radians(end[1] - start[1])
-        start[0] = radians(start[0])
-        end[0] = radians(end[0])
-        a = sin(d_lat / 2)**2 + cos(start[0]) * cos(end[0]) * sin(d_lon / 2)**2
-        c = 2*asin(sqrt(a))
-
-        return r * c
 
 
 class WAClippingRestriction(Restriction):
@@ -184,6 +154,8 @@ class SquareRestriction(Restriction):
         """
         `Author`: Bill Clark
 
+        DEPRECIATED: Use WAClipping.
+
         A restriction that flags all points that are not within distance x from a given center point to be removed.
         This is done in a square pattern by using two points, the NW corner and the SW corner. 
 
@@ -250,6 +222,8 @@ class CircleRadiusRestriction(Restriction):
         """
         `Author`: Bill Clark
 
+        DEPRECIATED: Use WAClipping.
+
         A restriction that flags all points that are not with in distance x from a given center point to be removed.
 
         `center`: the center point to draw distances from.
@@ -287,3 +261,33 @@ class CircleRadiusRestriction(Restriction):
                         break
             else:
                 print "Are you sure that was a good idea?"
+
+    def haversine(self, start, end):
+        """
+        `Author`: Nick LaPosta, Bill Clark
+
+        Uses the mathematical function of the same name to find the distance between two long lat coordinates.
+
+        `start`: The first coordinate, a lat long value pair in a list.
+
+        `end`: The second coordinate, a lat long value pair in a list.
+
+        `return`: The distance in the given metric system.
+        """
+
+        start = [start[1], start[0]]
+        end = [end[1], end[0]]
+
+        if self.metric:
+            r = 6371  # Earth radius in kilometers
+        else:
+            r = 3959  # Earth radius in miles
+
+        d_lat = radians(end[0] - start[0])
+        d_lon = radians(end[1] - start[1])
+        start[0] = radians(start[0])
+        end[0] = radians(end[0])
+        a = sin(d_lat / 2)**2 + cos(start[0]) * cos(end[0]) * sin(d_lon / 2)**2
+        c = 2*asin(sqrt(a))
+
+        return r * c

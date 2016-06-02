@@ -35,6 +35,7 @@ class Parser():
         `Author`: Bill Clark
 
         This is the method that parses a flag with it's data. It sets the class wide switches when provided.
+        If the flag has not none data, it's a data switch else it's a switch.
 
         `flag`: The flag being set. IE -v, -wa.
 
@@ -125,7 +126,7 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     if data['co']: fasade = KmlComposite(*[KmlFasade(file) for file in args[-(data['co']):]])
     else: fasade = KmlFasade(args[-1])
 
-    fasade.process(switches['h'])
+    fasade.processPlacemarks(switches['h'])
 
     if data['w']: fasade.removeGarbageTags()
     if switches['v']: observe.setStatus('Garbage data removed.\n', 'CONSOLE')
