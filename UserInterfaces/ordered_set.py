@@ -1,68 +1,35 @@
 
-import collections
+class OrderedSet(object):
+    """
+    this class is our implementation of an ordered set in python
 
-class OrderedSet(collections.MutableSet):
+    It wraps a list, allowing the the admission of elements only if the are NOT already contained in the list
+
+    """
+
+    lst = []    # internal component, collection of elements
 
     def __init__(self, iterable=None):
-        self.lst = []
-        self.end = end = []
-        end += [None, end, end]         # sentinel node for doubly linked list
-        self.map = {}                   # key --> [key, prev, next]
-        if iterable is not None:
-            self |= iterable
+        self.clear()
 
     def __len__(self):
-        return len(self.map)
+        return len(self.lst)
 
-    def __contains__(self, key):
-        return key in self.map
+    def __contains__(self, item):
+        return item in self.lst
 
-    def add(self, key):
-        if key not in self.map:
-            end = self.end
-            curr = end[1]
-            curr[2] = end[1] = self.map[key] = [key, curr, end]
-            self.lst.append(key)
+    def add(self, item):
+        print self.lst
+        if not self.__contains__(item):
+            self.lst.append(item)
             return True
         return False
 
-    def discard(self, key):
-        if key in self.map:
-            key, prev, next = self.map.pop(key)
-            prev[2] = next
-            next[1] = prev
+    def clear(self):
+        self.lst = []
 
     def __iter__(self):
-        end = self.end
-        curr = end[2]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[2]
+        return self.lst
 
-    def __getitem__(self, item):
-        return self.lst[item]
-
-    def __reversed__(self):
-        end = self.end
-        curr = end[1]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[1]
-
-    def pop(self, last=True):
-        if not self:
-            raise KeyError('set is empty')
-        key = self.end[1][0] if last else self.end[2][0]
-        self.discard(key)
-        return key
-
-    def __repr__(self):
-        if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
-
-    def __eq__(self, other):
-        if isinstance(other, OrderedSet):
-            return len(self) == len(other) and list(self) == list(other)
-        return set(self) == set(other)
-
+    def __getitem__(self, index):
+        return self.lst[index]
