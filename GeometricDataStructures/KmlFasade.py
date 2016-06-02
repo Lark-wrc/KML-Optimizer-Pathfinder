@@ -50,8 +50,7 @@ class KmlFasade(object):
         """
         `Author`: Bill Clark
 
-        Writes the stored file object back to the orginal file or a provided path. Basically combines a few lxml methods
-        to make this task quicker.
+        Writes the stored file object back to the orginal file or a provided path.
 
         `path`: The path to write to, otherwise it will use the original write path.
         """
@@ -85,11 +84,12 @@ class KmlFasade(object):
         `Author`: Bill Clark
 
         This method is used to append any xml tag with the placemark tag to a list and return it.
-        As the most relevant data in a kml file appears in a placemark tag, this is a convience method
+        As the most relevant data in a kml file appears in a placemark tag, this is a convience operation
         to prevent excess searching.
         During the interation, the method also looks to find all elements in the file that are irrelevant.
         Each element with it's tag in garbage data has no geometric data we care about. We can freely
-        delete them later with the garbageFilter method.
+        delete them later with the garbageFilter method. The functions are done at the same time for
+        efficiency's sake, we have very large files to process.
 
         `return`: A list of lxml Element objects matching the placemark tag. This is also stored in class.
         """
@@ -226,7 +226,7 @@ class KmlFasade(object):
         """
         `Author`: Bill Clark
 
-        Returns the geometrics contained in the class. Not really needed, but this helps for implementations using
+        Returns the geometrics contained in the class. Needed for implementations using
         the composite module. It uses yield instead of return so that it can be accessed in the same way of the
         composite, for x in yield.
         """

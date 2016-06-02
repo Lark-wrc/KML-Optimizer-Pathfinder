@@ -8,7 +8,8 @@ class KmlComposite:
         This class wraps kml fasades. It's functions through the composite method. Any call made to a
         KmlComposite calls the associated method on the fasades it wraps. No other actions are taken.
         One method is missing from KmlFasade, adding geometry. It's rarely used, and more importantly
-        doesn't work with the concept of apply the same action to all members.
+        doesn't work with the concept of apply the same action to all members. Each methods details
+        can be obtained from the KmlFasade class.
 
         `fasades`: A list of Kml Fasades.
         """
