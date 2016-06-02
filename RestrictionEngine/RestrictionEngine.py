@@ -15,21 +15,13 @@ class RestrictionFactory(object):
         """
         self.metric = metric
 
-    def newCircleRadiusRestriction(self, center, distance):
-        """
-        `Author`: Bill Clark
-
-        See CircleRadiusRestriction, this method returns a new instance of that object.
-        """
-        return CircleRadiusRestriction(center, distance, self.metric)
-
-    def newSquareRestriction(self, center, distance):
+    def newSquareRestriction(self, viewport):
         """
         `Author`: Bill Clark
 
         See SquareRestriction, this method returns a new instance of that object.
         """
-        return SquareRestriction(center, distance, self.metric)
+        return SquareRestriction(viewport)
 
     def newWAClipping(self, viewport):
         """
@@ -150,7 +142,7 @@ class WAClippingRestriction(Restriction):
 
 class SquareRestriction(Restriction):
 
-    def __init__(self, center, distance, metric=0):
+    def __init__(self, viewport):
         """
         `Author`: Bill Clark
 
@@ -165,15 +157,10 @@ class SquareRestriction(Restriction):
 
         `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
         """
-        super(SquareRestriction, self).__init__(metric)
-        self.center = center
-        self.distance = distance
-        if metric:
-            distance *= 0.62137
-        latDist = distance/69
-        lonDist = distance/(69.172)
-        self.NW = [center[0]-lonDist, center[1]+latDist]
-        self.SE = [center[0]+lonDist, center[1]-latDist]
+        super(SquareRestriction, self).__init__(0)
+        self.viewport = viewport
+        self.NW = self.viewport[1]
+        self.SE = self.viewport[3]
 
     def restrict(self, geometrics):
         """
@@ -187,107 +174,30 @@ class SquareRestriction(Restriction):
         """
         for geometry in geometrics:
             if geometry.tag == "Point":
-                if not self.pointWithinDistance(geometry.coordinates[0].listed()):
+                if not self.pointWithinCorners(geometry.coordinates[0]):
                     geometry.remove = 1
             elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
                 for coord in geometry.coordinates:
-                    if self.pointWithinDistance(coord.listed()):
+                    if self.pointWithinCorners(coord):
                         pass
                     else:
-                        geometry.remove = 1
+                        geometry.remove = len(geometry.coordinates)
                         break
             else:
                 print "uh oh spagettios."
 
-    def pointWithinDistance(self, coordinates):
+    def pointWithinCorners(self, coordinates):
         """
         `Author`: Bill Clark
 
         Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
         restrict.
 
-        `coordinates`: List of coordinate values, long lat.
+        `coordinates`: A LatLongPoint object.
 
         `return`: True if the point is contained, false else.
         """
-        if coordinates[0] >= self.NW[0] and coordinates[0] <= self.SE[0]:
-            if coordinates[1] <= self.NW[1] and coordinates[1] >= self.SE[1]:
+        if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+            if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
                 return True
         return False
-
-
-class CircleRadiusRestriction(Restriction):
-
-    def __init__(self, center, distance, metric=0):
-        """
-        `Author`: Bill Clark
-
-        DEPRECIATED: Use WAClipping.
-
-        A restriction that flags all points that are not with in distance x from a given center point to be removed.
-
-        `center`: the center point to draw distances from.
-
-        `distance`: the distance in the given metric that a point must be within from center.
-
-        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
-        """
-
-        super(CircleRadiusRestriction,self).__init__(metric)
-        self.center = center
-        self.distance = distance
-
-    def restrict(self, geometrics):
-        """
-        `Author`: Bill Clark
-
-        Looks at each geometric object in the list and, if it is not within distance of center, flags it for removal.
-
-        `geometrics`: A list of geometic objects.
-        """
-
-        for geometry in geometrics:
-            if geometry.tag == "Point":
-                d = self.haversine(self.center, geometry.coordinates[0].listed())
-                if d > self.distance:
-                    geometry.remove = 1
-            elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
-                for coord in geometry.coordinates:
-                    d = self.haversine(self.center, coord.listed())
-                    if d <= self.distance:
-                        pass
-                    else:
-                        geometry.remove = 1
-                        break
-            else:
-                print "Are you sure that was a good idea?"
-
-    def haversine(self, start, end):
-        """
-        `Author`: Nick LaPosta, Bill Clark
-
-        Uses the mathematical function of the same name to find the distance between two long lat coordinates.
-
-        `start`: The first coordinate, a lat long value pair in a list.
-
-        `end`: The second coordinate, a lat long value pair in a list.
-
-        `return`: The distance in the given metric system.
-        """
-
-        start = [start[1], start[0]]
-        end = [end[1], end[0]]
-
-        if self.metric:
-            r = 6371  # Earth radius in kilometers
-        else:
-            r = 3959  # Earth radius in miles
-
-        d_lat = radians(end[0] - start[0])
-        d_lon = radians(end[1] - start[1])
-        start[0] = radians(start[0])
-        end[0] = radians(end[0])
-        a = sin(d_lat / 2)**2 + cos(start[0]) * cos(end[0]) * sin(d_lon / 2)**2
-        c = 2*asin(sqrt(a))
-
-        return r * c
