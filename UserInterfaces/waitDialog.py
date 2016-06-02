@@ -8,10 +8,14 @@ class waitDialog(tk.Tk):
     def __init__(self, w, h, outimage):
         """
         This class encapsulates the functionality of the dialog box, specially designed to inform the user to wait during extended execution.
-        Its job also serves to update the text of dialog as the execution of persitently extended work
+        Its job also serves to update the text of dialog as the execution of persistently extended work
+
         `w`: desired width of app window
+
         `h`: desired width of app window
+
         `outimage`: destination of resultant image required to be oriented here to ensure updates are recorded
+
         `build`: state or URL builder required to be here as it is essential to execution of image downloading
         """
         self.w = w
@@ -23,6 +27,7 @@ class waitDialog(tk.Tk):
         This method sets the field of the display to the value of args
 
         `format`: layout of text to be prefaced in the display of the dialog
+
         `args`: string value to be displayed by dialog
         """
         self.update()
@@ -34,7 +39,6 @@ class waitDialog(tk.Tk):
         """
         This method clears the display of all text
 
-        :return:
         """
         self.label.config(text="")
         self.label.update_idletasks()
@@ -57,7 +61,7 @@ class waitDialog(tk.Tk):
 
     def activate(self):
         """
-        This method executes all of the essential code rewuired to beexecuted, in sequence, and in tandem with the UI driver
+        This method executes all of the essential code required to be executed, in sequence, and in tandem with the UI driver
 
         """
         # first render this window as the foremost visual element
@@ -77,10 +81,13 @@ class waitDialog(tk.Tk):
         self.set("We are merging the downloaded URL images now. This may take a few minutes" + "\nA button will appear for you to close this when work is done")
 
     def end(self):
+        """
+        This method updates the dialog box upon the closing of execution, by adding close and view buttons
+
+        """
         self.set("Finished. \nPlease hit View to view the image, or close to continue")
         self.buttonView.pack(side=LEFT, padx = 15, pady = 3, fill = BOTH, expand = YES)
         self.buttonClose.pack(side=RIGHT, padx = 15, pady = 3, fill = BOTH, expand = YES)
-
 
 # TODO -- keep or not keep this driver? (its useless)
 def main(w, h):

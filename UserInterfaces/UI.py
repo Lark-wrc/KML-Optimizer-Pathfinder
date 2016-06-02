@@ -21,23 +21,15 @@ class myFrame(Frame):
     ftypes = [('KML files', '.kml')]                            # default file types of kml save and open
     itypes = [('All files', '.*'), ('PNG files', '.png')]       # default file types of image saving
     init_dir = '../Inputs/KML Files/'                           # destination of local resources for file attribution
-    local_path = os.path.dirname(os.path.dirname(__file__))     # Used to designate the location of the project within the relative machine file system being used
-    how_to_path = local_path + "\how_to.txt"                    # path to the readme txt file of concise directions for use
     doc_url = "http://www.google.com"                           # resource of documentation TBD
     div_string = ("_", 2048)                                    # string to be used to 'divide' separate execs in the text area, with length as width
     hypkey = 'hyper'                                            # Constant used by hyper text capabilities to add click-able links to console
     console_font_size = 8                                       # size of text for console
+    Frame.local_path = os.path.dirname(os.path.dirname(__file__))  # Used to designate the location of the project within the relative machine file system being use
+    Frame.set_recent_inputs = OrderedSet()                      # ordered set of pre-determined recent inputs
+    how_to_path = Frame.local_path + "\how_to.txt"  # path to the readme txt file of concise directions for use
 
-    set_recent_inputs = OrderedSet()         # construct recent inputs with debug test
-    test_inp = (41.0, -103.0, 4, 500, local_path + '\\Inputs\\KML Files\\us_states.kml',
-           local_path + '\\Inputs\\KML Files\\dump.kml',
-           local_path + '\\Inputs\\KML Files\\test.png',)
-    set_recent_inputs.add(test_inp)
-    test_inp = (37.0, -72.0, 4, 250, local_path + '\\Inputs\\KML Files\\us_states.kml',
-           local_path + '\\Inputs\\KML Files\\dump.kml',
-           local_path + '\\Inputs\\KML Files\\test.png',)
-    set_recent_inputs.add(test_inp)
-
+    # build frame, on tkinter root foundation
     root = Tkinter.Tk()
     root.withdraw()
 
@@ -48,6 +40,19 @@ class myFrame(Frame):
     infile = None      # destination of KML file to be read
     outfile = None     # destination of KML file to be written
     outimage = None    # destination of Image file to be read
+
+
+    Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with debug test
+
+    # initialize the set of recent inputs to our test suite
+    test_inp1 = (41.0, -103.0, 4, 500, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+                     Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
+                     Frame.local_path + '\\Inputs\\KML Files\\test.png')
+    test_inp2 = (37.0, -72.0, 4, 250, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+                     Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
+                     Frame.local_path + '\\Inputs\\KML Files\\test.png')
+    Frame.set_recent_inputs.lst.append(test_inp1)
+    Frame.set_recent_inputs.lst.append(test_inp2)
 
     def __init__(self, parent):
         """
@@ -104,7 +109,7 @@ class myFrame(Frame):
         label.pack(pady=5, side = TOP)
 
         self.list_recent = Listbox(self, selectmode = SINGLE)
-        for input in self.set_recent_inputs:
+        for input in Frame.set_recent_inputs.lst:
             inp = (input[0], input[1], input[2], input[3], self.path_leaf(input[4]), self.path_leaf(input[5]),
                      self.path_leaf(input[6]))
             self.list_recent.insert(END, str(inp))
@@ -181,15 +186,18 @@ class myFrame(Frame):
                                   self.line_count.__str__() + "." + len(line.__str__()).__str__())
                 self.line_count += 1
             self.txt.tag_config(tag.__str__(), background="#ffb3b3", foreground="black")
-        if tag.__str__() == 'REDIRECTING':
+        elif tag.__str__() == 'REDIRECTING':
             self.txt.tag_config(tag.__str__(), background="orange", foreground="black")
             self.line_count += text.count('\n')
         elif tag.__str__() == 'FINISHED':
             self.txt.tag_config(tag.__str__(), background="green", foreground="black")
             self.line_count += text.count('\n')
+        elif tag.__str__() == 'CONSOLE':
+            self.txt.tag_config(tag.__str__(), background="#99ccff", foreground="#004d1a")
+            self.line_count += text.count('\n')
         elif tag.__str__() == 'URLS':
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="#004d1a")
-            self.line_count += len(text) + 1
+            self.line_count += text.count('\n') + 1
         else:
             self.txt.tag_config(tag.__str__(), background="yellow", foreground="#004d1a")
             self.line_count += text.count('\n')
@@ -207,24 +215,14 @@ class myFrame(Frame):
         message = tag.__str__() + ": " + text.__str__()
         print message
         if tag.__str__() == 'URLS':
-            self.log_urls(text)
+            self.txt.insert(END, tag.__str__() + ":\n")
+            for url in text.splitlines():
+                self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
         else:
             self.txt.insert(END, message)
-            self.applyTag(tag, text)
-            self.txt.see(END)
 
-    def log_urls(self, urls):
-        """
-        This method is used to log and format the url entries into the console, while applying the appropriate method to redirect the user to the related image
-
-        `urls`: the string, representing the url to which we apply the hypertext format and bind the hypertext link
-
-        """
-        tag = 'URLS'
-        self.txt.insert(END, tag.__str__() + ":\n")
-        for url in urls:
-            self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
-        self.applyTag(tag, urls)
+        self.applyTag(tag, text)
+        #self.txt.see(END)
 
     def open_url(self, url):
         """
@@ -267,7 +265,7 @@ class myFrame(Frame):
             self.run.config(state=NORMAL)
             e = sys.exc_info()
             tb = traceback.format_exc()
-            self.log("ERROR", "\n" + str(e) + str(tb) + "\n")
+            self.log('ERROR', "\n" + str(e) + str(tb) + "\n")
             if self.wd != None:
                 self.wd.set("An error has occurred.\nPlease close this dialog to continue.")
 
@@ -314,25 +312,32 @@ class myFrame(Frame):
                 return
 
     def populate_fields(self, event):
+        """
+        This method inserts the fields of the selected entry of the list of previous runs, and adds it to the state of the running UI
+        First the fields are set to ready their application upon running
+        then the entry fields are cleared and refilled with the fields of the selected input
+
+        'event': the selection of the chosen entry in the list box of previous inputs
+        """
         selection = event.widget.curselection()
 
         # Gather the values of the selected entry stored in history
         # Repaint the fields of entries with pre-decided entry
-        self.lat = self.set_recent_inputs[selection[0]][0]
-        self.lng = self.set_recent_inputs[selection[0]][1]
-        self.zoom = self.set_recent_inputs[selection[0]][2]
-        self.size = self.set_recent_inputs[selection[0]][3]
-        myFrame.infile = self.set_recent_inputs[selection[0]][4]
-        myFrame.outfile = self.set_recent_inputs[selection[0]][5]
-        myFrame.outimage = self.set_recent_inputs[selection[0]][6]
+        self.lat = Frame.set_recent_inputs[selection[0]][0]
+        self.lng = Frame.set_recent_inputs[selection[0]][1]
+        self.zoom = Frame.set_recent_inputs[selection[0]][2]
+        self.size = Frame.set_recent_inputs[selection[0]][3]
+        myFrame.infile = Frame.set_recent_inputs[selection[0]][4]
+        myFrame.outfile = Frame.set_recent_inputs[selection[0]][5]
+        myFrame.outimage = Frame.set_recent_inputs[selection[0]][6]
 
         # Repaint the fields of entries with pre-decided entry
         for i in range(0, 4):
             self.entries[i][1].delete(0, END)
-            self.entries[i][1].insert(0, self.set_recent_inputs[selection[0]][i])
+            self.entries[i][1].insert(0, Frame.set_recent_inputs[selection[0]][i])
 
         # Log the selection by the user
-        self.log("RECENT SELECTION", str(self.set_recent_inputs[selection[0]]) + "\n")
+        self.log("RECENT SELECTION", str(Frame.set_recent_inputs[selection[0]]) + "\n")
 
     def path_leaf(self, path):
         """
@@ -347,9 +352,14 @@ class myFrame(Frame):
         return tail or ntpath.basename(head)
 
     def update_recent(self):
-        input = (self.lat, self.lng, self.zoom, self.size, self.path_leaf(myFrame.infile), self.path_leaf(myFrame.outfile),self.path_leaf(myFrame.outimage))
-        if self.set_recent_inputs.add(input):
-            self.list_recent.insert(END, str(input))
+        """
+        this method adds to the set of previous inputs the selected combination then the list box of entries is updated
+
+        """
+        input = (self.lat, self.lng, self.zoom, self.size, myFrame.infile, myFrame.outfile, myFrame.outimage)
+        if Frame.set_recent_inputs.add(input):
+            inp = (self.lat, self.lng, self.zoom, self.size, self.path_leaf(myFrame.infile), self.path_leaf(myFrame.outfile), self.path_leaf(myFrame.outimage))
+            self.list_recent.insert(END, str(inp))
             self.list_recent.config(height=self.list_recent.size())
 
     def add_hyper(self, action):
@@ -368,6 +378,7 @@ class myFrame(Frame):
 
         This method will read in, at the request of the user, a file to be used for processing
         """
+
         # init pathname to local resource __file__ in case of erroneous choice
         myFrame.infile = os.path.join(os.path.dirname(__file__), '..')
         file =tkFileDialog.askopenfilename(parent=self.root, filetypes=self.ftypes, initialdir=self.init_dir, title = "Please choose a file to open", defaultextension='.kml')
@@ -407,7 +418,7 @@ class myFrame(Frame):
         Some Comment
 
         """
-        #TODO -- finsish this doc --
+        #TODO -- finish this doc --
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
