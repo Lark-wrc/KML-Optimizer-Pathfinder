@@ -83,7 +83,8 @@ class myFrame(Frame):
 
         self.parent.title("KML Klipper")
         self.pack(fill=BOTH, expand=1)
-        menubar = Menu(self.parent)
+
+        menubar = Menu(self)
         self.parent.config(menu=menubar)
         filemenu = Menu(menubar, tearoff = 0)
         menubar.add_cascade(label='File', menu = filemenu)
