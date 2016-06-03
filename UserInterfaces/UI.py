@@ -1,6 +1,7 @@
 import Tkinter
 import os
 import tkFileDialog
+import tkFont
 import tkMessageBox
 import traceback
 import webbrowser
@@ -446,7 +447,6 @@ class myFrame(Frame):
         # if ' ' in outimage: outimage = '"'+outimage+'"'
         # if ' ' in outfile: outfile = '"'+outfile+'"'
 
-        # TODO -- install flag call for html extraction --
         sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
             outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
