@@ -11,7 +11,7 @@ import ntpath
 import Console
 import waitDialog
 from Observations.WaitObserver import WaitObserver
-from Observations.UiObserver import UiObserver
+from Observations.uiObserver import UiObserver
 
 
 class myFrame(Frame):
@@ -27,7 +27,7 @@ class myFrame(Frame):
     console_font_size = 8                                       # size of text for console
     Frame.local_path = os.path.dirname(os.path.dirname(__file__))  # Used to designate the location of the project within the relative machine file system being use
     Frame.set_recent_inputs = OrderedSet()                      # ordered set of pre-determined recent inputs
-    how_to_path = Frame.local_path + "\how_to.txt"  # path to the readme txt file of concise directions for use
+    how_to_path = Frame.local_path + "\how_to.txt"              # path to the readme txt file of concise directions for use
 
     # build frame, on tkinter root foundation
     root = Tkinter.Tk()
@@ -36,7 +36,7 @@ class myFrame(Frame):
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
     entries = []       # list of values assigned to fields (see above) upon entry by user
-
+    ifextract = 0      # switch to denote extraction of html metadata
     infile = None      # destination of KML file to be read
     outfile = None     # destination of KML file to be written
     outimage = None    # destination of Image file to be read
@@ -68,8 +68,6 @@ class myFrame(Frame):
         Frame.__init__(self, parent)
 
         self.parent = parent
-        self.ifextract = BooleanVar()
-        self.ifextract.set(1)
         self.wd = None              # field to use for wait dialog when necessary
         self.initUI()
 
@@ -84,14 +82,16 @@ class myFrame(Frame):
         """
 
         self.parent.title("KML Klipper")
-
         self.pack(fill=BOTH, expand=1)
-        menubar = Menu(self.parent)
+
+        menubar = Menu(self)
         self.parent.config(menu=menubar)
-        menubar.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
-        menubar.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
-        menubar.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
-        menubar.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
+        filemenu = Menu(menubar, tearoff = 0)
+        menubar.add_cascade(label='File', menu = filemenu)
+        filemenu.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
+        filemenu.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
+        filemenu.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
+        filemenu.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
 
         for field in self.fields:
             row = Frame(self)
@@ -104,7 +104,6 @@ class myFrame(Frame):
 
         # check box for html extraction
         # TODO -- use a flag for the console so that the extraction occurs on check --
-        print self.ifextract.get()
         c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
         c.pack(pady=5)
 
@@ -132,12 +131,12 @@ class myFrame(Frame):
         label.pack(pady=5)
 
         #TODO -- add files for appropriate redirect/link here --
-        # link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
-        # link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
-        # font = tkFont.Font(link, link.cget("font"))
-        # font.configure(underline=True)
-        # link.configure(font=font)
-        # link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
+        link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
+        link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
+        font = tkFont.Font(link, link.cget("font"))
+        font.configure(underline=True)
+        link.configure(font=font)
+        link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
         # configure console with scrolling on entries
         self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE, height = 350)
@@ -219,7 +218,7 @@ class myFrame(Frame):
         print message
         if tag.__str__() == 'URLS':
             self.txt.insert(END, tag.__str__() + ":\n")
-            for url in text[10:].splitlines():
+            for url in text.splitlines():
                 self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
         else:
             self.txt.insert(END, message)
@@ -259,10 +258,9 @@ class myFrame(Frame):
             self.zoom = int(self.entries[2][1].get())
             self.size = int(self.entries[3][1].get())
 
-            self.interfaceConsole()
-
             self.update_recent()
 
+            self.interfaceConsole()
             self.run.config(state=NORMAL)
 
         except:
@@ -448,10 +446,11 @@ class myFrame(Frame):
         # if ' ' in outimage: outimage = '"'+outimage+'"'
         # if ' ' in outfile: outfile = '"'+outfile+'"'
 
+        # TODO -- install flag call for html extraction --
+        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
+            outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
-                '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
-        if self.ifextract.get():
-            args = ['-h'] + args
+                '-c', repr(lat)+','+ repr(lng), '-s', repr(size), '-h', self.ifextract, infile]
 
         # disable run button, to disallow too many running applications
         self.run.config(state=DISABLED)
@@ -466,6 +465,67 @@ class myFrame(Frame):
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n\n")
         self.run.config(state=NORMAL)
 
+    # TODO -- store or remove this code --
+    # def driver(self):
+    #     """
+    #     Author Bob Seedorf
+    #
+    #     This method executes the linear code of the former driver class, uniting the runtime states of the functionality and UI
+    #     """
+    #
+    #     # Create the KmlFasade, force user input if not read file has been selected
+    #     if myFrame.infile is None:
+    #         tkMessageBox.showwarning("Open file", "Please Choose A KML file to Open")
+    #         fasade = KmlFasade(self.onOpen())
+    #     else:
+    #         fasade = KmlFasade(myFrame.infile)
+    #
+    #     merc = MercatorProjection()
+    #     centerPoint = LatLongPoint(self.lat, self.lng)
+    #     f = RestrictionFactory()
+    #
+    #     clipped = f.newWAClipping(merc.get_corners(centerPoint, self.zoom, self.size, self.size))
+    #     fasade.placemarkToGeometrics()
+    #     fasade.removeGarbageTags()
+    #
+    #     clipped.restrict(fasade.geometrics)
+    #     fasade.fasadeUpdate()
+    #
+    #     # CAN BE USED TO MANDATE KML DESTINATION SELECTION IF DESIRED
+    #     # code to indicate the user has not chosen an output kml and then requests one
+    #     # if (myFrame.outfile is None):
+    #     #     tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
+    #     #     fasade.rewrite(self.saveFileKML())
+    #     # else:
+    #     #     fasade.rewrite(myFrame.outfile)
+    #
+    #     # Build the Url
+    #     build = UrlBuilder(600)
+    #     build.centerparams('%s,%s' % (self.lat, self.lng), repr(self.zoom))
+    #
+    #     markerlist = []
+    #     for element in fasade.geometrics:
+    #         if element.tag == "Point":
+    #             markerlist.append(element.printCoordinates())
+    #         if element.tag == "Polygon":
+    #             build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
+    #         if element.tag == "LineString":
+    #             build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
+    #
+    #     build.addmarkers({"color": "blue"}, markerlist)
+    #     self.log("URLS", build.printUrls())
+    #
+    #     if myFrame.outimage is None:
+    #         tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
+    #         myFrame.outimage = self.saveFileImg()
+    #
+    #     # Merge the Url Images
+    #     # merges by downloading everything and merging everything.
+    #     self.run.config(state=DISABLED)
+    #     self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
+    #     self.wd.activate()  # call activate in waitDialog to process image downloads
+    #     self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
+    #     self.run.config(state=NORMAL)
 
 def main(w, h):
     """
@@ -485,7 +545,6 @@ def main(w, h):
     root.wm_protocol("WM_DELETE_WINDOW", frame.onQuit)
     root.wm_protocol("WM_DEICONIFY")
     root.mainloop()
-
 
 def center(root, w, h):
     """
