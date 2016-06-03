@@ -26,7 +26,7 @@ class myFrame(Frame):
     console_font_size = 8                                       # size of text for console
     Frame.local_path = os.path.dirname(os.path.dirname(__file__))  # Used to designate the location of the project within the relative machine file system being use
     Frame.set_recent_inputs = OrderedSet()                      # ordered set of pre-determined recent inputs
-    how_to_path = Frame.local_path + "\how_to.txt"  # path to the readme txt file of concise directions for use
+    how_to_path = Frame.local_path + "\how_to.txt"              # path to the readme txt file of concise directions for use
 
     # build frame, on tkinter root foundation
     root = Tkinter.Tk()
@@ -35,7 +35,7 @@ class myFrame(Frame):
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
     entries = []       # list of values assigned to fields (see above) upon entry by user
-
+    ifextract = 0      # switch to denote extraction of html metadata
     infile = None      # destination of KML file to be read
     outfile = None     # destination of KML file to be written
     outimage = None    # destination of Image file to be read
@@ -67,8 +67,6 @@ class myFrame(Frame):
         Frame.__init__(self, parent)
 
         self.parent = parent
-        self.ifextract = BooleanVar()
-        self.ifextract.set(1)
         self.wd = None              # field to use for wait dialog when necessary
         self.initUI()
 
@@ -83,14 +81,16 @@ class myFrame(Frame):
         """
 
         self.parent.title("KML Klipper")
-
         self.pack(fill=BOTH, expand=1)
-        menubar = Menu(self.parent)
+
+        menubar = Menu(self)
         self.parent.config(menu=menubar)
-        menubar.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
-        menubar.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
-        menubar.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
-        menubar.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
+        filemenu = Menu(menubar, tearoff = 0)
+        menubar.add_cascade(label='File', menu = filemenu)
+        filemenu.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
+        filemenu.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
+        filemenu.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
+        filemenu.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
 
         for field in self.fields:
             row = Frame(self)
@@ -103,7 +103,6 @@ class myFrame(Frame):
 
         # check box for html extraction
         # TODO -- use a flag for the console so that the extraction occurs on check --
-        print self.ifextract.get()
         c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
         c.pack(pady=5)
 
@@ -218,7 +217,7 @@ class myFrame(Frame):
         print message
         if tag.__str__() == 'URLS':
             self.txt.insert(END, tag.__str__() + ":\n")
-            for url in text[10:].splitlines():
+            for url in text.splitlines():
                 self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
         else:
             self.txt.insert(END, message)
@@ -447,6 +446,9 @@ class myFrame(Frame):
         # if ' ' in outimage: outimage = '"'+outimage+'"'
         # if ' ' in outfile: outfile = '"'+outfile+'"'
 
+        # TODO -- install flag call for html extraction --
+        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
+            outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
                 '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
         if self.ifextract.get():
