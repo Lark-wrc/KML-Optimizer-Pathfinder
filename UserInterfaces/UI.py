@@ -27,7 +27,7 @@ class myFrame(Frame):
     console_font_size = 8                                       # size of text for console
     Frame.local_path = os.path.dirname(os.path.dirname(__file__))  # Used to designate the location of the project within the relative machine file system being use
     Frame.set_recent_inputs = OrderedSet()                      # ordered set of pre-determined recent inputs
-    how_to_path = Frame.local_path + "\how_to.txt"  # path to the readme txt file of concise directions for use
+    how_to_path = Frame.local_path + "\how_to.txt"              # path to the readme txt file of concise directions for use
 
     # build frame, on tkinter root foundation
     root = Tkinter.Tk()
@@ -82,14 +82,16 @@ class myFrame(Frame):
         """
 
         self.parent.title("KML Klipper")
-
         self.pack(fill=BOTH, expand=1)
-        menubar = Menu(self.parent)
+
+        menubar = Menu(self)
         self.parent.config(menu=menubar)
-        menubar.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
-        menubar.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
-        menubar.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
-        menubar.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
+        filemenu = Menu(menubar, tearoff = 0)
+        menubar.add_cascade(label='File', menu = filemenu)
+        filemenu.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
+        filemenu.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
+        filemenu.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
+        filemenu.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
 
         for field in self.fields:
             row = Frame(self)
@@ -444,10 +446,11 @@ class myFrame(Frame):
         # if ' ' in outimage: outimage = '"'+outimage+'"'
         # if ' ' in outfile: outfile = '"'+outfile+'"'
 
+        # TODO -- install flag call for html extraction --
         sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
             outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
-                '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
+                '-c', repr(lat)+','+ repr(lng), '-s', repr(size), '-h', self.ifextract, infile]
 
         # disable run button, to disallow too many running applications
         self.run.config(state=DISABLED)
