@@ -291,6 +291,14 @@ class WeilerClipping:
         return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
 
 	def is_clockwise(polygon):
+		"""
+		`Author` Nick LaPosta
+		
+		This method determines whether the list of points given is in a clockwise or counter-clockwise
+		`polygon` - List of points. Should be cyclic and a real polygon
+		`return`: A boolean value of True if polygon is clockwisw and False if polygon is counter-clockwise
+		
+		"""
 		reference = polygon[0]
 		for i in xrange(1, len(polygon)):
 			if polygon[i].lat > reference.lat:
