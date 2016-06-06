@@ -290,29 +290,31 @@ class WeilerClipping:
         temp = list[1:] + list[:1]  # rotate list by one, to the left
         return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
 
-	def is_clockwise(polygon):
-		"""
-		`Author` Nick LaPosta
-		
-		This method determines whether the list of points given is in a clockwise or counter-clockwise
-		`polygon` - List of points. Should be cyclic and a real polygon
-		`return`: A boolean value of True if polygon is clockwisw and False if polygon is counter-clockwise
-		
-		"""
-		reference = polygon[0]
-		for i in xrange(1, len(polygon)):
-			if polygon[i].lat > reference.lat:
-				reference = polygon[i]
-		prv = polygon[highest_index - 1]
-		nxt = polygon[highest_index + 1]
-		ref_prv = reference.lng - prv.lng
-		ref_nxt = reference.lng - nxt.lng
-		if ref_prv * ref_nxt <= 0:
-			return prv.lng < nxt.lng:
-		else:
-			m_prv = (reference.lat - prv.lat) / (reference.lng - prv.lng)
-			m_nxt = (reference.lat - nxt.lat) / (reference.lng - nxt.lng)
-			return m_prv < m_nxt
+    def is_clockwise(self, polygon):
+        """
+        `Author` Nick LaPosta
+
+        This method determines whether the list of points given is in a clockwise or counter-clockwise
+        `polygon` - List of points. Should be cyclic and a real polygon
+        `return`: A boolean value of True if polygon is clockwise and False if polygon is counter-clockwise
+
+        """
+        reference = polygon[0]
+        prv = polygon[-1]
+        nxt = polygon[1]
+        for i in xrange(1, len(polygon)):
+            if polygon[i].lat > reference.lat:
+                reference = polygon[i]
+                prv = polygon[i - 1]
+                nxt = polygon[(i + 1) % len(polygon)]
+        ref_prv = reference.lng - prv.lng
+        ref_nxt = reference.lng - nxt.lng
+        if ref_prv * ref_nxt <= 0:
+            return prv.lng < nxt.lng
+        else:
+            m_prv = (reference.lat - prv.lat) / (reference.lng - prv.lng)
+            m_nxt = (reference.lat - nxt.lat) / (reference.lng - nxt.lng)
+        return m_prv < m_nxt
 
     def clip(self, subjectlines, viewportlines):
 
