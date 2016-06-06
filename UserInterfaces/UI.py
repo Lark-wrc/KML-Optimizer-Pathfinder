@@ -129,12 +129,12 @@ class myFrame(Frame):
         label.pack(pady=5)
 
         #TODO -- add files for appropriate redirect/link here --
-        link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
-        link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
-        font = tkFont.Font(link, link.cget("font"))
-        font.configure(underline=True)
-        link.configure(font=font)
-        link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
+        # link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
+        # link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
+        # font = tkFont.Font(link, link.cget("font"))
+        # font.configure(underline=True)
+        # link.configure(font=font)
+        # link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
         # configure console with scrolling on entries
         self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE, height = 350)
@@ -256,9 +256,10 @@ class myFrame(Frame):
             self.zoom = int(self.entries[2][1].get())
             self.size = int(self.entries[3][1].get())
 
+            self.interfaceConsole()
+
             self.update_recent()
 
-            self.interfaceConsole()
             self.run.config(state=NORMAL)
 
         except:
