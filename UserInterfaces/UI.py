@@ -1,6 +1,7 @@
 import Tkinter
 import os
 import tkFileDialog
+import tkFont
 import tkMessageBox
 import traceback
 import webbrowser
@@ -26,7 +27,7 @@ class myFrame(Frame):
     console_font_size = 8                                       # size of text for console
     Frame.local_path = os.path.dirname(os.path.dirname(__file__))  # Used to designate the location of the project within the relative machine file system being use
     Frame.set_recent_inputs = OrderedSet()                      # ordered set of pre-determined recent inputs
-    how_to_path = Frame.local_path + "\how_to.txt"  # path to the readme txt file of concise directions for use
+    how_to_path = Frame.local_path + "\how_to.txt"              # path to the readme txt file of concise directions for use
 
     # build frame, on tkinter root foundation
     root = Tkinter.Tk()
@@ -34,20 +35,19 @@ class myFrame(Frame):
 
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
-    entries = []       # list of values assigned to fields (see above) upon entry by user
+    entries = []            # list of values assigned to fields (see above) upon entry by user
+    infile = None           # destination of KML file to be read
+    outfile = None          # destination of KML file to be written
+    outimage = None         # destination of Image file to be read
+    if_extract = False      # switch to control flag fot html extraction on run
 
-    infile = None      # destination of KML file to be read
-    outfile = None     # destination of KML file to be written
-    outimage = None    # destination of Image file to be read
-
-
-    Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with debug test
+    Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with available tests
 
     # initialize the set of recent inputs to our test suite
-    test_inp1 = (41.0, -103.0, 4, 500, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+    test_inp1 = (41.0, -94.0, 4, 300, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\test.png')
-    test_inp2 = (37.0, -72.0, 4, 250, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+    test_inp2 = (38.0, -74.0, 5, 300, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\test.png')
     Frame.set_recent_inputs.lst.append(test_inp1)
@@ -65,10 +65,7 @@ class myFrame(Frame):
         """
 
         Frame.__init__(self, parent)
-
         self.parent = parent
-        self.ifextract = BooleanVar()
-        self.ifextract.set(1)
         self.wd = None              # field to use for wait dialog when necessary
         self.initUI()
 
@@ -83,14 +80,16 @@ class myFrame(Frame):
         """
 
         self.parent.title("KML Klipper")
-
         self.pack(fill=BOTH, expand=1)
-        menubar = Menu(self.parent)
+
+        menubar = Menu(self)
         self.parent.config(menu=menubar)
-        menubar.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
-        menubar.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
-        menubar.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
-        menubar.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
+        filemenu = Menu(menubar, tearoff = 0)
+        menubar.add_cascade(label='File', menu = filemenu)
+        filemenu.add_command(label="How To", command=self.howTo)             # Dialog to general directions for GUI usage
+        filemenu.add_command(label="Open KML", command=self.onOpen)          # choose which kml file to open
+        filemenu.add_command(label="Save KML", command=self.saveFileKML)     # choose where to save processed kml
+        filemenu.add_command(label="Save Img", command=self.saveFileImg)     # choose where to save generated image of focused region
 
         for field in self.fields:
             row = Frame(self)
@@ -102,10 +101,8 @@ class myFrame(Frame):
             self.entries.append((field, entry))
 
         # check box for html extraction
-        # TODO -- use a flag for the console so that the extraction occurs on check --
-        print self.ifextract.get()
-        c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
-        c.pack(pady=5)
+        check = Checkbutton(self, text="Extract Meta Data on Run", command = self.switch)
+        check.pack(pady=5)
 
         label = Label(self, text="\nRecent Inputs:", anchor='n')
         label.pack(pady=5, side = TOP)
@@ -130,7 +127,6 @@ class myFrame(Frame):
         label = Label(self, text = "Output:", anchor='n')
         label.pack(pady=5)
 
-        #TODO -- add files for appropriate redirect/link here --
         # link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
         # link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
         # font = tkFont.Font(link, link.cget("font"))
@@ -218,7 +214,7 @@ class myFrame(Frame):
         print message
         if tag.__str__() == 'URLS':
             self.txt.insert(END, tag.__str__() + ":\n")
-            for url in text[10:].splitlines():
+            for url in text.splitlines():
                 self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
         else:
             self.txt.insert(END, message)
@@ -236,6 +232,14 @@ class myFrame(Frame):
         """
         self.log('REDIRECTING', "\nRedirecting to " + str(url) + "\n")
         webbrowser.open_new_tab(url)
+
+    def switch(self):
+        """
+        This method flips the value of if_extract when called
+        Used only in place of the failure of the checkbox
+
+        """
+        self.if_extract = not self.if_extract
 
     def start(self):
         """
@@ -258,10 +262,9 @@ class myFrame(Frame):
             self.zoom = int(self.entries[2][1].get())
             self.size = int(self.entries[3][1].get())
 
-            self.interfaceConsole()
-
             self.update_recent()
 
+            self.interfaceConsole()
             self.run.config(state=NORMAL)
 
         except:
@@ -421,7 +424,6 @@ class myFrame(Frame):
         Some Comment
 
         """
-        #TODO -- finish this doc --
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
@@ -447,9 +449,11 @@ class myFrame(Frame):
         # if ' ' in outimage: outimage = '"'+outimage+'"'
         # if ' ' in outfile: outfile = '"'+outfile+'"'
 
+        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
+            outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
                 '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
-        if self.ifextract.get():
+        if self.if_extract:
             args = ['-h'] + args
 
         # disable run button, to disallow too many running applications
