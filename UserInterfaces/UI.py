@@ -35,12 +35,11 @@ class myFrame(Frame):
 
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
-    entries = []       # list of values assigned to fields (see above) upon entry by user
-    ifextract = 0      # switch to denote extraction of html metadata
-    infile = None      # destination of KML file to be read
-    outfile = None     # destination of KML file to be written
-    outimage = None    # destination of Image file to be read
-
+    entries = []            # list of values assigned to fields (see above) upon entry by user
+    infile = None           # destination of KML file to be read
+    outfile = None          # destination of KML file to be written
+    outimage = None         # destination of Image file to be read
+    if_extract = False      # switch to control flag fot html extraction on run
 
     Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with available tests
 
@@ -263,10 +262,9 @@ class myFrame(Frame):
             self.zoom = int(self.entries[2][1].get())
             self.size = int(self.entries[3][1].get())
 
-            self.interfaceConsole()
-
             self.update_recent()
 
+            self.interfaceConsole()
             self.run.config(state=NORMAL)
 
         except:
