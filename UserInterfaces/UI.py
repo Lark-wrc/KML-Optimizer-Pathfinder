@@ -1,7 +1,6 @@
 import Tkinter
 import os
 import tkFileDialog
-import tkFont
 import tkMessageBox
 import traceback
 import webbrowser
@@ -39,15 +38,15 @@ class myFrame(Frame):
     infile = None           # destination of KML file to be read
     outfile = None          # destination of KML file to be written
     outimage = None         # destination of Image file to be read
-    ifextract = IntVar()    # switch to control flag fot html extraction on run
+    if_extract = False      # switch to control flag fot html extraction on run
 
-    Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with debug test
+    Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with available tests
 
     # initialize the set of recent inputs to our test suite
-    test_inp1 = (41.0, -103.0, 4, 500, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+    test_inp1 = (41.0, -94.0, 4, 300, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\test.png')
-    test_inp2 = (37.0, -72.0, 4, 250, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+    test_inp2 = (38.0, -74.0, 5, 300, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\test.png')
     Frame.set_recent_inputs.lst.append(test_inp1)
@@ -65,7 +64,6 @@ class myFrame(Frame):
         """
 
         Frame.__init__(self, parent)
-
         self.parent = parent
         self.wd = None              # field to use for wait dialog when necessary
         self.initUI()
@@ -102,9 +100,8 @@ class myFrame(Frame):
             self.entries.append((field, entry))
 
         # check box for html extraction
-        # TODO -- use a flag for the console so that the extraction occurs on check --
-        c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
-        c.pack(pady=5)
+        check = Checkbutton(self, text="Extract Meta Data on Run", command = self.switch)
+        check.pack(pady=5)
 
         label = Label(self, text="\nRecent Inputs:", anchor='n')
         label.pack(pady=5, side = TOP)
@@ -129,13 +126,12 @@ class myFrame(Frame):
         label = Label(self, text = "Output:", anchor='n')
         label.pack(pady=5)
 
-        #TODO -- add files for appropriate redirect/link here --
-        link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
-        link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
-        font = tkFont.Font(link, link.cget("font"))
-        font.configure(underline=True)
-        link.configure(font=font)
-        link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
+        # link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
+        # link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
+        # font = tkFont.Font(link, link.cget("font"))
+        # font.configure(underline=True)
+        # link.configure(font=font)
+        # link.pack(side=BOTTOM, fill=X, padx=15, pady=15)
 
         # configure console with scrolling on entries
         self.txt = Text(self, font = ("Consolas", self.console_font_size), wrap = NONE, height = 350)
@@ -235,6 +231,14 @@ class myFrame(Frame):
         """
         self.log('REDIRECTING', "\nRedirecting to " + str(url) + "\n")
         webbrowser.open_new_tab(url)
+
+    def switch(self):
+        """
+        This method flips the value of if_extract when called
+        Used only in place of the failure of the checkbox
+
+        """
+        self.if_extract = not self.if_extract
 
     def start(self):
         """
@@ -419,7 +423,6 @@ class myFrame(Frame):
         Some Comment
 
         """
-        #TODO -- finish this doc --
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
@@ -449,9 +452,11 @@ class myFrame(Frame):
                                                                              outimage, repr(zoom), repr(lat), repr(lng),
                                                                              repr(size), infile)
         # add flag '-h' for html extraction
-        if self.ifextract.get():
+
+        if self.if_extract:
             args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
                     '-c', repr(lat) + ',' + repr(lng), '-s', repr(size), '-h', infile]
+            self.log("HTML", "Extracting HTML\n")
         else:
             args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
                     '-c', repr(lat) + ',' + repr(lng), '-s', repr(size), infile]
@@ -469,67 +474,6 @@ class myFrame(Frame):
         self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n\n")
         self.run.config(state=NORMAL)
 
-    # TODO -- store or remove this code --
-    # def driver(self):
-    #     """
-    #     Author Bob Seedorf
-    #
-    #     This method executes the linear code of the former driver class, uniting the runtime states of the functionality and UI
-    #     """
-    #
-    #     # Create the KmlFasade, force user input if not read file has been selected
-    #     if myFrame.infile is None:
-    #         tkMessageBox.showwarning("Open file", "Please Choose A KML file to Open")
-    #         fasade = KmlFasade(self.onOpen())
-    #     else:
-    #         fasade = KmlFasade(myFrame.infile)
-    #
-    #     merc = MercatorProjection()
-    #     centerPoint = LatLongPoint(self.lat, self.lng)
-    #     f = RestrictionFactory()
-    #
-    #     clipped = f.newWAClipping(merc.get_corners(centerPoint, self.zoom, self.size, self.size))
-    #     fasade.placemarkToGeometrics()
-    #     fasade.removeGarbageTags()
-    #
-    #     clipped.restrict(fasade.geometrics)
-    #     fasade.fasadeUpdate()
-    #
-    #     # CAN BE USED TO MANDATE KML DESTINATION SELECTION IF DESIRED
-    #     # code to indicate the user has not chosen an output kml and then requests one
-    #     # if (myFrame.outfile is None):
-    #     #     tkMessageBox.showwarning("Write KML file", "Please Choose A KML file to write to")
-    #     #     fasade.rewrite(self.saveFileKML())
-    #     # else:
-    #     #     fasade.rewrite(myFrame.outfile)
-    #
-    #     # Build the Url
-    #     build = UrlBuilder(600)
-    #     build.centerparams('%s,%s' % (self.lat, self.lng), repr(self.zoom))
-    #
-    #     markerlist = []
-    #     for element in fasade.geometrics:
-    #         if element.tag == "Point":
-    #             markerlist.append(element.printCoordinates())
-    #         if element.tag == "Polygon":
-    #             build.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
-    #         if element.tag == "LineString":
-    #             build.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
-    #
-    #     build.addmarkers({"color": "blue"}, markerlist)
-    #     self.log("URLS", build.printUrls())
-    #
-    #     if myFrame.outimage is None:
-    #         tkMessageBox.showwarning("Write Img file", "Please Choose an image file to write to")
-    #         myFrame.outimage = self.saveFileImg()
-    #
-    #     # Merge the Url Images
-    #     # merges by downloading everything and merging everything.
-    #     self.run.config(state=DISABLED)
-    #     self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage, build)
-    #     self.wd.activate()  # call activate in waitDialog to process image downloads
-    #     self.log("FINISHED", "\n" + str(self.div_string[0] * ((self.div_string[1]/len(self.div_string[0]))+1))[:self.div_string[1]] + "\n")
-    #     self.run.config(state=NORMAL)
 
 def main(w, h):
     """
@@ -569,4 +513,4 @@ def center(root, w, h):
     return offset_x, offset_y
 
 if __name__ == '__main__':
-    main(550, 700)
+    main(550, 600)
