@@ -61,7 +61,8 @@ class Parser():
         while args[0][0] == '-':
             if args[0][1:] in self.switches: self.parse(args.pop(0), None)
             elif args[0][1:] in self.data: self.parse(args.pop(0), args.pop(0))
-            else: print 'Bad parse.'
+            else:
+                raise Exception
         #Switch checks
         self.switches['wa'] = self.switches['wa'] and self.data['c'] and self.data['z'] and self.data['s']
         self.switches['sr'] = self.switches['sr'] and self.data['c'] and self.data['z'] and self.data['s']
@@ -105,7 +106,10 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
 
     # parse args.
     if not args: args = sys.argv[1:]
-    parser.parseArgs(args)
+    try: parser.parseArgs(args)
+    except:
+        observe.setStatus('Failure to parse arguments, Invalid argument given.\n', 'CONSOLE')
+        raise Exception
     switches, data = parser.export()
 
     if switches['v']: observe.setStatus('Arguments parsed correctly.\n', 'CONSOLE')
@@ -128,6 +132,7 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     else: fasade = KmlFasade(args[-1])
 
     fasade.processPlacemarks(switches['h'])
+    if switches['h'] and switches['v']: observe.setStatus('Metadata extracted.\n', 'CONSOLE')
 
     if data['w']: fasade.removeGarbageTags()
     if switches['v']: observe.setStatus('Garbage data removed.\n', 'CONSOLE')

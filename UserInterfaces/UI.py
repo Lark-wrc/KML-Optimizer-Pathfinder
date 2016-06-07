@@ -36,7 +36,7 @@ class myFrame(Frame):
     # fields for user input, stored along with their respective entries
     fields = 'Latitude of Center', 'Longitude of Center', 'Zoom Distance (1 through 20)', 'Image Size'
     entries = []       # list of values assigned to fields (see above) upon entry by user
-    ifextract = 0      # switch to denote extraction of html metadata
+
     infile = None      # destination of KML file to be read
     outfile = None     # destination of KML file to be written
     outimage = None    # destination of Image file to be read
@@ -68,6 +68,8 @@ class myFrame(Frame):
         Frame.__init__(self, parent)
 
         self.parent = parent
+        self.ifextract = BooleanVar()
+        self.ifextract.set(1)
         self.wd = None              # field to use for wait dialog when necessary
         self.initUI()
 
@@ -102,6 +104,7 @@ class myFrame(Frame):
 
         # check box for html extraction
         # TODO -- use a flag for the console so that the extraction occurs on check --
+        print self.ifextract.get()
         c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
         c.pack(pady=5)
 
@@ -216,7 +219,7 @@ class myFrame(Frame):
         print message
         if tag.__str__() == 'URLS':
             self.txt.insert(END, tag.__str__() + ":\n")
-            for url in text.splitlines():
+            for url in text[10:].splitlines():
                 self.txt.insert(END, str(url) + "\n", self.add_hyper(lambda link=url: self.open_url(str(link))))
         else:
             self.txt.insert(END, message)
@@ -445,10 +448,10 @@ class myFrame(Frame):
         # if ' ' in outimage: outimage = '"'+outimage+'"'
         # if ' ' in outfile: outfile = '"'+outfile+'"'
 
-        sampleLine = """-wa -w {} -m {} -v -z {} -c {},{} -s {} {}""".format(outfile,
-            outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
                 '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
+        if self.ifextract.get():
+            args = ['-h'] + args
 
         # disable run button, to disallow too many running applications
         self.run.config(state=DISABLED)
