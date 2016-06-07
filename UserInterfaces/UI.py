@@ -42,13 +42,13 @@ class myFrame(Frame):
     outimage = None    # destination of Image file to be read
 
 
-    Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with debug test
+    Frame.set_recent_inputs = OrderedSet()  # construct recent inputs with available tests
 
     # initialize the set of recent inputs to our test suite
-    test_inp1 = (41.0, -103.0, 4, 500, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+    test_inp1 = (41.0, -94.0, 4, 300, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\test.png')
-    test_inp2 = (37.0, -72.0, 4, 250, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
+    test_inp2 = (38.0, -74.0, 5, 300, Frame.local_path + '\\Inputs\\KML Files\\us_states.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\dump.kml',
                      Frame.local_path + '\\Inputs\\KML Files\\test.png')
     Frame.set_recent_inputs.lst.append(test_inp1)
@@ -66,7 +66,6 @@ class myFrame(Frame):
         """
 
         Frame.__init__(self, parent)
-
         self.parent = parent
         self.wd = None              # field to use for wait dialog when necessary
         self.initUI()
@@ -103,9 +102,8 @@ class myFrame(Frame):
             self.entries.append((field, entry))
 
         # check box for html extraction
-        # TODO -- use a flag for the console so that the extraction occurs on check --
-        c = Checkbutton(self, text="Extract Meta Data on Run", variable=self.ifextract)
-        c.pack(pady=5)
+        check = Checkbutton(self, text="Extract Meta Data on Run", command = self.switch)
+        check.pack(pady=5)
 
         label = Label(self, text="\nRecent Inputs:", anchor='n')
         label.pack(pady=5, side = TOP)
@@ -130,7 +128,6 @@ class myFrame(Frame):
         label = Label(self, text = "Output:", anchor='n')
         label.pack(pady=5)
 
-        #TODO -- add files for appropriate redirect/link here --
         # link = Label(self, text="Link To Our Py Doc", fg="blue", cursor="hand2")
         # link.bind("<Button-1>", lambda url=self.doc_url: self.open_url(self.doc_url))
         # font = tkFont.Font(link, link.cget("font"))
@@ -236,6 +233,14 @@ class myFrame(Frame):
         """
         self.log('REDIRECTING', "\nRedirecting to " + str(url) + "\n")
         webbrowser.open_new_tab(url)
+
+    def switch(self):
+        """
+        This method flips the value of if_extract when called
+        Used only in place of the failure of the checkbox
+
+        """
+        self.if_extract = not self.if_extract
 
     def start(self):
         """
@@ -421,7 +426,6 @@ class myFrame(Frame):
         Some Comment
 
         """
-        #TODO -- finish this doc --
         lat = self.lat
         lng = self.lng
         zoom = self.zoom
