@@ -10,17 +10,18 @@ class Merger(Observable):
         """
         `Author`: Bill Clark
 
-        This class is basically the same method as mergemodeRGB. The add method is almost identical. The reason
-        for this class is that it allows for urls to be added incrementally with ease. Given an instance where you
-        want to merge urls to the same outfile based off the same base image, but don't have the urls all at once,
-        this method allows for any number of add calls to merge images to the output. This comes with over head,
-        saving the image to the outfile location after each individual merge, but certain situations really need this
-        kind of functionality.
+        This class is basically the same method as mergemodeRGB, now the contained mergeAll method.
+        The add method is almost identical. The reason for this class is that it allows for urls to be
+        added incrementally with ease. Given an instance where you want to merge urls to the same outfile
+        based off the same base image, but don't have the urls all at once, this method allows for any number
+        of add calls to merge images to the output. This comes with over head, saving the image to the
+        outfile location after each individual merge, but certain situations really need this kind of functionality.
 
-        `outfile`: The file to save to.
+        `outfile`: The file address to save the output file to.
 
-        `base`: The base image to compare to for each merge. Each image merged must be the same center and zoom
-                        as this image, or else.
+        `base`: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why
+            the center and zoom are REQUIRED. Those parameters being the same will line up the unchanged pixels
+            correctly so that only the edited pixels pick up as different.
         """
 
         super(Merger, self).__init__()
@@ -69,7 +70,7 @@ class Merger(Observable):
         if debug: trackedimage.show()
 
         self.mcount += 1
-        self.setStatus("{} images merged successfully.".format(self.mcount))
+        self.setStatus("{} images merged successfully.".format(self.mcount), self.mcount)
         trackedimage.save(self.outfile)
 
     def mergeAll(self, *images):
@@ -83,12 +84,6 @@ class Merger(Observable):
         placed over the original base image pixel that was contained in the new file. This is done for every pixel and
         every layer. Debug information contains the ratio of different to not different pixels in percent form, as well
         as a display of the output after each layer merge.
-
-        `outfile`: The file address to save the output file to.
-
-        `base`: The unmodified image which all the layers will be drawn to. The images MUST line up, which is why
-                        the center and zoom are REQUIRED. Those parameters being the same will line up the unchanged pixels
-                        correctly so that only the edited pixels pick up as different.
 
         `images`: Any number of image urls that are layers of the base image. Same center and zoom are a must.
         """
@@ -119,7 +114,7 @@ class Merger(Observable):
             self.setStatus("Merging {} of {} Images".format(count, len(images)))
 
         print ""
-        self.setStatus("{} Images Merged Successfully.".format(self.mcount))
+        self.setStatus("{} Images Merged Successfully.".format(self.mcount), self.mcount)
         trackedimage.save(self.outfile)
 
     def convertAll(self, *images):
@@ -131,6 +126,7 @@ class Merger(Observable):
 
         `images`: The images that need to be converted. They are expected to be in P color mode, though other modes
                 may convert cleanly.
+
         `return`: A list of the new file locations, since the file names have been changed.
         """
         ret = []
@@ -140,20 +136,18 @@ class Merger(Observable):
             im = img.convert("RGBA")
             ret.append(image[:-4]+'.con'+image[-4:])
             im.save(image[:-4]+'.con'+image[-4:])
-            self.setStatus("Converting {} of {} Images.".format(count, len(images)))
+            self.setStatus("Converting {} of {} Images.".format(count, len(images)), self.mcount)
             count += 1
-        self.setStatus("{} Images Converted Successfully.".format(count))
+        self.setStatus("{} Images Converted Successfully.".format(count), self.mcount)
         return ret
 
-    def blkDiff(self, images, outfile="DifferenceFile.png"):
+    def blkDiff(self, images, outfile="Outputs\DifferenceFile.png"):
         """
         `Author`: Bill Clark
 
-        This method will change the color of any pixel that is different between a base image and another provided
-        image. This works in the same way as mergeRGB, which does mean the inputs need to be RGB format. You can use this
-        to visually see the detected differences between two images.
-
-        `base`: The first image to compare. It does have to be at the same center and zoom as the below image.
+        This method will change the color of any pixel that is different between the base image and another provided
+        image. This works in the same way as mergeRGB, which does mean the inputs need to be RGB format. You can use
+        this to visually see the detected differences between two images.
 
         `images`: the image to compare to base.
 
@@ -181,12 +175,3 @@ class Merger(Observable):
 
         if debug: print ""
         trackedimage.save(outfile)
-
-    def setStatus(self, string=None):
-        if string is not None: self.status = string
-        if self.observers:
-            for observer in self.observers:
-                observer.update(self.status, self.mcount)
-
-    def register(self, object):
-        self.observers.append(object)

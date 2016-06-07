@@ -106,12 +106,19 @@ class KmlFasade(object):
         # self.placemarks = ret
         return ret
 
-    def placemarkToGeometrics(self, extract=0):
+    def processPlacemarks(self, extract=0, geos=1):
         """
-        `Author`: Bill Clark
+        `Author`: Bill Clark, Nick LaPosta
 
-        This method takes the list of placemarks it has generated (or generates them) and creates geometric
-        objects to allow for easy of editing.
+        This method iterates through the placemarks of the kml file. It has two functional purposes, primary being
+        the convertion to geometrics. Geometrics are necessary to process, clip, and modify coordinate data. The
+        second functionality is to pull out any data contained in the name and description fields. This data is
+        stored in the Outputs\metadata folder for later access. Both functions are done within a single iteration
+        of the placemarks for efficiency.
+
+        `extract`: flag to turn on the HTML metadata extraction function of the loop. Defaults to off.
+
+        `geos`: flag to turn on the geometric conversion part of the loop. Defaults to on.
 
         `return`: List of geometric objects for each placemark in this object's placemark list. This is stored in class
                   as well.
@@ -143,24 +150,38 @@ class KmlFasade(object):
                         output.write(self.html_entry("h2", element.tag, element.text))
                         output.close()
 
-                if skip:
-                    skip += len(element)
-                    skip-=1
+                if geos:
+                    if skip:
+                        skip += len(element)
+                        skip-=1
 
-                elif element.tag in factory.geometryTypes:
-                    geo = factory.create(element)
-                    assert geo is not None  # Checking an object actually got made.
+                    elif element.tag in factory.geometryTypes:
+                        geo = factory.create(element)
+                        assert geo is not None  # Checking an object actually got made.
 
-                    if type(geo) is list: ret.extend(geo)  # catches multigeometry returns.
-                    else: ret.append(geo)
+                        if type(geo) is list: ret.extend(geo)  # catches multigeometry returns.
+                        else: ret.append(geo)
 
-                    if element.tag == "Polygon" or element.tag == "MultiGeometry": skip = len(element)
-                else:
-                    pass
+                        if element.tag == "Polygon" or element.tag == "MultiGeometry": skip = len(element)
+                    else:
+                        pass
         self.geometrics = ret
         return ret
 
     def html_entry(self, html_tag, tag, text):
+        """
+        `Author`: Nick Laposta
+
+        Formats a string to an html entry for logging purposes. Used by the processPlacemarks when extract is set to 1.
+
+        `html_tag`: The html style tag to be used.
+
+        `tag`: The tag of the xml element being logged.
+
+        `text`: The text value of the xml element.
+
+        `return`: A formatted html string of the tag and text.
+        """
         return "<" + html_tag + ">" + tag + "</" + html_tag + ">" + "\n\n" + text + "\n\n"
 
     def fasadeUpdate(self):

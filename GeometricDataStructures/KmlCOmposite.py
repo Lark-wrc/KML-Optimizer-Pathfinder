@@ -27,7 +27,7 @@ class KmlComposite:
         for fasade in self.fasades:
             fasade.pullPlacemarksAndGarbage()
 
-    def placemarkToGeometrics(self, extract=0):
+    def processPlacemarks(self, extract=0, geo=1):
         for fasade in self.fasades:
             fasade.placemarkToGeometrics(extract)
 

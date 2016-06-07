@@ -27,14 +27,15 @@ class Parser():
                   h - exports the metadata to outputs\metadata
         Example arg list.
         -c 1 -wa -w "Outputs/Console Rewrite.kml" -h -m Outputs/Outfile.png -z 8 -c 40.0583,-74.4057 -s 600 -v "Inputs/KML Files/us_states.kml"        """
-        self.switches = {'wa':0, 'v':0, 'h':0}
-        self.data = {'w':0, 'sr':0, 'm':0, 'c':0, 'z':0, 's':0, 'co':0}
+        self.switches = {'wa':0, 'v':0, 'h':0,  'sr':0}
+        self.data = {'w':0, 'm':0, 'c':0, 'z':0, 's':0, 'co':0}
 
     def parse(self, flag, data):
         """
         `Author`: Bill Clark
 
         This is the method that parses a flag with it's data. It sets the class wide switches when provided.
+        If the flag has not none data, it's a data switch else it's a switch.
 
         `flag`: The flag being set. IE -v, -wa.
 
@@ -63,7 +64,8 @@ class Parser():
             else: print 'Bad parse.'
         #Switch checks
         self.switches['wa'] = self.switches['wa'] and self.data['c'] and self.data['z'] and self.data['s']
-        if not self.data['c']: self.data['sr'] = 0
+        self.switches['sr'] = self.switches['sr'] and self.data['c'] and self.data['z'] and self.data['s']
+        if not self.data['c']: self.switches['sr'] = 0
         if not (self.data['m'] and self.data['c'] and self.data['z'] and self.data['s']): self.data['m'] = 0
 
 
@@ -125,7 +127,7 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     if data['co']: fasade = KmlComposite(*[KmlFasade(file) for file in args[-(data['co']):]])
     else: fasade = KmlFasade(args[-1])
 
-    fasade.placemarkToGeometrics(switches['h'])
+    fasade.processPlacemarks(switches['h'])
 
     if data['w']: fasade.removeGarbageTags()
     if switches['v']: observe.setStatus('Garbage data removed.\n', 'CONSOLE')
@@ -133,9 +135,9 @@ def interface(args=None, uiObserve=None, imObserve=None, urlObserve=None):
     # clip if requested in the args.
     if switches['wa']:
         restrict = f.newWAClipping(merc.get_corners(center, zoom, size, size))
-    if data['sr']:
-        restrict = f.newSquareRestriction([center.lat, center.lng], data['sr'])
-    if switches['wa'] or data['sr']:
+    if switches['sr']:
+        restrict = f.newSquareRestriction(merc.get_corners(center, zoom, size, size))
+    if switches['wa'] or switches['sr']:
         for geometrics in fasade.yieldGeometrics():
             restrict.restrict(geometrics)
         fasade.fasadeUpdate()
