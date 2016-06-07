@@ -453,7 +453,7 @@ class myFrame(Frame):
             outimage, repr(zoom), repr(lat), repr(lng), repr(size), infile)
         args = ['-wa', '-w', outfile, '-m', outimage, '-v', '-z', repr(zoom),
                 '-c', repr(lat)+','+ repr(lng), '-s', repr(size), infile]
-        if self.ifextract.get():
+        if self.if_extract:
             args = ['-h'] + args
 
         # disable run button, to disallow too many running applications
