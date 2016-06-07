@@ -31,10 +31,12 @@ class WeilerClipping:
         NOTE: Does NOT check if lines intersect, as a precondition that should be accomplished before this method is called
 
         `pointA`: start point of first line
-        `pointB`: end point of first line
-        `pointC`: start point of second line
-        `pointD`: end point of second line
 
+        `pointB`: end point of first line
+
+        `pointC`: start point of second line
+
+        `pointD`: end point of second line
         """
 
         xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
@@ -57,8 +59,8 @@ class WeilerClipping:
         |_B, D_|    =   (A * D) - (B * C) = return value
 
         `pointA`: start point of line
-        `pointB`: end point of line
 
+        `pointB`: end point of line
         """
         return (tupA[0] * tupB[1] - tupB[0] * tupA[1])
 
@@ -72,10 +74,12 @@ class WeilerClipping:
         In the case that the orientation of A, B, and C is the same as A, B, and D, and the the orientation of C, D, and A is the same as C, D, and B, then the lines do not intersect
 
         `pointA`: start point of first line
-        `pointB`: end point of first line
-        `pointC`: start point of second line
-        `pointD`: end point of second line
 
+        `pointB`: end point of first line
+
+        `pointC`: start point of second line
+
+        `pointD`: end point of second line
         """
 
         o1 = self.findOrientation(pointA, pointB, pointC)
@@ -92,13 +96,14 @@ class WeilerClipping:
         `Author`: Bob Seedorf
 
         Returns orientation of three given points in coordinate space.
-        The assumption lines drwan between points A, B and B, C and C, A are used to define this 'orientation'
+        The assumption lines drawn between points A, B and B, C and C, A are used to define this 'orientation'
         Through projection of the combinations of lines and extraneous points the slopes of the projections are found to be of an appropriate orientatoin
 
         `pointA`: first point being passed
-        `pointB`: second point being passed
-        `pointC`: third point being passed
 
+        `pointB`: second point being passed
+
+        `pointC`: third point being passed
         """
         val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - \
               (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
@@ -116,9 +121,10 @@ class WeilerClipping:
         NOTE: in the case that the two points are of equal distance, point A will be chosen over point B
 
         `target`: control point form whom the distances of the other two will be checked
-        `pointA`: first point to be checked, has return precedence over pointB
-        `pointB`: second point to be checked
 
+        `pointA`: first point to be checked, has return precedence over pointB
+
+        `pointB`: second point to be checked
         """
         distToA = math.sqrt(((target.lng - pointA.lng) ** 2) + (target.lat - pointA.lat) ** 2)
         distToB = math.sqrt(((target.lng - pointB.lng) ** 2) + (target.lat - pointB.lat) ** 2)
@@ -137,31 +143,31 @@ class WeilerClipping:
 
         """
 
-        result = []
-        reserve = Ie[-1]
+        result = Stack()
+        reserve = Ie.peek()
         location = reserve
         flag = 1
         while flag:
             Ie.pop()
-            end = Ie[-1]
+            end = Ie.peek()
             index = P.index(location)
             while not location == end:
                 location.rewrap()
-                result.append(location)
+                result.push(location)
                 index = (index+1) % len(P)
                 location = P[index]
             Ie.pop()
 
-            if len(Ie) == 0:
+            if Ie.isEmpty():
                 end = reserve
                 flag = 0
             else:
-                end = Ie[-1]
+                end = Ie.peek()
 
             index = Q.index(location)
             while not location == end:
                 location.rewrap()
-                result.append(location)
+                result.push(location)
                 index = (index+1) % len(Q)
                 location = Q[index]
         return result
@@ -173,12 +179,13 @@ class WeilerClipping:
         This method calculates and maintains the list of points, P, to be used during the iterative phase of the getCLipped method
 
         `subjectlines`: The collection points that compose all vertices of the subject which we are clipping
-        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
-        `return`: P and Ie, the collection of all points that lie on the subject lines of the polygon being examined and the collection of all points of intersection respectively
 
+        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+
+        `return`: P and Ie, the collection of all points that lie on the subject lines of the polygon being examined and the collection of all points of intersection respectively
         """
         P = []
-        Ie = []
+        Ie = Stack()
         for subjectline in reversed(subjectlines):
             P.append(subjectline[1])
             crossCount = 0
@@ -187,12 +194,12 @@ class WeilerClipping:
                 if self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1]):
                     poi = self.getLineIntersection(subjectline[0], subjectline[1], viewportline[0], viewportline[1])
                     P.append(poi)
-                    Ie.append(poi)
+                    Ie.push(poi)
                     crossCount += 1
                 if crossCount > 1:
-                    if Ie[-1] == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
+                    if Ie.peek() == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
                         # perform swap
-                        Ie[-1], Ie[-2] = Ie[-2], Ie[-1]
+                        Ie.items[-1], Ie.items[-2] = Ie.items[-2], Ie.items[-1]
                         P[-1], P[-2] = P[-2], P[-1]
                 if crossCount == 2:
                     break
@@ -207,9 +214,10 @@ class WeilerClipping:
         By iterating over Ie, the list of points of intersection, every point of intersection cooresponding to the line starting with the point at index 1-4 of the viewport is checked and ordered as to generate a counter clockwise, flattened collection of the viewport
 
         `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
-        `Ie`:  and the collection of all points of intersection between subjeclines and viewportlines
-        `return`: Q, the collection of all points that lie on the viewport polygon
 
+        `Ie`:  and the collection of all points of intersection between subjeclines and viewportlines
+
+        `return`: Q, the collection of all points that lie on the viewport polygon
         """
         Q = []
         storagebank = []
@@ -250,8 +258,8 @@ class WeilerClipping:
         However, the path of the visualization software in google earth will not limit the capacity for polygons' dimensions to exceed 180 degrees width
 
         `list`: the un-flattened list of the polygon being modified
-        `return`: None, this method statically modifies the parameterized list
 
+        `return`: None, this method statically modifies the parameterized list
         """
         for p in list:
             if (p[0].lng * p[1].lng) < 0:    # if one is negative and the other positive
@@ -269,8 +277,8 @@ class WeilerClipping:
         This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by calculating each of the coordinate pair's values individually
 
         `list`: the un-flattened list of the polygon being modified
-        `return`: None, this method statically modifies the parameterized list
 
+        `return`: None, this method statically modifies the parameterized list
         """
         for p in list:
             p[0].rewrap()
@@ -283,42 +291,28 @@ class WeilerClipping:
         this method 'un-flattens' the list being passed
         by creating a tuple of each lat-long-point and it's respective neighbor a new list of 'lines' is created for the purpose of iteration by the necessary methods.
 
-        `list` - list to be modified.
-        `return`: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
+        `list`: list to be modified.
 
+        `return`: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
         """
         temp = list[1:] + list[:1]  # rotate list by one, to the left
         return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
 
-    def is_clockwise(self, polygon):
-        """
-        `Author` Nick LaPosta
-
-        This method determines whether the list of points given is in a clockwise or counter-clockwise
-        `polygon` - List of points. Should be cyclic and a real polygon
-        `return`: A boolean value of True if polygon is clockwise and False if polygon is counter-clockwise
-
-        """
-        reference = polygon[0]
-        prv = polygon[-1]
-        nxt = polygon[1]
-        for i in xrange(1, len(polygon)):
-            if polygon[i].lat > reference.lat:
-                reference = polygon[i]
-                prv = polygon[i - 1]
-                nxt = polygon[(i + 1) % len(polygon)]
-        ref_prv = reference.lng - prv.lng
-        ref_nxt = reference.lng - nxt.lng
-        if ref_prv * ref_nxt <= 0:
-            return prv.lng < nxt.lng
-        else:
-            m_prv = (reference.lat - prv.lat) / (reference.lng - prv.lng)
-            m_nxt = (reference.lat - nxt.lat) / (reference.lng - nxt.lng)
-        return m_prv < m_nxt
 
     def clip(self, subjectlines, viewportlines):
+        """
+        This method takes in flattened, lists of lat long points representing the polygon of the subject polygon and the viewport polygon.
+        first the two collections are un-flattened to form the list of lists needed to run the algorithm
+        Next the lists are unwrapped to fold them over the anti-meridian, allowing analysis of continuous lines in the solution space
+        Next the three integral collections P, Ie, and Q are found using the deferred methods
+        Finally the resultant clipped polygon is found with a call to the local method and returned
 
-        # un-flatten subject viewport...
+        `subjectlines`: list of points on subject shape
+        `viewportlines`: list of pints on the viewport shape
+        `return`: the result of the call to get clipped
+        """
+
+        # un-flatten subject viewport
         subjectlines = self.unFlattenList(subjectlines)
         viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
 
@@ -326,12 +320,11 @@ class WeilerClipping:
         self.unwrap(subjectlines)
         self.unwrap(viewportlines)
 
-        # run me, in order
         # find P, Ie
         P, Ie = self.getP(subjectlines, viewportlines)
         if self.debug: print "P :",P
-        if self.debug: print "Ie:", Ie
-        if not Ie or Ie == []:
+        if self.debug: print "Ie:", Ie.items
+        if not Ie.items or Ie.items == []:
             return None
 
         # then find Q
@@ -340,13 +333,47 @@ class WeilerClipping:
 
         # then get Clipped
         result = self.getClipped(P, Q, Ie)
-        result.append(result[0])
+        result.items.append(result[0])
         return result
 
+
+class Stack():
+     """
+     'Author' Bob S.
+
+     this class is used only to ensure the proper procedures of the getClipped algorithm are executed appropriately
+
+     """
+     def __init__(self):
+         self.items = []
+
+     def isEmpty(self):
+         return self.items == []
+
+     def push(self, item):
+         self.items.append(item)
+
+     def pop(self):
+         if(len(self.items)-1 < 0):
+             raise Exception
+         return self.items.pop()
+
+     def peek(self):
+         if(self.isEmpty()):
+             raise Exception
+         return self.items[len(self.items)-1]
+
+     def size(self):
+         return len(self.items)
+
+     def __getitem__(self, int):
+         return self.items[int]
 
 if __name__ == '__main__':
 
     clipper = WeilerClipping()
+
+    #TODO - keep this or no? --
 
     # P = [(2.0, 2.25), (1.4, 3.0), (1.0, 3.5), (0.8571428571428571, 3.0), (0.0, 0.0), (0.0, -1.0), (0.0, -3.0), (0.6666666666666666, -1.0), (1.0, 0.0), (2.0, 0.5), (3.0, 1.0)]
     # Q = [(2.0, 3.0), (1.4, 3.0), (0.8571428571428571, 3.0), (-1.0, 3.0), (-1.0, -1.0), (0.0, -1.0), (0.6666666666666666, -1.0), (2.0, -1.0), (2.0, 0.5), (2.0, 2.25)]
@@ -437,7 +464,7 @@ if __name__ == '__main__':
 
     # do some stuff on the subjectlines / viewport lines here
     print "\n-------------------------------\n"
-    # this ti sthe psot processing for the lat/lng's
+    # this is the post processing for the lat/lng's
 
     clipper.rewrap(test)
 
