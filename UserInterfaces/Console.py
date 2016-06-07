@@ -6,7 +6,7 @@ from GeometricDataStructures.Mercator import *
 from GeometricDataStructures.KmlCOmposite import KmlComposite
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
-from Observations.observableConsole import ObservableConsole
+from Observations.ObservableConsole import ObservableConsole
 
 class Parser():
     def __init__(self):
