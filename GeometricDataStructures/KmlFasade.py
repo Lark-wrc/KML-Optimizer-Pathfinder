@@ -72,7 +72,7 @@ class KmlFasade(object):
 
         This method is a catch all for and garbage filtering operations. Currently it has one functionality,
         it takes every element stored in the garbage field and removes it from the Kml. Each element in the garbage
-        list has no relevent data, removing it helps with the file length.
+        list has no relevant data, removing it helps with the file length.
         """
 
         for element in self.garbage:

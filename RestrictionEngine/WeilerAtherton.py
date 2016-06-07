@@ -164,6 +164,7 @@ class WeilerClipping:
                 result.append(location)
                 index = (index+1) % len(Q)
                 location = Q[index]
+        print "RESULT", result
         return result
 
     def getP(self, subjectlines, viewportlines):
@@ -234,6 +235,7 @@ class WeilerClipping:
         storagebank[2].sort(key=lambda tup: tup.lng)
         storagebank[3].sort(key=lambda tup: tup.lat)
         Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
+        print "QQQ", Q
         return Q
 
     def unwrap(self, list):
@@ -318,7 +320,15 @@ class WeilerClipping:
 
     def clip(self, subjectlines, viewportlines):
 
-        # un-flatten subject viewport...
+        # ensure the subjectlines ar reversed all ready
+        if self.is_clockwise(subjectlines):
+            subjectlines.reverse()
+
+        if self.is_clockwise(viewportlines):
+            viewportlines.reverse()
+
+
+        # un-flatten subject and viewport...
         subjectlines = self.unFlattenList(subjectlines)
         viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
 
@@ -326,7 +336,6 @@ class WeilerClipping:
         self.unwrap(subjectlines)
         self.unwrap(viewportlines)
 
-        # run me, in order
         # find P, Ie
         P, Ie = self.getP(subjectlines, viewportlines)
         if self.debug: print "P :",P

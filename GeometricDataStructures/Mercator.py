@@ -73,6 +73,13 @@ class MercatorProjection:
         return LatLongPoint(lat, lng)
 
     def bound(self, value, opt_min, opt_max):
+        """
+
+        :param value:
+        :param opt_min:
+        :param opt_max:
+        :return:
+        """
         if opt_min is not None:
             value = max(value, opt_min)
         if opt_max is not None:
