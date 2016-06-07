@@ -1,4 +1,3 @@
-
 class OrderedSet(object):
     """
     this class is our implementation of an ordered set in python

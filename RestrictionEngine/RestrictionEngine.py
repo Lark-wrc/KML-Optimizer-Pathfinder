@@ -1,4 +1,4 @@
-from math import radians, sin, cos, asin, sqrt, log
+from math import sqrt, log
 from WeilerAtherton import WeilerClipping
 
 ZOOM_CONSTANT = 10 + log(45, 2)  # Final Variable, Do Not Modify

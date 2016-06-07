@@ -1,5 +1,5 @@
 import UI
-import waitDialog
+import WaitDialog
 import Console
 
-__all__ = ["UI", "waitDialog", "Console"]
+__all__ = ["UI", "WaitDialog.py", "Console"]

@@ -1,15 +1,14 @@
 import Tkinter
 import os
 import tkFileDialog
-import tkFont
 import tkMessageBox
 import traceback
 import webbrowser
 from Tkinter import *
-from ordered_set import OrderedSet
+from OrderedSet import OrderedSet
 import ntpath
 import Console
-import waitDialog
+import WaitDialog
 from Observations.WaitObserver import WaitObserver
 from Observations.UiObserver import UiObserver
 
@@ -456,7 +455,7 @@ class myFrame(Frame):
         # disable run button, to disallow too many running applications
         self.run.config(state=DISABLED)
 
-        self.wd = waitDialog.waitDialog(350, 100, myFrame.outimage)
+        self.wd = WaitDialog.WaitDialog(350, 100, myFrame.outimage)
         self.wd.activate()
         uiobserver = UiObserver(self)
         imobserver = WaitObserver(self.wd)
@@ -467,7 +466,7 @@ class myFrame(Frame):
         self.run.config(state=NORMAL)
 
 
-def main(w, h):
+def main(w=550, h=600):
     """
     Author: Bob Seedorf
 
@@ -506,4 +505,7 @@ def center(root, w, h):
     return offset_x, offset_y
 
 if __name__ == '__main__':
-    main(550, 700)
+    if len(sys.argv) > 1:
+        main(int(sys.argv[1]), int(sys.argv[2]))
+    else:
+        main()

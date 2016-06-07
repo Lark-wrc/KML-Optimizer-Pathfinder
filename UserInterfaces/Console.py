@@ -3,7 +3,7 @@ from PIL import Image
 import StaticMapsConnections.ImageMerge as ImageMerge
 from GeometricDataStructures.KmlFasade import KmlFasade
 from GeometricDataStructures.Mercator import *
-from GeometricDataStructures.KmlCOmposite import KmlComposite
+from GeometricDataStructures.KmlComposite import KmlComposite
 from RestrictionEngine.RestrictionEngine import RestrictionFactory
 from StaticMapsConnections.UrlBuilder import UrlBuilder
 from Observations.ObservableConsole import ObservableConsole

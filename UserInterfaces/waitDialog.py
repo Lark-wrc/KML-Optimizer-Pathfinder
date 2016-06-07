@@ -3,7 +3,7 @@ from Tkinter import *
 from PIL import Image
 import UserInterfaces.UI
 
-class waitDialog(tk.Tk):
+class WaitDialog(tk.Tk):
 
     def __init__(self, w, h, outimage):
         """
@@ -88,20 +88,3 @@ class waitDialog(tk.Tk):
         self.set("Finished. \nPlease hit View to view the image, or close to continue")
         self.buttonView.pack(side=LEFT, padx = 15, pady = 3, fill = BOTH, expand = YES)
         self.buttonClose.pack(side=RIGHT, padx = 15, pady = 3, fill = BOTH, expand = YES)
-
-# TODO -- keep or not keep this driver? (its useless)
-def main(w, h):
-    """
-    This method generates the dialog body, the rendering is done via the activate method
-    CANNOT BE USED INDEPENDENT OF UI DRIVER
-
-    `w`: desired width of app window
-    `h`: desired width of app window
-    """
-    app = waitDialog(w, h)
-    app.activate()
-    app.mainloop()
-    return 0
-
-if __name__ == '__main__':
-    main(350, 200)
