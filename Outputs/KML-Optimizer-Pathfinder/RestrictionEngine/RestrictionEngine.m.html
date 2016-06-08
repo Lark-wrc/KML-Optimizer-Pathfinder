@@ -1,0 +1,2222 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine API documentation</title>
+    <meta name="description" content="" />
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.ZOOM_CONSTANT">ZOOM_CONSTANT</a></li>
+  </ul>
+
+    </li>
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.restrict">restrict</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.zoom">zoom</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory">RestrictionFactory</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newSquareRestriction">newSquareRestriction</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newWAClipping">newWAClipping</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction">SquareRestriction</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.pointWithinCorners">pointWithinCorners</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.restrict">restrict</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.zoom">zoom</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction">WAClippingRestriction</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.pointWithinCorners">pointWithinCorners</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.restrict">restrict</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.zoom">zoom</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine</span> module</h1>
+  
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine" class="source">
+    <pre><code>from math import sqrt, log
+from WeilerAtherton import WeilerClipping
+
+ZOOM_CONSTANT = 10 + log(45, 2)  # Final Variable, Do Not Modify
+
+
+class RestrictionFactory(object):
+
+    def __init__(self, metric=0):
+        """
+        `Author`: Bill Clark
+
+        This method generates a new restriction. The factory makes sure that every restriction created works off
+        the same measurement scale, metric or imperial.
+        """
+        self.metric = metric
+
+    def newSquareRestriction(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        See SquareRestriction, this method returns a new instance of that object.
+        """
+        return SquareRestriction(viewport)
+
+    def newWAClipping(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        see MercatorRestriction, this method returns a new instance of the object.
+        """
+        return WAClippingRestriction(viewport)
+
+
+class Restriction(object):
+
+    def __init__(self, metric):
+        """
+        `Author`: Bill Clark
+
+        An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
+        methods can be built into the restriction engines.
+        """
+        self.metric = metric
+        self.debug = 0
+        pass
+
+    def restrict(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        The primary method for a restriction. The only method that *should* be called from outside the class.
+        Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.
+
+        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+        """
+        pass
+
+    def zoom(self, width):
+        """
+        `Author`: Nick LaPosta
+
+        Determines the proper  zoom level and filter range for the given frame size.
+
+        `width`: The desired size in miles for the view port.
+
+        `return`: A tuple of the zoom level and the filter range respectively
+        """
+        zoom_level = ZOOM_CONSTANT - log(width, 2)
+        filter_range = sqrt(width)
+        return zoom_level, filter_range
+
+
+class WAClippingRestriction(Restriction):
+
+    def __init__(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        This method uses the weiler atherton algorithm module to clip geometrics. Any points and lines
+        within the viewport's corners are left in the geometric, everything else is removed. The polygon
+        is closed as well.
+
+        `Viewport`: = The return from the get_corners method of the mercator module. This is the 4 points
+        that make up the corner of the viewport.
+        """
+        super(WAClippingRestriction, self).__init__(0)
+        self.viewport = viewport
+        self.NW = self.viewport[1]
+        self.SE = self.viewport[3]
+
+    def restrict(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        This restriction iterates all through the provided list of geometrics. On each iteration,
+        the coordinates in the geometry are checked for two things; being within the viewport of the
+        Restriction and if the point is an entry point. An entry point is required for WA clipping to work,
+        simply a point that the prior point was not in the viewport. After the iteration, any geometry that is
+        partially in the viewport is clipped via the WeilerAtherton module.
+
+        `geometrics`: list of geometric objects.
+        """
+        atherton = WeilerClipping()
+        for geometry in geometrics:
+            last_pos = -1
+            startCoord = 0
+            count = 0
+            for coordin in geometry.coordinates:
+                count = count+1
+                if not self.pointWithinCorners(coordin):
+                    geometry.remove += 1
+                    curr_pos = 0
+                else: curr_pos = 1
+
+                if last_pos == 0 and curr_pos == 1:
+                    startCoord = geometry.coordinates.index(coordin)-1
+                last_pos = curr_pos
+
+            length = len(geometry.coordinates)
+            geometry.coordinates[:] = geometry.coordinates[-(length - startCoord):] + geometry.coordinates[:startCoord]
+            if not length == geometry.remove and not geometry.remove == 0:  # Completely in/outside the viewport.
+                newgeometry = atherton.clip(geometry.coordinates, self.viewport)
+                geometry.coordinates[:] = newgeometry
+
+    def pointWithinCorners(self, coordinates):
+        """
+        `Author`: Bill Clark
+
+        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+        restrict.
+
+        `coordinates`: A LatLongPoint object.
+
+        `return`: True if the point is contained, false else.
+        """
+        if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+            if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
+                return True
+        return False
+
+
+class SquareRestriction(Restriction):
+
+    def __init__(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        DEPRECIATED: Use WAClipping.
+
+        A restriction that flags all points that are not within distance x from a given center point to be removed.
+        This is done in a square pattern by using two points, the NW corner and the SW corner. 
+
+        `center`: the center point to draw distances from.
+
+        `distance`: the distance in the given metric that a point must be within from center.
+
+        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
+        """
+        super(SquareRestriction, self).__init__(0)
+        self.viewport = viewport
+        self.NW = self.viewport[1]
+        self.SE = self.viewport[3]
+
+    def restrict(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        This method restricts based off of the NW and SE values this object contains. It looks at each point
+        in a geometric and checks to see if it's contained by the lines drawn from NW and SE. If it's contained,
+        we know that the point is in our frame of mind.
+
+        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+        """
+        for geometry in geometrics:
+            if geometry.tag == "Point":
+                if not self.pointWithinCorners(geometry.coordinates[0]):
+                    geometry.remove = 1
+            elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
+                for coord in geometry.coordinates:
+                    if self.pointWithinCorners(coord):
+                        pass
+                    else:
+                        geometry.remove = len(geometry.coordinates)
+                        break
+            else:
+                print "uh oh spagettios."
+
+    def pointWithinCorners(self, coordinates):
+        """
+        `Author`: Bill Clark
+
+        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+        restrict.
+
+        `coordinates`: A LatLongPoint object.
+
+        `return`: True if the point is contained, false else.
+        """
+        if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+            if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
+                return True
+        return False
+</code></pre>
+  </div>
+
+  </header>
+
+  <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.ZOOM_CONSTANT" class="name">var <span class="ident">ZOOM_CONSTANT</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction" class="name">class <span class="ident">Restriction</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction" class="source">
+    <pre><code>class Restriction(object):
+
+    def __init__(self, metric):
+        """
+        `Author`: Bill Clark
+
+        An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
+        methods can be built into the restriction engines.
+        """
+        self.metric = metric
+        self.debug = 0
+        pass
+
+    def restrict(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        The primary method for a restriction. The only method that *should* be called from outside the class.
+        Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.
+
+        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+        """
+        pass
+
+    def zoom(self, width):
+        """
+        `Author`: Nick LaPosta
+
+        Determines the proper  zoom level and filter range for the given frame size.
+
+        `width`: The desired size in miles for the view port.
+
+        `return`: A tuple of the zoom level and the filter range respectively
+        """
+        zoom_level = ZOOM_CONSTANT - log(width, 2)
+        filter_range = sqrt(width)
+        return zoom_level, filter_range
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.debug" class="name">var <span class="ident">debug</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.metric" class="name">var <span class="ident">metric</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, metric)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
+methods can be built into the restriction engines.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.__init__" class="source">
+    <pre><code>def __init__(self, metric):
+    """
+    `Author`: Bill Clark
+    An 'interface' (as interface as python gets) for new Restrictions. With it templating and the composite
+    methods can be built into the restriction engines.
+    """
+    self.metric = metric
+    self.debug = 0
+    pass
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.restrict">
+    <p>def <span class="ident">restrict</span>(</p><p>self, geometrics)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>The primary method for a restriction. The only method that <em>should</em> be called from outside the class.
+Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.</p>
+<p><code>geometrics</code>: A list of geometric objects, which wrap an xml coordinate tag for easy access.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.restrict', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.restrict" class="source">
+    <pre><code>def restrict(self, geometrics):
+    """
+    `Author`: Bill Clark
+    The primary method for a restriction. The only method that *should* be called from outside the class.
+    Should modify the geometrics it gets, (not remove them) as the implementation chooses to do so.
+    `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+    """
+    pass
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.zoom">
+    <p>def <span class="ident">zoom</span>(</p><p>self, width)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Determines the proper  zoom level and filter range for the given frame size.</p>
+<p><code>width</code>: The desired size in miles for the view port.</p>
+<p><code>return</code>: A tuple of the zoom level and the filter range respectively</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.zoom', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.zoom" class="source">
+    <pre><code>def zoom(self, width):
+    """
+    `Author`: Nick LaPosta
+    Determines the proper  zoom level and filter range for the given frame size.
+    `width`: The desired size in miles for the view port.
+    `return`: A tuple of the zoom level and the filter range respectively
+    """
+    zoom_level = ZOOM_CONSTANT - log(width, 2)
+    filter_range = sqrt(width)
+    return zoom_level, filter_range
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory" class="name">class <span class="ident">RestrictionFactory</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory" class="source">
+    <pre><code>class RestrictionFactory(object):
+
+    def __init__(self, metric=0):
+        """
+        `Author`: Bill Clark
+
+        This method generates a new restriction. The factory makes sure that every restriction created works off
+        the same measurement scale, metric or imperial.
+        """
+        self.metric = metric
+
+    def newSquareRestriction(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        See SquareRestriction, this method returns a new instance of that object.
+        """
+        return SquareRestriction(viewport)
+
+    def newWAClipping(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        see MercatorRestriction, this method returns a new instance of the object.
+        """
+        return WAClippingRestriction(viewport)
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory">RestrictionFactory</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.metric" class="name">var <span class="ident">metric</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, metric=0)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method generates a new restriction. The factory makes sure that every restriction created works off
+the same measurement scale, metric or imperial.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.__init__" class="source">
+    <pre><code>def __init__(self, metric=0):
+    """
+    `Author`: Bill Clark
+    This method generates a new restriction. The factory makes sure that every restriction created works off
+    the same measurement scale, metric or imperial.
+    """
+    self.metric = metric
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newSquareRestriction">
+    <p>def <span class="ident">newSquareRestriction</span>(</p><p>self, viewport)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>See SquareRestriction, this method returns a new instance of that object.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newSquareRestriction', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newSquareRestriction" class="source">
+    <pre><code>def newSquareRestriction(self, viewport):
+    """
+    `Author`: Bill Clark
+    See SquareRestriction, this method returns a new instance of that object.
+    """
+    return SquareRestriction(viewport)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newWAClipping">
+    <p>def <span class="ident">newWAClipping</span>(</p><p>self, viewport)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>see MercatorRestriction, this method returns a new instance of the object.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newWAClipping', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.RestrictionFactory.newWAClipping" class="source">
+    <pre><code>def newWAClipping(self, viewport):
+    """
+    `Author`: Bill Clark
+    see MercatorRestriction, this method returns a new instance of the object.
+    """
+    return WAClippingRestriction(viewport)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction" class="name">class <span class="ident">SquareRestriction</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction" class="source">
+    <pre><code>class SquareRestriction(Restriction):
+
+    def __init__(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        DEPRECIATED: Use WAClipping.
+
+        A restriction that flags all points that are not within distance x from a given center point to be removed.
+        This is done in a square pattern by using two points, the NW corner and the SW corner. 
+
+        `center`: the center point to draw distances from.
+
+        `distance`: the distance in the given metric that a point must be within from center.
+
+        `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
+        """
+        super(SquareRestriction, self).__init__(0)
+        self.viewport = viewport
+        self.NW = self.viewport[1]
+        self.SE = self.viewport[3]
+
+    def restrict(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        This method restricts based off of the NW and SE values this object contains. It looks at each point
+        in a geometric and checks to see if it's contained by the lines drawn from NW and SE. If it's contained,
+        we know that the point is in our frame of mind.
+
+        `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+        """
+        for geometry in geometrics:
+            if geometry.tag == "Point":
+                if not self.pointWithinCorners(geometry.coordinates[0]):
+                    geometry.remove = 1
+            elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
+                for coord in geometry.coordinates:
+                    if self.pointWithinCorners(coord):
+                        pass
+                    else:
+                        geometry.remove = len(geometry.coordinates)
+                        break
+            else:
+                print "uh oh spagettios."
+
+    def pointWithinCorners(self, coordinates):
+        """
+        `Author`: Bill Clark
+
+        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+        restrict.
+
+        `coordinates`: A LatLongPoint object.
+
+        `return`: True if the point is contained, false else.
+        """
+        if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+            if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
+                return True
+        return False
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction">SquareRestriction</a></li>
+          <li><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.NW" class="name">var <span class="ident">NW</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.SE" class="name">var <span class="ident">SE</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.debug" class="name">var <span class="ident">debug</span></p>
+            
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.debug">debug</a></code>
+    </p>
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.metric" class="name">var <span class="ident">metric</span></p>
+            
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.metric">metric</a></code>
+    </p>
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.viewport" class="name">var <span class="ident">viewport</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, viewport)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.__init__">__init__</a></code>
+    </p>
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>DEPRECIATED: Use WAClipping.</p>
+<p>A restriction that flags all points that are not within distance x from a given center point to be removed.
+This is done in a square pattern by using two points, the NW corner and the SW corner. </p>
+<p><code>center</code>: the center point to draw distances from.</p>
+<p><code>distance</code>: the distance in the given metric that a point must be within from center.</p>
+<p><code>metric</code>: the measure of distance to be used. True is metric system, False is imperial (miles).</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.__init__" class="source">
+    <pre><code>def __init__(self, viewport):
+    """
+    `Author`: Bill Clark
+    DEPRECIATED: Use WAClipping.
+    A restriction that flags all points that are not within distance x from a given center point to be removed.
+    This is done in a square pattern by using two points, the NW corner and the SW corner. 
+    `center`: the center point to draw distances from.
+    `distance`: the distance in the given metric that a point must be within from center.
+    `metric`: the measure of distance to be used. True is metric system, False is imperial (miles).
+    """
+    super(SquareRestriction, self).__init__(0)
+    self.viewport = viewport
+    self.NW = self.viewport[1]
+    self.SE = self.viewport[3]
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.pointWithinCorners">
+    <p>def <span class="ident">pointWithinCorners</span>(</p><p>self, coordinates)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+restrict.</p>
+<p><code>coordinates</code>: A LatLongPoint object.</p>
+<p><code>return</code>: True if the point is contained, false else.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.pointWithinCorners', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.pointWithinCorners" class="source">
+    <pre><code>def pointWithinCorners(self, coordinates):
+    """
+    `Author`: Bill Clark
+    Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+    restrict.
+    `coordinates`: A LatLongPoint object.
+    `return`: True if the point is contained, false else.
+    """
+    if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+        if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
+            return True
+    return False
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.restrict">
+    <p>def <span class="ident">restrict</span>(</p><p>self, geometrics)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.restrict">restrict</a></code>
+    </p>
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method restricts based off of the NW and SE values this object contains. It looks at each point
+in a geometric and checks to see if it's contained by the lines drawn from NW and SE. If it's contained,
+we know that the point is in our frame of mind.</p>
+<p><code>geometrics</code>: A list of geometric objects, which wrap an xml coordinate tag for easy access.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.restrict', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.restrict" class="source">
+    <pre><code>def restrict(self, geometrics):
+    """
+    `Author`: Bill Clark
+    This method restricts based off of the NW and SE values this object contains. It looks at each point
+    in a geometric and checks to see if it's contained by the lines drawn from NW and SE. If it's contained,
+    we know that the point is in our frame of mind.
+    `geometrics`: A list of geometric objects, which wrap an xml coordinate tag for easy access.
+    """
+    for geometry in geometrics:
+        if geometry.tag == "Point":
+            if not self.pointWithinCorners(geometry.coordinates[0]):
+                geometry.remove = 1
+        elif geometry.tag == "LineString" or geometry.tag == "LinearRing" or geometry.tag == "Polygon":
+            for coord in geometry.coordinates:
+                if self.pointWithinCorners(coord):
+                    pass
+                else:
+                    geometry.remove = len(geometry.coordinates)
+                    break
+        else:
+            print "uh oh spagettios."
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.zoom">
+    <p>def <span class="ident">zoom</span>(</p><p>self, width)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.zoom">zoom</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p><code>Author</code>: Nick LaPosta</p>
+<p>Determines the proper  zoom level and filter range for the given frame size.</p>
+<p><code>width</code>: The desired size in miles for the view port.</p>
+<p><code>return</code>: A tuple of the zoom level and the filter range respectively</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.zoom', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.SquareRestriction.zoom" class="source">
+    <pre><code>def zoom(self, width):
+    """
+    `Author`: Nick LaPosta
+    Determines the proper  zoom level and filter range for the given frame size.
+    `width`: The desired size in miles for the view port.
+    `return`: A tuple of the zoom level and the filter range respectively
+    """
+    zoom_level = ZOOM_CONSTANT - log(width, 2)
+    filter_range = sqrt(width)
+    return zoom_level, filter_range
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction" class="name">class <span class="ident">WAClippingRestriction</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction" class="source">
+    <pre><code>class WAClippingRestriction(Restriction):
+
+    def __init__(self, viewport):
+        """
+        `Author`: Bill Clark
+
+        This method uses the weiler atherton algorithm module to clip geometrics. Any points and lines
+        within the viewport's corners are left in the geometric, everything else is removed. The polygon
+        is closed as well.
+
+        `Viewport`: = The return from the get_corners method of the mercator module. This is the 4 points
+        that make up the corner of the viewport.
+        """
+        super(WAClippingRestriction, self).__init__(0)
+        self.viewport = viewport
+        self.NW = self.viewport[1]
+        self.SE = self.viewport[3]
+
+    def restrict(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        This restriction iterates all through the provided list of geometrics. On each iteration,
+        the coordinates in the geometry are checked for two things; being within the viewport of the
+        Restriction and if the point is an entry point. An entry point is required for WA clipping to work,
+        simply a point that the prior point was not in the viewport. After the iteration, any geometry that is
+        partially in the viewport is clipped via the WeilerAtherton module.
+
+        `geometrics`: list of geometric objects.
+        """
+        atherton = WeilerClipping()
+        for geometry in geometrics:
+            last_pos = -1
+            startCoord = 0
+            count = 0
+            for coordin in geometry.coordinates:
+                count = count+1
+                if not self.pointWithinCorners(coordin):
+                    geometry.remove += 1
+                    curr_pos = 0
+                else: curr_pos = 1
+
+                if last_pos == 0 and curr_pos == 1:
+                    startCoord = geometry.coordinates.index(coordin)-1
+                last_pos = curr_pos
+
+            length = len(geometry.coordinates)
+            geometry.coordinates[:] = geometry.coordinates[-(length - startCoord):] + geometry.coordinates[:startCoord]
+            if not length == geometry.remove and not geometry.remove == 0:  # Completely in/outside the viewport.
+                newgeometry = atherton.clip(geometry.coordinates, self.viewport)
+                geometry.coordinates[:] = newgeometry
+
+    def pointWithinCorners(self, coordinates):
+        """
+        `Author`: Bill Clark
+
+        Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+        restrict.
+
+        `coordinates`: A LatLongPoint object.
+
+        `return`: True if the point is contained, false else.
+        """
+        if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+            if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
+                return True
+        return False
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction">WAClippingRestriction</a></li>
+          <li><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.NW" class="name">var <span class="ident">NW</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.SE" class="name">var <span class="ident">SE</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.debug" class="name">var <span class="ident">debug</span></p>
+            
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.debug">debug</a></code>
+    </p>
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.metric" class="name">var <span class="ident">metric</span></p>
+            
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.metric">metric</a></code>
+    </p>
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.viewport" class="name">var <span class="ident">viewport</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, viewport)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.__init__">__init__</a></code>
+    </p>
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method uses the weiler atherton algorithm module to clip geometrics. Any points and lines
+within the viewport's corners are left in the geometric, everything else is removed. The polygon
+is closed as well.</p>
+<p><code>Viewport</code>: = The return from the get_corners method of the mercator module. This is the 4 points
+that make up the corner of the viewport.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.__init__" class="source">
+    <pre><code>def __init__(self, viewport):
+    """
+    `Author`: Bill Clark
+    This method uses the weiler atherton algorithm module to clip geometrics. Any points and lines
+    within the viewport's corners are left in the geometric, everything else is removed. The polygon
+    is closed as well.
+    `Viewport`: = The return from the get_corners method of the mercator module. This is the 4 points
+    that make up the corner of the viewport.
+    """
+    super(WAClippingRestriction, self).__init__(0)
+    self.viewport = viewport
+    self.NW = self.viewport[1]
+    self.SE = self.viewport[3]
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.pointWithinCorners">
+    <p>def <span class="ident">pointWithinCorners</span>(</p><p>self, coordinates)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+restrict.</p>
+<p><code>coordinates</code>: A LatLongPoint object.</p>
+<p><code>return</code>: True if the point is contained, false else.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.pointWithinCorners', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.pointWithinCorners" class="source">
+    <pre><code>def pointWithinCorners(self, coordinates):
+    """
+    `Author`: Bill Clark
+    Returns true if the given coordinates are contained by this classes NW and SE lines. Helper method to
+    restrict.
+    `coordinates`: A LatLongPoint object.
+    `return`: True if the point is contained, false else.
+    """
+    if coordinates.lng >= self.NW.lng and coordinates.lng <= self.SE.lng:
+        if coordinates.lat <= self.NW.lat and coordinates.lat >= self.SE.lat:
+            return True
+    return False
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.restrict">
+    <p>def <span class="ident">restrict</span>(</p><p>self, geometrics)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.restrict">restrict</a></code>
+    </p>
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This restriction iterates all through the provided list of geometrics. On each iteration,
+the coordinates in the geometry are checked for two things; being within the viewport of the
+Restriction and if the point is an entry point. An entry point is required for WA clipping to work,
+simply a point that the prior point was not in the viewport. After the iteration, any geometry that is
+partially in the viewport is clipped via the WeilerAtherton module.</p>
+<p><code>geometrics</code>: list of geometric objects.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.restrict', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.restrict" class="source">
+    <pre><code>def restrict(self, geometrics):
+    """
+    `Author`: Bill Clark
+    This restriction iterates all through the provided list of geometrics. On each iteration,
+    the coordinates in the geometry are checked for two things; being within the viewport of the
+    Restriction and if the point is an entry point. An entry point is required for WA clipping to work,
+    simply a point that the prior point was not in the viewport. After the iteration, any geometry that is
+    partially in the viewport is clipped via the WeilerAtherton module.
+    `geometrics`: list of geometric objects.
+    """
+    atherton = WeilerClipping()
+    for geometry in geometrics:
+        last_pos = -1
+        startCoord = 0
+        count = 0
+        for coordin in geometry.coordinates:
+            count = count+1
+            if not self.pointWithinCorners(coordin):
+                geometry.remove += 1
+                curr_pos = 0
+            else: curr_pos = 1
+            if last_pos == 0 and curr_pos == 1:
+                startCoord = geometry.coordinates.index(coordin)-1
+            last_pos = curr_pos
+        length = len(geometry.coordinates)
+        geometry.coordinates[:] = geometry.coordinates[-(length - startCoord):] + geometry.coordinates[:startCoord]
+        if not length == geometry.remove and not geometry.remove == 0:  # Completely in/outside the viewport.
+            newgeometry = atherton.clip(geometry.coordinates, self.viewport)
+            geometry.coordinates[:] = newgeometry
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.zoom">
+    <p>def <span class="ident">zoom</span>(</p><p>self, width)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction">Restriction</a></code>.<code><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.Restriction.zoom">zoom</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p><code>Author</code>: Nick LaPosta</p>
+<p>Determines the proper  zoom level and filter range for the given frame size.</p>
+<p><code>width</code>: The desired size in miles for the view port.</p>
+<p><code>return</code>: A tuple of the zoom level and the filter range respectively</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.zoom', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.RestrictionEngine.WAClippingRestriction.zoom" class="source">
+    <pre><code>def zoom(self, width):
+    """
+    `Author`: Nick LaPosta
+    Determines the proper  zoom level and filter range for the given frame size.
+    `width`: The desired size in miles for the view port.
+    `return`: A tuple of the zoom level and the filter range respectively
+    """
+    zoom_level = ZOOM_CONSTANT - log(width, 2)
+    filter_range = sqrt(width)
+    return zoom_level, filter_range
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.2</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+</body>
+</html>

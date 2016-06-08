@@ -1,0 +1,1704 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator API documentation</title>
+    <meta name="description" content="" />
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint">MercatorPoint</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint.__init__">__init__</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection">MercatorProjection</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.bound">bound</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.degrees_to_radians">degrees_to_radians</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_lat_lng_to_point">from_lat_lng_to_point</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_point_to_lat_lng">from_point_to_lat_lng</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.get_corners">get_corners</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.radians_to_degrees">radians_to_degrees</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator</span> module</h1>
+  
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator" class="source">
+    <pre><code>from __future__ import division
+import math
+from GeometricDataStructures.Geometrics import LatLongPoint
+
+
+class MercatorPoint:
+    """
+    `Author`: Nick LaPosta
+
+    Container for the location of a pixel on a Mercator map projection
+    """
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+
+class MercatorProjection:
+    """
+    `Author`: Nick LaPosta
+
+    Contains conversion functions to convert a GeoPoint to a GeoLatLng and back using a center pixel of a Mercator map
+    projection.
+    """
+
+    def __init__(self):
+        """
+        `Author`: Nick LaPosta
+
+        Creates a pixel coordinate for the center point of the map that every pixel coordinate will be relative to as
+        well as the ratio of longitude degrees/radians to pixels
+        """
+        # Google Maps full Earth image is 256x256 pixels
+        self.MERCATOR_RANGE = 256
+        self.pixelOrigin_ = MercatorPoint(self.MERCATOR_RANGE / 2, self.MERCATOR_RANGE / 2)
+        self.pixelsPerLonDegree_ = self.MERCATOR_RANGE / 360
+        self.pixelsPerLonRadian_ = self.MERCATOR_RANGE / (2 * math.pi)
+
+    def from_lat_lng_to_point(self, lat_lng, opt_point=None):
+        """
+        `Author`: Nick LaPosta
+
+        Converts a GeoLatLng object into a GeoPoint object
+
+        `lat_lng`:  The GeoLatLng object that will be converted into a GeoPoint object
+
+        `opt_point`:  The GeoPoint that will contain the converted GeoLatLng. Default creates a new GeoPoint
+
+        `return`:  A GeoPoint that refers to the same location on the map by pixel rather than by latitude and longitude
+        """
+        point = opt_point if opt_point is not None else MercatorPoint(0, 0)
+        origin = self.pixelOrigin_
+        point.x = origin.x + lat_lng.lng * self.pixelsPerLonDegree_
+        # NOTE: Truncating to 0.9999 effectively limits latitude to
+        # 89.189.  This is about a third of a tile past the edge of the world tile.
+        sin_y = self.bound(math.sin(self.degrees_to_radians(lat_lng.lat)), -0.9999, 0.9999)
+        point.y = origin.y + 0.5 * math.log((1 + sin_y) / (1 - sin_y)) * -self.pixelsPerLonRadian_
+        return point
+
+    def from_point_to_lat_lng(self, point):
+        """
+        `Author`: Nick LaPosta
+
+        Converts a GeoPoint object into a GeoPoint object
+
+        `point`:  The GeoPoint object that will be converted into a GeoLatLng object
+
+        `return`:  A GeoLatLng that refers to the same location on the map by latitude and longitude rather than by pixel
+        """
+        origin = self.pixelOrigin_
+        lng = (point.x - origin.x) / self.pixelsPerLonDegree_
+        lat_radians = (point.y - origin.y) / -self.pixelsPerLonRadian_
+        lat = self.radians_to_degrees(2 * math.atan(math.exp(lat_radians)) - math.pi / 2)
+        return LatLongPoint(lat, lng)
+
+    def bound(self, value, opt_min, opt_max):
+        if opt_min is not None:
+            value = max(value, opt_min)
+        if opt_max is not None:
+            value = min(value, opt_max)
+        return value
+
+    def degrees_to_radians(self, deg):
+        """
+        `Author`: Nick LaPosta
+
+        Converts degrees to radians
+
+        `deg`:  Angle in degrees
+
+        `return`:  Angle in radians
+        """
+        return deg * (math.pi / 180)
+
+    def radians_to_degrees(self, rad):
+        """
+        `Author`: Nick LaPosta
+
+        Converts radians to degrees
+
+        `rad`:  Angle in radians
+
+        `return`:  Angle in degrees
+        """
+        return rad / (math.pi / 180)
+
+    def get_corners(self, center, zoom, map_width, map_height):
+        """
+        `Author`: Nick LaPosta
+
+        This function returns a dict of all of the corner points and the four cardinal direction limits of the image that
+        will be downloaded from the Google Maps API
+
+        `center`:  The center GeoLatLng object that the URL will use as the center
+
+        `zoom`:  The zoom level that the UrlBuilder will use to generate the image
+
+        `map_width`:  The pixel width of the image to be downloaded
+
+        `map_height`:  The pixel height of the image to be downloaded
+
+        `return`:  A dict of all of the corner points and the four cardinal direction limits of the image
+        """
+        scale = 2 ** zoom
+
+        center_pixel = self.from_lat_lng_to_point(center)
+
+        # Create Latitude and Longitude for the North East point of the image
+        ne_point = MercatorPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+        ne_lat_lon = self.from_point_to_lat_lng(ne_point)
+
+        # Create Latitude and Longitude for the North West point of the image
+        nw_point = MercatorPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+        nw_lat_lon = self.from_point_to_lat_lng(nw_point)
+
+        # Create Latitude and Longitude for the South East point of the image
+        se_point = MercatorPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+        se_lat_lon = self.from_point_to_lat_lng(se_point)
+
+        # Create Latitude and Longitude for the South West point of the image
+        sw_point = MercatorPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+        sw_lat_lon = self.from_point_to_lat_lng(sw_point)
+
+        # return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng,
+        #             NE=ne_lat_lon, NW=nw_lat_lon, SE=se_lat_lon, SW=sw_lat_lon)
+
+        return (ne_lat_lon, nw_lat_lon, sw_lat_lon, se_lat_lon)
+</code></pre>
+  </div>
+
+  </header>
+
+  <section id="section-items">
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint" class="name">class <span class="ident">MercatorPoint</span></p>
+      
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Container for the location of a pixel on a Mercator map projection</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint" class="source">
+    <pre><code>class MercatorPoint:
+    """
+    `Author`: Nick LaPosta
+
+    Container for the location of a pixel on a Mercator map projection
+    """
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint">MercatorPoint</a></li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint.x" class="name">var <span class="ident">x</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint.y" class="name">var <span class="ident">y</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, x=0, y=0)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorPoint.__init__" class="source">
+    <pre><code>def __init__(self, x=0, y=0):
+    self.x = x
+    self.y = y
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection" class="name">class <span class="ident">MercatorProjection</span></p>
+      
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Contains conversion functions to convert a GeoPoint to a GeoLatLng and back using a center pixel of a Mercator map
+projection.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection" class="source">
+    <pre><code>class MercatorProjection:
+    """
+    `Author`: Nick LaPosta
+
+    Contains conversion functions to convert a GeoPoint to a GeoLatLng and back using a center pixel of a Mercator map
+    projection.
+    """
+
+    def __init__(self):
+        """
+        `Author`: Nick LaPosta
+
+        Creates a pixel coordinate for the center point of the map that every pixel coordinate will be relative to as
+        well as the ratio of longitude degrees/radians to pixels
+        """
+        # Google Maps full Earth image is 256x256 pixels
+        self.MERCATOR_RANGE = 256
+        self.pixelOrigin_ = MercatorPoint(self.MERCATOR_RANGE / 2, self.MERCATOR_RANGE / 2)
+        self.pixelsPerLonDegree_ = self.MERCATOR_RANGE / 360
+        self.pixelsPerLonRadian_ = self.MERCATOR_RANGE / (2 * math.pi)
+
+    def from_lat_lng_to_point(self, lat_lng, opt_point=None):
+        """
+        `Author`: Nick LaPosta
+
+        Converts a GeoLatLng object into a GeoPoint object
+
+        `lat_lng`:  The GeoLatLng object that will be converted into a GeoPoint object
+
+        `opt_point`:  The GeoPoint that will contain the converted GeoLatLng. Default creates a new GeoPoint
+
+        `return`:  A GeoPoint that refers to the same location on the map by pixel rather than by latitude and longitude
+        """
+        point = opt_point if opt_point is not None else MercatorPoint(0, 0)
+        origin = self.pixelOrigin_
+        point.x = origin.x + lat_lng.lng * self.pixelsPerLonDegree_
+        # NOTE: Truncating to 0.9999 effectively limits latitude to
+        # 89.189.  This is about a third of a tile past the edge of the world tile.
+        sin_y = self.bound(math.sin(self.degrees_to_radians(lat_lng.lat)), -0.9999, 0.9999)
+        point.y = origin.y + 0.5 * math.log((1 + sin_y) / (1 - sin_y)) * -self.pixelsPerLonRadian_
+        return point
+
+    def from_point_to_lat_lng(self, point):
+        """
+        `Author`: Nick LaPosta
+
+        Converts a GeoPoint object into a GeoPoint object
+
+        `point`:  The GeoPoint object that will be converted into a GeoLatLng object
+
+        `return`:  A GeoLatLng that refers to the same location on the map by latitude and longitude rather than by pixel
+        """
+        origin = self.pixelOrigin_
+        lng = (point.x - origin.x) / self.pixelsPerLonDegree_
+        lat_radians = (point.y - origin.y) / -self.pixelsPerLonRadian_
+        lat = self.radians_to_degrees(2 * math.atan(math.exp(lat_radians)) - math.pi / 2)
+        return LatLongPoint(lat, lng)
+
+    def bound(self, value, opt_min, opt_max):
+        if opt_min is not None:
+            value = max(value, opt_min)
+        if opt_max is not None:
+            value = min(value, opt_max)
+        return value
+
+    def degrees_to_radians(self, deg):
+        """
+        `Author`: Nick LaPosta
+
+        Converts degrees to radians
+
+        `deg`:  Angle in degrees
+
+        `return`:  Angle in radians
+        """
+        return deg * (math.pi / 180)
+
+    def radians_to_degrees(self, rad):
+        """
+        `Author`: Nick LaPosta
+
+        Converts radians to degrees
+
+        `rad`:  Angle in radians
+
+        `return`:  Angle in degrees
+        """
+        return rad / (math.pi / 180)
+
+    def get_corners(self, center, zoom, map_width, map_height):
+        """
+        `Author`: Nick LaPosta
+
+        This function returns a dict of all of the corner points and the four cardinal direction limits of the image that
+        will be downloaded from the Google Maps API
+
+        `center`:  The center GeoLatLng object that the URL will use as the center
+
+        `zoom`:  The zoom level that the UrlBuilder will use to generate the image
+
+        `map_width`:  The pixel width of the image to be downloaded
+
+        `map_height`:  The pixel height of the image to be downloaded
+
+        `return`:  A dict of all of the corner points and the four cardinal direction limits of the image
+        """
+        scale = 2 ** zoom
+
+        center_pixel = self.from_lat_lng_to_point(center)
+
+        # Create Latitude and Longitude for the North East point of the image
+        ne_point = MercatorPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+        ne_lat_lon = self.from_point_to_lat_lng(ne_point)
+
+        # Create Latitude and Longitude for the North West point of the image
+        nw_point = MercatorPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+        nw_lat_lon = self.from_point_to_lat_lng(nw_point)
+
+        # Create Latitude and Longitude for the South East point of the image
+        se_point = MercatorPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+        se_lat_lon = self.from_point_to_lat_lng(se_point)
+
+        # Create Latitude and Longitude for the South West point of the image
+        sw_point = MercatorPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+        sw_lat_lon = self.from_point_to_lat_lng(sw_point)
+
+        # return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng,
+        #             NE=ne_lat_lon, NW=nw_lat_lon, SE=se_lat_lon, SW=sw_lat_lon)
+
+        return (ne_lat_lon, nw_lat_lon, sw_lat_lon, se_lat_lon)
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection">MercatorProjection</a></li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.MERCATOR_RANGE" class="name">var <span class="ident">MERCATOR_RANGE</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.pixelOrigin_" class="name">var <span class="ident">pixelOrigin_</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.pixelsPerLonDegree_" class="name">var <span class="ident">pixelsPerLonDegree_</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.pixelsPerLonRadian_" class="name">var <span class="ident">pixelsPerLonRadian_</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Creates a pixel coordinate for the center point of the map that every pixel coordinate will be relative to as
+well as the ratio of longitude degrees/radians to pixels</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.__init__" class="source">
+    <pre><code>def __init__(self):
+    """
+    `Author`: Nick LaPosta
+    Creates a pixel coordinate for the center point of the map that every pixel coordinate will be relative to as
+    well as the ratio of longitude degrees/radians to pixels
+    """
+    # Google Maps full Earth image is 256x256 pixels
+    self.MERCATOR_RANGE = 256
+    self.pixelOrigin_ = MercatorPoint(self.MERCATOR_RANGE / 2, self.MERCATOR_RANGE / 2)
+    self.pixelsPerLonDegree_ = self.MERCATOR_RANGE / 360
+    self.pixelsPerLonRadian_ = self.MERCATOR_RANGE / (2 * math.pi)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.bound">
+    <p>def <span class="ident">bound</span>(</p><p>self, value, opt_min, opt_max)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.bound', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.bound" class="source">
+    <pre><code>def bound(self, value, opt_min, opt_max):
+    if opt_min is not None:
+        value = max(value, opt_min)
+    if opt_max is not None:
+        value = min(value, opt_max)
+    return value
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.degrees_to_radians">
+    <p>def <span class="ident">degrees_to_radians</span>(</p><p>self, deg)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Converts degrees to radians</p>
+<p><code>deg</code>:  Angle in degrees</p>
+<p><code>return</code>:  Angle in radians</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.degrees_to_radians', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.degrees_to_radians" class="source">
+    <pre><code>def degrees_to_radians(self, deg):
+    """
+    `Author`: Nick LaPosta
+    Converts degrees to radians
+    `deg`:  Angle in degrees
+    `return`:  Angle in radians
+    """
+    return deg * (math.pi / 180)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_lat_lng_to_point">
+    <p>def <span class="ident">from_lat_lng_to_point</span>(</p><p>self, lat_lng, opt_point=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Converts a GeoLatLng object into a GeoPoint object</p>
+<p><code>lat_lng</code>:  The GeoLatLng object that will be converted into a GeoPoint object</p>
+<p><code>opt_point</code>:  The GeoPoint that will contain the converted GeoLatLng. Default creates a new GeoPoint</p>
+<p><code>return</code>:  A GeoPoint that refers to the same location on the map by pixel rather than by latitude and longitude</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_lat_lng_to_point', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_lat_lng_to_point" class="source">
+    <pre><code>def from_lat_lng_to_point(self, lat_lng, opt_point=None):
+    """
+    `Author`: Nick LaPosta
+    Converts a GeoLatLng object into a GeoPoint object
+    `lat_lng`:  The GeoLatLng object that will be converted into a GeoPoint object
+    `opt_point`:  The GeoPoint that will contain the converted GeoLatLng. Default creates a new GeoPoint
+    `return`:  A GeoPoint that refers to the same location on the map by pixel rather than by latitude and longitude
+    """
+    point = opt_point if opt_point is not None else MercatorPoint(0, 0)
+    origin = self.pixelOrigin_
+    point.x = origin.x + lat_lng.lng * self.pixelsPerLonDegree_
+    # NOTE: Truncating to 0.9999 effectively limits latitude to
+    # 89.189.  This is about a third of a tile past the edge of the world tile.
+    sin_y = self.bound(math.sin(self.degrees_to_radians(lat_lng.lat)), -0.9999, 0.9999)
+    point.y = origin.y + 0.5 * math.log((1 + sin_y) / (1 - sin_y)) * -self.pixelsPerLonRadian_
+    return point
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_point_to_lat_lng">
+    <p>def <span class="ident">from_point_to_lat_lng</span>(</p><p>self, point)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Converts a GeoPoint object into a GeoPoint object</p>
+<p><code>point</code>:  The GeoPoint object that will be converted into a GeoLatLng object</p>
+<p><code>return</code>:  A GeoLatLng that refers to the same location on the map by latitude and longitude rather than by pixel</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_point_to_lat_lng', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.from_point_to_lat_lng" class="source">
+    <pre><code>def from_point_to_lat_lng(self, point):
+    """
+    `Author`: Nick LaPosta
+    Converts a GeoPoint object into a GeoPoint object
+    `point`:  The GeoPoint object that will be converted into a GeoLatLng object
+    `return`:  A GeoLatLng that refers to the same location on the map by latitude and longitude rather than by pixel
+    """
+    origin = self.pixelOrigin_
+    lng = (point.x - origin.x) / self.pixelsPerLonDegree_
+    lat_radians = (point.y - origin.y) / -self.pixelsPerLonRadian_
+    lat = self.radians_to_degrees(2 * math.atan(math.exp(lat_radians)) - math.pi / 2)
+    return LatLongPoint(lat, lng)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.get_corners">
+    <p>def <span class="ident">get_corners</span>(</p><p>self, center, zoom, map_width, map_height)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>This function returns a dict of all of the corner points and the four cardinal direction limits of the image that
+will be downloaded from the Google Maps API</p>
+<p><code>center</code>:  The center GeoLatLng object that the URL will use as the center</p>
+<p><code>zoom</code>:  The zoom level that the UrlBuilder will use to generate the image</p>
+<p><code>map_width</code>:  The pixel width of the image to be downloaded</p>
+<p><code>map_height</code>:  The pixel height of the image to be downloaded</p>
+<p><code>return</code>:  A dict of all of the corner points and the four cardinal direction limits of the image</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.get_corners', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.get_corners" class="source">
+    <pre><code>def get_corners(self, center, zoom, map_width, map_height):
+    """
+    `Author`: Nick LaPosta
+    This function returns a dict of all of the corner points and the four cardinal direction limits of the image that
+    will be downloaded from the Google Maps API
+    `center`:  The center GeoLatLng object that the URL will use as the center
+    `zoom`:  The zoom level that the UrlBuilder will use to generate the image
+    `map_width`:  The pixel width of the image to be downloaded
+    `map_height`:  The pixel height of the image to be downloaded
+    `return`:  A dict of all of the corner points and the four cardinal direction limits of the image
+    """
+    scale = 2 ** zoom
+    center_pixel = self.from_lat_lng_to_point(center)
+    # Create Latitude and Longitude for the North East point of the image
+    ne_point = MercatorPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+    ne_lat_lon = self.from_point_to_lat_lng(ne_point)
+    # Create Latitude and Longitude for the North West point of the image
+    nw_point = MercatorPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y - (map_height / 2) / scale)
+    nw_lat_lon = self.from_point_to_lat_lng(nw_point)
+    # Create Latitude and Longitude for the South East point of the image
+    se_point = MercatorPoint(center_pixel.x + (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+    se_lat_lon = self.from_point_to_lat_lng(se_point)
+    # Create Latitude and Longitude for the South West point of the image
+    sw_point = MercatorPoint(center_pixel.x - (map_width / 2) / scale, center_pixel.y + (map_height / 2) / scale)
+    sw_lat_lon = self.from_point_to_lat_lng(sw_point)
+    # return dict(N=ne_lat_lon.lat, E=ne_lat_lon.lng, S=sw_lat_lon.lat, W=sw_lat_lon.lng,
+    #             NE=ne_lat_lon, NW=nw_lat_lon, SE=se_lat_lon, SW=sw_lat_lon)
+    return (ne_lat_lon, nw_lat_lon, sw_lat_lon, se_lat_lon)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.radians_to_degrees">
+    <p>def <span class="ident">radians_to_degrees</span>(</p><p>self, rad)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Nick LaPosta</p>
+<p>Converts radians to degrees</p>
+<p><code>rad</code>:  Angle in radians</p>
+<p><code>return</code>:  Angle in degrees</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.radians_to_degrees', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.GeometricDataStructures.Mercator.MercatorProjection.radians_to_degrees" class="source">
+    <pre><code>def radians_to_degrees(self, rad):
+    """
+    `Author`: Nick LaPosta
+    Converts radians to degrees
+    `rad`:  Angle in radians
+    `return`:  Angle in degrees
+    """
+    return rad / (math.pi / 180)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.2</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+</body>
+</html>

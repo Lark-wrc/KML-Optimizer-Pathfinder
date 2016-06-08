@@ -1,0 +1,2447 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder API documentation</title>
+    <meta name="description" content="" />
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder">UrlBuilder</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addGeometrics">addGeometrics</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addmarkers">addmarkers</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparam">addparam</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparams">addparams</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addpath">addpath</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.centerparams">centerparams</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.countUrl">countUrl</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.download">download</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.downloadBase">downloadBase</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.printUrls">printUrls</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.register">register</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.retireUrl">retireUrl</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.setStatus">setStatus</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.viewportparam">viewportparam</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder</span> module</h1>
+  
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder" class="source">
+    <pre><code>from urllib import urlretrieve
+from time import sleep
+from Observations.Observer import Observable
+
+
+class UrlBuilder(Observable):
+
+    def __init__(self, height, width=0):
+        """
+        `Author`: Bill Clark
+
+        The UrlBuilder Class should be created anew for each url the user wants to build.
+        Using the methods contained, the user may create a valid google maps static api url.
+        Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
+        All inputs will be need to be converted to Long Lat, as all other files use Lat Long.
+
+        `size`: the size of the returned image in pixels. [0-640]x[0-640]
+        """
+
+        super(UrlBuilder, self).__init__()
+        self.dcount = 1
+        self.setStatus('Initialized.')
+        self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.urlbase += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
+        self.url = self.urlbase
+        self.urllist = []
+        self.limit = 2000 #Proper limit is 2048, buffer of 48. Url can only be that many characters.
+        self.debug = 0
+
+    def addparam(self, feature, value):
+        """
+        `Author`: Bill Clark
+
+        Appends the given parameter to the static maps url. This applies to all urls in a split scenerio.
+
+        `feature: The name of the parameter. Valid`: scale | maptype | format
+
+        `value: the value of the parameter. Valid`: 1,2,4 | roadmap, satellite, hybrid, terrain |
+                                                                png, jpg, png32, gif, jpg-baseline
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = ""
+        curr += '&&' + feature + '='
+        curr += value
+
+        self.urlbase += curr
+        self.url = self.urlbase
+        return self.url
+
+    def addparams(self, dict):
+        """
+        `Author`: Bill Clark
+
+        Allows for a list of parameters to be added to the static map. This is applied to all urls in a split scenario.
+
+        `dict: a dictionary of features`:values from the addparam method.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = ""
+        for key in dict:
+            curr += '&&' + key + '=' + dict[key]
+
+        self.urlbase += curr
+        self.url = self.urlbase
+        return self.url
+
+    def centerparams(self, center, zoom):
+        """
+        `Author`: Bill Clark
+
+        This method adds two parameters to the url that are required for a consistent image. In order to merge
+        images, these parameters are required to keep the image displaying the same area. In a split scenario,
+        these are applied to each url. Multiple calls are unnecessary.
+
+        `center`: The center point the map will display. latitude and longitude coordinates.
+
+        `zoom`: How far zoomed in the map slice will be. [1-20]
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        if len(self.urlbase) > 59:
+            return 0
+        curr = ""
+        curr += '&&center='+center
+        curr += '&&zoom='+zoom
+        curr += '&&key=AIzaSyAdYQpSjMl5wE2GNIknG63nZpOcadeNhDc'
+        self.urlbase += curr
+        self.url = self.urlbase
+        return self.url
+
+    def viewportparam(self, viewports):
+        """
+        `Author`: Bill Clark
+
+        Appends a viewport parameter. A viewport makes each point it is given visible on the map. If the parameters
+        are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+        the url will be split. If the locations are provided as a solid string, the url will only be checked after
+        everything is appended. (This could cause data loss.)
+
+        `viewports`: Locations in a list format. Each will be made visible.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = self.url[:]
+        curr += '&&visible='
+        if type(viewports) is list:
+            for coordin in viewports:
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + '&&visible='
+                    curr += coordin + '|'
+                else:
+                    curr += '|'
+            curr = curr[:-1]
+        elif type(viewports) is str:
+            curr += (viewports)
+
+        self.url = curr
+        self.retireUrl(self.url)
+        return self.url
+
+    def addmarkers(self, styles, locations):
+        """
+        `Author`: Bill Clark
+
+        Adds the locations listed as markers to the url. Each point will have the supplied style settings. If the
+        parameters are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+        the url will be split. If the locations are provided as a solid string, the url will only be checked after
+        everything is appended. (This could cause data loss.)
+
+        `styles`: Style settings, which function like parameters, a dict of name and value.
+                        Valid Names: size | label | color
+                        Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
+        `locations`: Locations in a list format. Each will be added to be marked. list of  coordinates.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = self.url[:]
+        curr += '&&markers='
+
+        for key in styles:
+            curr += key + ':' + styles[key] + '|'
+
+        if type(locations) is list:
+            for coordin in locations:
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + '&&markers='
+                    for key in styles:
+                        curr += key + ':' + styles[key] + '|'
+                    curr += coordin + '|'
+                else:
+                    curr += '|'
+            curr = curr[:-1]
+        elif type(locations) is str:
+            curr += (locations)
+
+        self.url = curr
+        self.retireUrl(self.url)
+        return curr
+
+    def addpath(self, styles, locations):
+        """
+        `Author`: Bill Clark
+
+        Adds the path listed to the url. The lines drawn and area filled will have the style setting specified.
+        If the url is split, filling with not work, and can possibly break the url. Filled areas are expected to
+        with in a single url by google maps static.
+        If the parameters are provided as a list, when a coordinate is added and the length is pushed over the
+        character limit, the url will be split. If the locations are provided as a solid string, the url will only be
+        checked after everything is appended. (This could cause data loss.)
+
+        `styles`: Style settings, which function like parameters, a dict of name and value.
+                        Valid Names: weight | geodesic | color | fillcolor
+                        Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
+        `locations`: Locations in a list format. Each will be added to be marked. list of coordinates.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = self.url[:]
+        curr += '&&path='
+
+        for key in styles:
+            curr += key + ':' + styles[key] + '|'
+
+        if type(locations) is list:
+            for coordin in locations:
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + "&&path="
+                    for key in styles:
+                        curr += key + ':' + styles[key] + '|'
+                    curr += coordin + '|'
+                else:
+                    curr += "|"
+            curr = curr[:-1]
+        elif type(locations) is str:
+            curr += (locations)
+
+        self.url = curr
+        self.retireUrl(self.url)
+        return curr
+
+    def addGeometrics(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        Exported from the original driver. This code takes a list of geometrics and adds their data to the urls.
+        Points are  NOT included, the line is commented out. Linestrings are drawn in red, Polygons in blue, and
+        if markers are uncommented they will be yellow.
+
+        `geometrics`: A list of geometrics from a KmlFasade.
+        """
+        markerlist = []
+        for element in geometrics:
+            if element.tag == "Point":
+                markerlist.append(element.printCoordinates())
+            if element.tag == "Polygon":
+                self.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
+            if element.tag == "LineString":
+                self.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
+        #self.addmarkers({"color": "yellow"}, markerlist)
+
+    def download(self, path="""Inputs\Static Maps\Mass\{} {}.png""", prefix='image'):
+        """
+        `Author`: Bill Clark
+
+        Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
+        the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
+        because mulitple urls may be downloaded.
+
+        `path`: a file path to save the generated image to.
+
+        `prefix`: The prefix to the count in the file name. Defaults to image.
+
+        `return`: A list of the file locations for the downloaded files.
+        """
+
+        ret = []
+        count = 1
+        ret.append(urlretrieve(self.urlbase, path.format(prefix, '0'))[0])
+        for url in self.urllist:
+            ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
+            count += 1
+            self.setStatus('Downloaded {} of {} Images.'.format(count, len(self.urllist)+2))
+            sleep(.3)
+        ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
+        self.dcount = count+1
+        self.setStatus('Downloaded {} Images Successfully.'.format(self.dcount+1))
+        return ret
+
+    def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
+        """
+        `Author`: Bill Clark
+
+        Downloads only the base url. The generator method does not download that url (better for automation), so this
+        method was a required addition.
+
+        `path`: a file path to save the generated image to.
+
+        `prefix`: The prefix to the count in the file name. Defaults to image.
+
+        'return' the base url's saved location.
+        """
+
+        return urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+
+    def countUrl(self, url):
+        """
+        `Author`: Bill Clark
+
+        This method counts the characters in the given url. Of note, This does not use internal values, unlike most
+        methods in the class. This method is necessary because | characters count as 3 when actually read by static
+        maps.
+
+        `url`: The url to be counted.
+
+        `return`: returns the number of characters in the url.
+        """
+
+        ret = 0
+        for character in url:
+            if character == "|": ret += 3
+            else: ret += 1
+        return ret
+
+    def retireUrl(self, url, offset=0):
+        """
+        `Author`: Bill Clark
+
+        This method is used to split urls that have hit the size limit. It uses side effects to great effect.
+        This method actually checks the url (and an optional offset) against the limit, and if the number is greater
+        than or equal to the limit, returns true. When it does return true, it adds the current url to the url list
+        and provides a new url copied from the urlbase saved in the object. This is how all parameters are kept the
+        same across splits, parameters update the base url and not the actual current url. (technically they do update
+        both, but you get the idea.) The method returns false if the url is shorter than the limit.
+
+        `url`: The url to check the length of.
+        """
+        count = self.countUrl(url)+offset
+        if count >= self.limit:
+            self.urllist.append(url)
+            self.url = self.urlbase[:]
+            return 1
+        else:
+            return 0
+
+    def printUrls(self, prin=0):
+        """
+        `Author`: Bill Clark
+
+        This method prints all the urls contained in the object in a readable manner. As readable as lines of character
+        length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
+        The print is actually optional now, because we now have proper handlers that can print the string in better
+        places. Now the generated string is returned by default.
+
+        `return`: the list of urls for logging in UI
+        """
+        ret = ""
+        ret += "Base Url: " + self.urlbase + '\n'
+        for url in self.urllist:
+            ret += url + '\n'
+        ret += self.url + '\n'
+        if prin: print ret
+        return ret
+
+    def __str__(self):
+        """
+        `Author`: Bill Clark
+
+        Simple override so that printing the object prints the url's it has with in it.
+
+        `return`: ToString of the url's contained in the object.
+        """
+        return self.printUrls()
+</code></pre>
+  </div>
+
+  </header>
+
+  <section id="section-items">
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder" class="name">class <span class="ident">UrlBuilder</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder" class="source">
+    <pre><code>class UrlBuilder(Observable):
+
+    def __init__(self, height, width=0):
+        """
+        `Author`: Bill Clark
+
+        The UrlBuilder Class should be created anew for each url the user wants to build.
+        Using the methods contained, the user may create a valid google maps static api url.
+        Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
+        All inputs will be need to be converted to Long Lat, as all other files use Lat Long.
+
+        `size`: the size of the returned image in pixels. [0-640]x[0-640]
+        """
+
+        super(UrlBuilder, self).__init__()
+        self.dcount = 1
+        self.setStatus('Initialized.')
+        self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
+        self.urlbase += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
+        self.url = self.urlbase
+        self.urllist = []
+        self.limit = 2000 #Proper limit is 2048, buffer of 48. Url can only be that many characters.
+        self.debug = 0
+
+    def addparam(self, feature, value):
+        """
+        `Author`: Bill Clark
+
+        Appends the given parameter to the static maps url. This applies to all urls in a split scenerio.
+
+        `feature: The name of the parameter. Valid`: scale | maptype | format
+
+        `value: the value of the parameter. Valid`: 1,2,4 | roadmap, satellite, hybrid, terrain |
+                                                                png, jpg, png32, gif, jpg-baseline
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = ""
+        curr += '&&' + feature + '='
+        curr += value
+
+        self.urlbase += curr
+        self.url = self.urlbase
+        return self.url
+
+    def addparams(self, dict):
+        """
+        `Author`: Bill Clark
+
+        Allows for a list of parameters to be added to the static map. This is applied to all urls in a split scenario.
+
+        `dict: a dictionary of features`:values from the addparam method.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = ""
+        for key in dict:
+            curr += '&&' + key + '=' + dict[key]
+
+        self.urlbase += curr
+        self.url = self.urlbase
+        return self.url
+
+    def centerparams(self, center, zoom):
+        """
+        `Author`: Bill Clark
+
+        This method adds two parameters to the url that are required for a consistent image. In order to merge
+        images, these parameters are required to keep the image displaying the same area. In a split scenario,
+        these are applied to each url. Multiple calls are unnecessary.
+
+        `center`: The center point the map will display. latitude and longitude coordinates.
+
+        `zoom`: How far zoomed in the map slice will be. [1-20]
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        if len(self.urlbase) > 59:
+            return 0
+        curr = ""
+        curr += '&&center='+center
+        curr += '&&zoom='+zoom
+        curr += '&&key=AIzaSyAdYQpSjMl5wE2GNIknG63nZpOcadeNhDc'
+        self.urlbase += curr
+        self.url = self.urlbase
+        return self.url
+
+    def viewportparam(self, viewports):
+        """
+        `Author`: Bill Clark
+
+        Appends a viewport parameter. A viewport makes each point it is given visible on the map. If the parameters
+        are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+        the url will be split. If the locations are provided as a solid string, the url will only be checked after
+        everything is appended. (This could cause data loss.)
+
+        `viewports`: Locations in a list format. Each will be made visible.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = self.url[:]
+        curr += '&&visible='
+        if type(viewports) is list:
+            for coordin in viewports:
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + '&&visible='
+                    curr += coordin + '|'
+                else:
+                    curr += '|'
+            curr = curr[:-1]
+        elif type(viewports) is str:
+            curr += (viewports)
+
+        self.url = curr
+        self.retireUrl(self.url)
+        return self.url
+
+    def addmarkers(self, styles, locations):
+        """
+        `Author`: Bill Clark
+
+        Adds the locations listed as markers to the url. Each point will have the supplied style settings. If the
+        parameters are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+        the url will be split. If the locations are provided as a solid string, the url will only be checked after
+        everything is appended. (This could cause data loss.)
+
+        `styles`: Style settings, which function like parameters, a dict of name and value.
+                        Valid Names: size | label | color
+                        Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
+        `locations`: Locations in a list format. Each will be added to be marked. list of  coordinates.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = self.url[:]
+        curr += '&&markers='
+
+        for key in styles:
+            curr += key + ':' + styles[key] + '|'
+
+        if type(locations) is list:
+            for coordin in locations:
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + '&&markers='
+                    for key in styles:
+                        curr += key + ':' + styles[key] + '|'
+                    curr += coordin + '|'
+                else:
+                    curr += '|'
+            curr = curr[:-1]
+        elif type(locations) is str:
+            curr += (locations)
+
+        self.url = curr
+        self.retireUrl(self.url)
+        return curr
+
+    def addpath(self, styles, locations):
+        """
+        `Author`: Bill Clark
+
+        Adds the path listed to the url. The lines drawn and area filled will have the style setting specified.
+        If the url is split, filling with not work, and can possibly break the url. Filled areas are expected to
+        with in a single url by google maps static.
+        If the parameters are provided as a list, when a coordinate is added and the length is pushed over the
+        character limit, the url will be split. If the locations are provided as a solid string, the url will only be
+        checked after everything is appended. (This could cause data loss.)
+
+        `styles`: Style settings, which function like parameters, a dict of name and value.
+                        Valid Names: weight | geodesic | color | fillcolor
+                        Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
+        `locations`: Locations in a list format. Each will be added to be marked. list of coordinates.
+
+        `return`: the url with the given parameter appended to it. Also updates saved url.
+        """
+
+        curr = self.url[:]
+        curr += '&&path='
+
+        for key in styles:
+            curr += key + ':' + styles[key] + '|'
+
+        if type(locations) is list:
+            for coordin in locations:
+                curr += coordin
+                if self.retireUrl(curr):
+                    curr = self.url + "&&path="
+                    for key in styles:
+                        curr += key + ':' + styles[key] + '|'
+                    curr += coordin + '|'
+                else:
+                    curr += "|"
+            curr = curr[:-1]
+        elif type(locations) is str:
+            curr += (locations)
+
+        self.url = curr
+        self.retireUrl(self.url)
+        return curr
+
+    def addGeometrics(self, geometrics):
+        """
+        `Author`: Bill Clark
+
+        Exported from the original driver. This code takes a list of geometrics and adds their data to the urls.
+        Points are  NOT included, the line is commented out. Linestrings are drawn in red, Polygons in blue, and
+        if markers are uncommented they will be yellow.
+
+        `geometrics`: A list of geometrics from a KmlFasade.
+        """
+        markerlist = []
+        for element in geometrics:
+            if element.tag == "Point":
+                markerlist.append(element.printCoordinates())
+            if element.tag == "Polygon":
+                self.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
+            if element.tag == "LineString":
+                self.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
+        #self.addmarkers({"color": "yellow"}, markerlist)
+
+    def download(self, path="""Inputs\Static Maps\Mass\{} {}.png""", prefix='image'):
+        """
+        `Author`: Bill Clark
+
+        Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
+        the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
+        because mulitple urls may be downloaded.
+
+        `path`: a file path to save the generated image to.
+
+        `prefix`: The prefix to the count in the file name. Defaults to image.
+
+        `return`: A list of the file locations for the downloaded files.
+        """
+
+        ret = []
+        count = 1
+        ret.append(urlretrieve(self.urlbase, path.format(prefix, '0'))[0])
+        for url in self.urllist:
+            ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
+            count += 1
+            self.setStatus('Downloaded {} of {} Images.'.format(count, len(self.urllist)+2))
+            sleep(.3)
+        ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
+        self.dcount = count+1
+        self.setStatus('Downloaded {} Images Successfully.'.format(self.dcount+1))
+        return ret
+
+    def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
+        """
+        `Author`: Bill Clark
+
+        Downloads only the base url. The generator method does not download that url (better for automation), so this
+        method was a required addition.
+
+        `path`: a file path to save the generated image to.
+
+        `prefix`: The prefix to the count in the file name. Defaults to image.
+
+        'return' the base url's saved location.
+        """
+
+        return urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+
+    def countUrl(self, url):
+        """
+        `Author`: Bill Clark
+
+        This method counts the characters in the given url. Of note, This does not use internal values, unlike most
+        methods in the class. This method is necessary because | characters count as 3 when actually read by static
+        maps.
+
+        `url`: The url to be counted.
+
+        `return`: returns the number of characters in the url.
+        """
+
+        ret = 0
+        for character in url:
+            if character == "|": ret += 3
+            else: ret += 1
+        return ret
+
+    def retireUrl(self, url, offset=0):
+        """
+        `Author`: Bill Clark
+
+        This method is used to split urls that have hit the size limit. It uses side effects to great effect.
+        This method actually checks the url (and an optional offset) against the limit, and if the number is greater
+        than or equal to the limit, returns true. When it does return true, it adds the current url to the url list
+        and provides a new url copied from the urlbase saved in the object. This is how all parameters are kept the
+        same across splits, parameters update the base url and not the actual current url. (technically they do update
+        both, but you get the idea.) The method returns false if the url is shorter than the limit.
+
+        `url`: The url to check the length of.
+        """
+        count = self.countUrl(url)+offset
+        if count >= self.limit:
+            self.urllist.append(url)
+            self.url = self.urlbase[:]
+            return 1
+        else:
+            return 0
+
+    def printUrls(self, prin=0):
+        """
+        `Author`: Bill Clark
+
+        This method prints all the urls contained in the object in a readable manner. As readable as lines of character
+        length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
+        The print is actually optional now, because we now have proper handlers that can print the string in better
+        places. Now the generated string is returned by default.
+
+        `return`: the list of urls for logging in UI
+        """
+        ret = ""
+        ret += "Base Url: " + self.urlbase + '\n'
+        for url in self.urllist:
+            ret += url + '\n'
+        ret += self.url + '\n'
+        if prin: print ret
+        return ret
+
+    def __str__(self):
+        """
+        `Author`: Bill Clark
+
+        Simple override so that printing the object prints the url's it has with in it.
+
+        `return`: ToString of the url's contained in the object.
+        """
+        return self.printUrls()
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder">UrlBuilder</a></li>
+          <li>Observations.Observer.Observable</li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.dcount" class="name">var <span class="ident">dcount</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.debug" class="name">var <span class="ident">debug</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.limit" class="name">var <span class="ident">limit</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.url" class="name">var <span class="ident">url</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.urlbase" class="name">var <span class="ident">urlbase</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.urllist" class="name">var <span class="ident">urllist</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, height, width=0)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>The UrlBuilder Class should be created anew for each url the user wants to build.
+Using the methods contained, the user may create a valid google maps static api url.
+Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
+All inputs will be need to be converted to Long Lat, as all other files use Lat Long.</p>
+<p><code>size</code>: the size of the returned image in pixels. [0-640]x[0-640]</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.__init__" class="source">
+    <pre><code>def __init__(self, height, width=0):
+    """
+    `Author`: Bill Clark
+    The UrlBuilder Class should be created anew for each url the user wants to build.
+    Using the methods contained, the user may create a valid google maps static api url.
+    Input is not checked, and ALL INPUTS SHOULD BE STRINGS. Even integer values should be entered repr()'d.
+    All inputs will be need to be converted to Long Lat, as all other files use Lat Long.
+    `size`: the size of the returned image in pixels. [0-640]x[0-640]
+    """
+    super(UrlBuilder, self).__init__()
+    self.dcount = 1
+    self.setStatus('Initialized.')
+    self.urlbase = 'https://maps.googleapis.com/maps/api/staticmap?'
+    self.urlbase += 'size='+repr(height) + "x" + repr(height) if width == 0 else repr(width)
+    self.url = self.urlbase
+    self.urllist = []
+    self.limit = 2000 #Proper limit is 2048, buffer of 48. Url can only be that many characters.
+    self.debug = 0
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addGeometrics">
+    <p>def <span class="ident">addGeometrics</span>(</p><p>self, geometrics)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Exported from the original driver. This code takes a list of geometrics and adds their data to the urls.
+Points are  NOT included, the line is commented out. Linestrings are drawn in red, Polygons in blue, and
+if markers are uncommented they will be yellow.</p>
+<p><code>geometrics</code>: A list of geometrics from a KmlFasade.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addGeometrics', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addGeometrics" class="source">
+    <pre><code>def addGeometrics(self, geometrics):
+    """
+    `Author`: Bill Clark
+    Exported from the original driver. This code takes a list of geometrics and adds their data to the urls.
+    Points are  NOT included, the line is commented out. Linestrings are drawn in red, Polygons in blue, and
+    if markers are uncommented they will be yellow.
+    `geometrics`: A list of geometrics from a KmlFasade.
+    """
+    markerlist = []
+    for element in geometrics:
+        if element.tag == "Point":
+            markerlist.append(element.printCoordinates())
+        if element.tag == "Polygon":
+            self.addpath({"color": "blue", "weight": '5'}, element.coordinatesAsListStrings())
+        if element.tag == "LineString":
+            self.addpath({"color": "red", "weight": '5'}, element.coordinatesAsListStrings())
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addmarkers">
+    <p>def <span class="ident">addmarkers</span>(</p><p>self, styles, locations)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Adds the locations listed as markers to the url. Each point will have the supplied style settings. If the
+parameters are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+the url will be split. If the locations are provided as a solid string, the url will only be checked after
+everything is appended. (This could cause data loss.)</p>
+<p><code>styles</code>: Style settings, which function like parameters, a dict of name and value.
+                Valid Names: size | label | color
+                Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
+<code>locations</code>: Locations in a list format. Each will be added to be marked. list of  coordinates.</p>
+<p><code>return</code>: the url with the given parameter appended to it. Also updates saved url.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addmarkers', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addmarkers" class="source">
+    <pre><code>def addmarkers(self, styles, locations):
+    """
+    `Author`: Bill Clark
+    Adds the locations listed as markers to the url. Each point will have the supplied style settings. If the
+    parameters are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+    the url will be split. If the locations are provided as a solid string, the url will only be checked after
+    everything is appended. (This could cause data loss.)
+    `styles`: Style settings, which function like parameters, a dict of name and value.
+                    Valid Names: size | label | color
+                    Valid value: tiny, mid, small, normal | [A-Z] or [0-9] | [hexvalue] or color name
+    `locations`: Locations in a list format. Each will be added to be marked. list of  coordinates.
+    `return`: the url with the given parameter appended to it. Also updates saved url.
+    """
+    curr = self.url[:]
+    curr += '&&markers='
+    for key in styles:
+        curr += key + ':' + styles[key] + '|'
+    if type(locations) is list:
+        for coordin in locations:
+            curr += coordin
+            if self.retireUrl(curr):
+                curr = self.url + '&&markers='
+                for key in styles:
+                    curr += key + ':' + styles[key] + '|'
+                curr += coordin + '|'
+            else:
+                curr += '|'
+        curr = curr[:-1]
+    elif type(locations) is str:
+        curr += (locations)
+    self.url = curr
+    self.retireUrl(self.url)
+    return curr
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparam">
+    <p>def <span class="ident">addparam</span>(</p><p>self, feature, value)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Appends the given parameter to the static maps url. This applies to all urls in a split scenerio.</p>
+<p><code>feature: The name of the parameter. Valid</code>: scale | maptype | format</p>
+<p><code>value: the value of the parameter. Valid</code>: 1,2,4 | roadmap, satellite, hybrid, terrain |
+                                                        png, jpg, png32, gif, jpg-baseline
+<code>return</code>: the url with the given parameter appended to it. Also updates saved url.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparam', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparam" class="source">
+    <pre><code>def addparam(self, feature, value):
+    """
+    `Author`: Bill Clark
+    Appends the given parameter to the static maps url. This applies to all urls in a split scenerio.
+    `feature: The name of the parameter. Valid`: scale | maptype | format
+    `value: the value of the parameter. Valid`: 1,2,4 | roadmap, satellite, hybrid, terrain |
+                                                            png, jpg, png32, gif, jpg-baseline
+    `return`: the url with the given parameter appended to it. Also updates saved url.
+    """
+    curr = ""
+    curr += '&&' + feature + '='
+    curr += value
+    self.urlbase += curr
+    self.url = self.urlbase
+    return self.url
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparams">
+    <p>def <span class="ident">addparams</span>(</p><p>self, dict)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Allows for a list of parameters to be added to the static map. This is applied to all urls in a split scenario.</p>
+<p><code>dict: a dictionary of features</code>:values from the addparam method.</p>
+<p><code>return</code>: the url with the given parameter appended to it. Also updates saved url.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparams', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addparams" class="source">
+    <pre><code>def addparams(self, dict):
+    """
+    `Author`: Bill Clark
+    Allows for a list of parameters to be added to the static map. This is applied to all urls in a split scenario.
+    `dict: a dictionary of features`:values from the addparam method.
+    `return`: the url with the given parameter appended to it. Also updates saved url.
+    """
+    curr = ""
+    for key in dict:
+        curr += '&&' + key + '=' + dict[key]
+    self.urlbase += curr
+    self.url = self.urlbase
+    return self.url
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addpath">
+    <p>def <span class="ident">addpath</span>(</p><p>self, styles, locations)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Adds the path listed to the url. The lines drawn and area filled will have the style setting specified.
+If the url is split, filling with not work, and can possibly break the url. Filled areas are expected to
+with in a single url by google maps static.
+If the parameters are provided as a list, when a coordinate is added and the length is pushed over the
+character limit, the url will be split. If the locations are provided as a solid string, the url will only be
+checked after everything is appended. (This could cause data loss.)</p>
+<p><code>styles</code>: Style settings, which function like parameters, a dict of name and value.
+                Valid Names: weight | geodesic | color | fillcolor
+                Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
+<code>locations</code>: Locations in a list format. Each will be added to be marked. list of coordinates.</p>
+<p><code>return</code>: the url with the given parameter appended to it. Also updates saved url.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addpath', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.addpath" class="source">
+    <pre><code>def addpath(self, styles, locations):
+    """
+    `Author`: Bill Clark
+    Adds the path listed to the url. The lines drawn and area filled will have the style setting specified.
+    If the url is split, filling with not work, and can possibly break the url. Filled areas are expected to
+    with in a single url by google maps static.
+    If the parameters are provided as a list, when a coordinate is added and the length is pushed over the
+    character limit, the url will be split. If the locations are provided as a solid string, the url will only be
+    checked after everything is appended. (This could cause data loss.)
+    `styles`: Style settings, which function like parameters, a dict of name and value.
+                    Valid Names: weight | geodesic | color | fillcolor
+                    Valid value: [0-.] | T or F | [hexvalue] or [hexvalue32] or color name | same as color
+    `locations`: Locations in a list format. Each will be added to be marked. list of coordinates.
+    `return`: the url with the given parameter appended to it. Also updates saved url.
+    """
+    curr = self.url[:]
+    curr += '&&path='
+    for key in styles:
+        curr += key + ':' + styles[key] + '|'
+    if type(locations) is list:
+        for coordin in locations:
+            curr += coordin
+            if self.retireUrl(curr):
+                curr = self.url + "&&path="
+                for key in styles:
+                    curr += key + ':' + styles[key] + '|'
+                curr += coordin + '|'
+            else:
+                curr += "|"
+        curr = curr[:-1]
+    elif type(locations) is str:
+        curr += (locations)
+    self.url = curr
+    self.retireUrl(self.url)
+    return curr
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.centerparams">
+    <p>def <span class="ident">centerparams</span>(</p><p>self, center, zoom)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method adds two parameters to the url that are required for a consistent image. In order to merge
+images, these parameters are required to keep the image displaying the same area. In a split scenario,
+these are applied to each url. Multiple calls are unnecessary.</p>
+<p><code>center</code>: The center point the map will display. latitude and longitude coordinates.</p>
+<p><code>zoom</code>: How far zoomed in the map slice will be. [1-20]</p>
+<p><code>return</code>: the url with the given parameter appended to it. Also updates saved url.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.centerparams', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.centerparams" class="source">
+    <pre><code>def centerparams(self, center, zoom):
+    """
+    `Author`: Bill Clark
+    This method adds two parameters to the url that are required for a consistent image. In order to merge
+    images, these parameters are required to keep the image displaying the same area. In a split scenario,
+    these are applied to each url. Multiple calls are unnecessary.
+    `center`: The center point the map will display. latitude and longitude coordinates.
+    `zoom`: How far zoomed in the map slice will be. [1-20]
+    `return`: the url with the given parameter appended to it. Also updates saved url.
+    """
+    if len(self.urlbase) > 59:
+        return 0
+    curr = ""
+    curr += '&&center='+center
+    curr += '&&zoom='+zoom
+    curr += '&&key=AIzaSyAdYQpSjMl5wE2GNIknG63nZpOcadeNhDc'
+    self.urlbase += curr
+    self.url = self.urlbase
+    return self.url
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.countUrl">
+    <p>def <span class="ident">countUrl</span>(</p><p>self, url)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method counts the characters in the given url. Of note, This does not use internal values, unlike most
+methods in the class. This method is necessary because | characters count as 3 when actually read by static
+maps.</p>
+<p><code>url</code>: The url to be counted.</p>
+<p><code>return</code>: returns the number of characters in the url.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.countUrl', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.countUrl" class="source">
+    <pre><code>def countUrl(self, url):
+    """
+    `Author`: Bill Clark
+    This method counts the characters in the given url. Of note, This does not use internal values, unlike most
+    methods in the class. This method is necessary because | characters count as 3 when actually read by static
+    maps.
+    `url`: The url to be counted.
+    `return`: returns the number of characters in the url.
+    """
+    ret = 0
+    for character in url:
+        if character == "|": ret += 3
+        else: ret += 1
+    return ret
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.download">
+    <p>def <span class="ident">download</span>(</p><p>self, path=&#39;Inputs\\Static Maps\\Mass\\{} {}.png&#39;, prefix=&#39;image&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
+the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
+because mulitple urls may be downloaded.</p>
+<p><code>path</code>: a file path to save the generated image to.</p>
+<p><code>prefix</code>: The prefix to the count in the file name. Defaults to image.</p>
+<p><code>return</code>: A list of the file locations for the downloaded files.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.download', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.download" class="source">
+    <pre><code>def download(self, path="""Inputs\Static Maps\Mass\{} {}.png""", prefix='image'):
+    """
+    `Author`: Bill Clark
+    Takes a parameter path and downloads the generated url to that path. Using the symbol {} {} twice will replace
+    the first with the given prefix, and the second with a counter. This is the recommended way of using this path,
+    because mulitple urls may be downloaded.
+    `path`: a file path to save the generated image to.
+    `prefix`: The prefix to the count in the file name. Defaults to image.
+    `return`: A list of the file locations for the downloaded files.
+    """
+    ret = []
+    count = 1
+    ret.append(urlretrieve(self.urlbase, path.format(prefix, '0'))[0])
+    for url in self.urllist:
+        ret.append(urlretrieve(url, path.format(prefix, repr(count)))[0])
+        count += 1
+        self.setStatus('Downloaded {} of {} Images.'.format(count, len(self.urllist)+2))
+        sleep(.3)
+    ret.append(urlretrieve(self.url, path.format(prefix, repr(count)))[0])
+    self.dcount = count+1
+    self.setStatus('Downloaded {} Images Successfully.'.format(self.dcount+1))
+    return ret
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.downloadBase">
+    <p>def <span class="ident">downloadBase</span>(</p><p>self, path=&#39;Inputs\\Static Maps\\Mass\\{} 0.png&#39;, prefix=&#39;image&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Downloads only the base url. The generator method does not download that url (better for automation), so this
+method was a required addition.</p>
+<p><code>path</code>: a file path to save the generated image to.</p>
+<p><code>prefix</code>: The prefix to the count in the file name. Defaults to image.</p>
+<p>'return' the base url's saved location.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.downloadBase', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.downloadBase" class="source">
+    <pre><code>def downloadBase(self, path='Inputs\Static Maps\\Mass\{} 0.png', prefix='image'):
+    """
+    `Author`: Bill Clark
+    Downloads only the base url. The generator method does not download that url (better for automation), so this
+    method was a required addition.
+    `path`: a file path to save the generated image to.
+    `prefix`: The prefix to the count in the file name. Defaults to image.
+    'return' the base url's saved location.
+    """
+    return urlretrieve(self.urlbase, path.format(prefix, '0'))[0]
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.printUrls">
+    <p>def <span class="ident">printUrls</span>(</p><p>self, prin=0)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method prints all the urls contained in the object in a readable manner. As readable as lines of character
+length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
+The print is actually optional now, because we now have proper handlers that can print the string in better
+places. Now the generated string is returned by default.</p>
+<p><code>return</code>: the list of urls for logging in UI</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.printUrls', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.printUrls" class="source">
+    <pre><code>def printUrls(self, prin=0):
+    """
+    `Author`: Bill Clark
+    This method prints all the urls contained in the object in a readable manner. As readable as lines of character
+    length 2000~ can be. It labels the base url (used for image merging) and then lists all layer images.
+    The print is actually optional now, because we now have proper handlers that can print the string in better
+    places. Now the generated string is returned by default.
+    `return`: the list of urls for logging in UI
+    """
+    ret = ""
+    ret += "Base Url: " + self.urlbase + '\n'
+    for url in self.urllist:
+        ret += url + '\n'
+    ret += self.url + '\n'
+    if prin: print ret
+    return ret
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.register">
+    <p>def <span class="ident">register</span>(</p><p>self, object)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Register a new observer to the Observable.</p>
+<p><code>object</code>: An observer to add to this object.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.register', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.register" class="source">
+    <pre><code>def register(self, object):
+    """
+    `Author`: Bill Clark
+    Register a new observer to the Observable.
+    `object`: An observer to add to this object.
+    """
+    self.observers.append(object)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.retireUrl">
+    <p>def <span class="ident">retireUrl</span>(</p><p>self, url, offset=0)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>This method is used to split urls that have hit the size limit. It uses side effects to great effect.
+This method actually checks the url (and an optional offset) against the limit, and if the number is greater
+than or equal to the limit, returns true. When it does return true, it adds the current url to the url list
+and provides a new url copied from the urlbase saved in the object. This is how all parameters are kept the
+same across splits, parameters update the base url and not the actual current url. (technically they do update
+both, but you get the idea.) The method returns false if the url is shorter than the limit.</p>
+<p><code>url</code>: The url to check the length of.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.retireUrl', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.retireUrl" class="source">
+    <pre><code>def retireUrl(self, url, offset=0):
+    """
+    `Author`: Bill Clark
+    This method is used to split urls that have hit the size limit. It uses side effects to great effect.
+    This method actually checks the url (and an optional offset) against the limit, and if the number is greater
+    than or equal to the limit, returns true. When it does return true, it adds the current url to the url list
+    and provides a new url copied from the urlbase saved in the object. This is how all parameters are kept the
+    same across splits, parameters update the base url and not the actual current url. (technically they do update
+    both, but you get the idea.) The method returns false if the url is shorter than the limit.
+    `url`: The url to check the length of.
+    """
+    count = self.countUrl(url)+offset
+    if count >= self.limit:
+        self.urllist.append(url)
+        self.url = self.urlbase[:]
+        return 1
+    else:
+        return 0
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.setStatus">
+    <p>def <span class="ident">setStatus</span>(</p><p>self, string, op=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Set the status of each observer the object has. Does so via the update method in each Observer.</p>
+<p><code>string</code>: Text to set the observer's status too.</p>
+<p><code>op</code>: The optional argument.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.setStatus', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.setStatus" class="source">
+    <pre><code>def setStatus(self, string, op=None):
+    """
+    `Author`: Bill Clark
+    Set the status of each observer the object has. Does so via the update method in each Observer.
+    `string`: Text to set the observer's status too.
+    `op`: The optional argument.
+    """
+    if self.observers:
+        for observer in self.observers:
+            observer.update(string, op)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.viewportparam">
+    <p>def <span class="ident">viewportparam</span>(</p><p>self, viewports)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bill Clark</p>
+<p>Appends a viewport parameter. A viewport makes each point it is given visible on the map. If the parameters
+are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+the url will be split. If the locations are provided as a solid string, the url will only be checked after
+everything is appended. (This could cause data loss.)</p>
+<p><code>viewports</code>: Locations in a list format. Each will be made visible.</p>
+<p><code>return</code>: the url with the given parameter appended to it. Also updates saved url.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.viewportparam', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.StaticMapsConnections.UrlBuilder.UrlBuilder.viewportparam" class="source">
+    <pre><code>def viewportparam(self, viewports):
+    """
+    `Author`: Bill Clark
+    Appends a viewport parameter. A viewport makes each point it is given visible on the map. If the parameters
+    are provided as a list, when a coordinate is added and the length is pushed over the character limit,
+    the url will be split. If the locations are provided as a solid string, the url will only be checked after
+    everything is appended. (This could cause data loss.)
+    `viewports`: Locations in a list format. Each will be made visible.
+    `return`: the url with the given parameter appended to it. Also updates saved url.
+    """
+    curr = self.url[:]
+    curr += '&&visible='
+    if type(viewports) is list:
+        for coordin in viewports:
+            curr += coordin
+            if self.retireUrl(curr):
+                curr = self.url + '&&visible='
+                curr += coordin + '|'
+            else:
+                curr += '|'
+        curr = curr[:-1]
+    elif type(viewports) is str:
+        curr += (viewports)
+    self.url = curr
+    self.retireUrl(self.url)
+    return self.url
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.2</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+</body>
+</html>
