@@ -141,7 +141,7 @@ class Merger(Observable):
         self.setStatus("{} Images Converted Successfully.".format(count), self.mcount)
         return ret
 
-    def blkDiff(self, images, outfile="Outputs\DifferenceFile.png"):
+    def blkDiff(self, images):
         """
         `Author`: Bill Clark
 
@@ -174,4 +174,13 @@ class Merger(Observable):
         if debug: trackedimage.show()
 
         if debug: print ""
-        trackedimage.save(outfile)
+        trackedimage.save(self.outfile)
+
+if __name__ == "__main__":
+    diffnum = 120
+    debug = 1
+    image1 = 'C:\Users\localadmin\Documents\Code Repositories\IntelliJ\SoftwareEng_Team5\Images\Example 2 Picture 1.jpg'
+    image2 = 'C:\Users\localadmin\Documents\Code Repositories\IntelliJ\SoftwareEng_Team5\Images\Example 2 Picture 2.jpg'
+    m = Merger('Outputs\ImF.png', image1)
+    m.blkDiff(image2)
+    # m.merge(image2)
