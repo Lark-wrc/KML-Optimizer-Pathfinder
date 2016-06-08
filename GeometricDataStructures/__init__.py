@@ -3,4 +3,4 @@ import Geometrics
 import Mercator
 import KmlCOmposite
 
-__all__ = ["KmlFasade", "Geometrics", "Mercator", "KmlCOmposite.py"]
+__all__ = ["KmlFasade", "Geometrics", "Mercator", "KmlCOmposite"]
