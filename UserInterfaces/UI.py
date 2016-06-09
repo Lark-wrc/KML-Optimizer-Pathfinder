@@ -9,7 +9,7 @@ from Tkinter import *
 from OrderedSet import OrderedSet
 import ntpath
 import Console
-import WaitDialog
+import waitDialog
 from Observations.WaitObserver import WaitObserver
 from Observations.UiObserver import UiObserver
 
