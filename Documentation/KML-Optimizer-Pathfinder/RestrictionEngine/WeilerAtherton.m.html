@@ -1,0 +1,2322 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton API documentation</title>
+    <meta name="description" content="" />
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping">WeilerClipping</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.__init__">__init__</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.clip">clip</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.determinant">determinant</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.doLinesIntersect">doLinesIntersect</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.findOrientation">findOrientation</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClipped">getClipped</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClosestPoint">getClosestPoint</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getLineIntersection">getLineIntersection</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getP">getP</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getQ">getQ</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.rewrap">rewrap</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unFlattenList">unFlattenList</a></li>
+    <li class="mono"><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unwrap">unwrap</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton</span> module</h1>
+  
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton" class="source">
+    <pre><code>from GeometricDataStructures.Geometrics import LatLongPoint
+import math
+
+class WeilerClipping:
+    """
+    `Author`: Bob S. Bill C. Nick L. and Eliakah K.
+
+    This class encapsulates all of the functionality of our implementation of the 'Weiler Atherton' Polygon Clipping Algorithm.
+
+    Included are all of the arithmetic operations, transformations and calculations necessary to accomplish our goal.
+    First build the polygons composed of the subject, being clipped, and the viewport against which the subject is being clipped are defined
+    Next we construct the integral collections, P, Q, and Ie (see the methods getP and getQ) to stage the execution of clipping.
+    Finally, these collections are fed into the clip method, that returns the new polygon as a flat list of points, in sequence, representing the new polygon as a set of vertices
+
+    """
+
+    def __init__(self, debug=0):
+        self.debug = debug
+
+    def getLineIntersection(self, pointA, pointB, pointC, pointD):
+        """
+        `Author`: Bob Seedorf, Eliakah K.
+
+        Returns the point, as a LatLongPoint object, at which the line segments composed of points A, B and points C, D intersect
+        First the tuple of the difference in the x's an y's of points A, B and then points C, D are found.
+        Next the determinant of the difference of the x values y values, respctively, are stored
+        Next the determinant of the the individual lines, A, B and C, D are found, this yields value d.
+        Subsequently the corresponding point of intersection's x and y values are found through the division of the determinant of d and ydiff and d and xdiff by div
+        The return is the pair of values, resutltx and resulty, representing the coordinate pair that is the point of intersection
+
+        NOTE: Does NOT check if lines intersect, as a precondition that should be accomplished before this method is called
+
+        `pointA`: start point of first line
+
+        `pointB`: end point of first line
+
+        `pointC`: start point of second line
+
+        `pointD`: end point of second line
+        """
+
+        xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
+        ydiff = pointA.lat - pointB.lat, pointC.lat - pointD.lat
+
+        div = self.determinant(xdiff, ydiff)
+        d = self.determinant(pointA.getTup(), pointB.getTup()), self.determinant(pointC.getTup(), pointD.getTup())
+
+        resultx = float(self.determinant(d, xdiff)) / float(div)
+        resulty = float(self.determinant(d, ydiff)) / float(div)
+        return LatLongPoint(resulty, resultx)
+
+    def determinant(self, tupA, tupB):
+        """
+        `Author`: Bob Seedorf
+
+        Returns the algebraic determinant of the parameterized tuple using linear combinations of their coordinate pairs ([0], [1]).
+         _    _
+        | A  C |
+        |_B, D_|    =   (A * D) - (B * C) = return value
+
+        `pointA`: start point of line
+
+        `pointB`: end point of line
+        """
+        return (tupA[0] * tupB[1] - tupB[0] * tupA[1])
+
+    def doLinesIntersect(self, pointA, pointB, pointC, pointD):
+        """
+        `Author`: Bob Seedorf, Eliakah K.
+
+        Returns True if the line segments composed of points A, B and points C, D have an intersection point.
+        By finding the orientation of any three given points the traits of the lines intersection can be determined through relational equality
+        The orientation of the lines, being only the decision that they rotate either clockwise, counterclockwise, or not at all (collinear) is used to determine the
+        In the case that the orientation of A, B, and C is the same as A, B, and D, and the the orientation of C, D, and A is the same as C, D, and B, then the lines do not intersect
+
+        `pointA`: start point of first line
+
+        `pointB`: end point of first line
+
+        `pointC`: start point of second line
+
+        `pointD`: end point of second line
+        """
+
+        o1 = self.findOrientation(pointA, pointB, pointC)
+        o2 = self.findOrientation(pointA, pointB, pointD)
+        o3 = self.findOrientation(pointC, pointD, pointA)
+        o4 = self.findOrientation(pointC, pointD, pointB)
+
+        if o1 != o2 and o3 != o4:
+            return True
+        return False
+
+    def findOrientation(self, pointA, pointB, pointC):
+        """
+        `Author`: Bob Seedorf
+
+        Returns orientation of three given points in coordinate space.
+        The assumption lines drawn between points A, B and B, C and C, A are used to define this 'orientation'
+        Through projection of the combinations of lines and extraneous points the slopes of the projections are found to be of an appropriate orientatoin
+
+        `pointA`: first point being passed
+
+        `pointB`: second point being passed
+
+        `pointC`: third point being passed
+        """
+        val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - \
+              (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
+        if val == 0.0: return 0   # Orientation.COLLINEAR
+        elif val > 0: return -1   # Orientation.RIGHT
+        else: return 1            # Orientation.LEFT
+
+    def getClosestPoint(self, target, pointA, pointB):
+        """
+        `Author`: Bob Seedorf
+
+        Returns the point, of the set {pointA, pointB} that is dimensionally closest to the point target
+        By using the pythagorean theorem and calculating the hypotenuse of the triangle composed of sides of the difference in x and difference in y for the two given points, the closest point is selected based on this distance.
+
+        NOTE: in the case that the two points are of equal distance, point A will be chosen over point B
+
+        `target`: control point form whom the distances of the other two will be checked
+
+        `pointA`: first point to be checked, has return precedence over pointB
+
+        `pointB`: second point to be checked
+        """
+        distToA = math.sqrt(((target.lng - pointA.lng) ** 2) + (target.lat - pointA.lat) ** 2)
+        distToB = math.sqrt(((target.lng - pointB.lng) ** 2) + (target.lat - pointB.lat) ** 2)
+        return pointA if distToA <= distToB else pointB
+
+    def getClipped(self, P, Q, Ie):
+        """
+        `Author`: Bob S, Nick L, Bill C.
+
+        This method returns the result of the clipping algorithm as a collection of coordinate pairs; a list of tuples
+        Using the collections, P, Q, and Ie, the resultant clipped polygon is found through an iteration over P and Q based on Ie.
+        The collection of P is used to find all the necessary points on the subject polygon, while the collection of Q is used to find the necessary points on the viewport polygon.
+        by 'bouncing back and forth' between these two collections, as we pop intersection points off Ie, the bounded region of the result is constructed in a dynamic fashion and returned as a list of points representing every vertex of the shape
+
+        `return`: result, the collection of tuples representing the points of the new polygon
+
+        """
+
+        result = []
+        reserve = Ie[-1]
+        location = reserve
+        flag = 1
+        while flag:
+            Ie.pop()
+            end = Ie[-1]
+            index = P.index(location)
+            while not location == end:
+                location.rewrap()
+                result.append(location)
+                index = (index+1) % len(P)
+                location = P[index]
+            Ie.pop()
+
+            if len(Ie) == 0:
+                end = reserve
+                flag = 0
+            else:
+                end = Ie[-1]
+
+            index = Q.index(location)
+            while not location == end:
+                location.rewrap()
+                result.append(location)
+                index = (index+1) % len(Q)
+                location = Q[index]
+        return result
+
+    def getP(self, subjectlines, viewportlines):
+        """
+        'Author' Bob S. Nick L. and Bill C.
+
+        This method calculates and maintains the list of points, P, to be used during the iterative phase of the getCLipped method
+
+        `subjectlines`: The collection points that compose all vertices of the subject which we are clipping
+
+        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+
+        `return`: P and Ie, the collection of all points that lie on the subject lines of the polygon being examined and the collection of all points of intersection respectively
+        """
+        P = []
+        Ie = []
+        for subjectline in reversed(subjectlines):
+            P.append(subjectline[1])
+            crossCount = 0
+            for viewportline in viewportlines:
+                poi = None
+                if self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1]):
+                    poi = self.getLineIntersection(subjectline[0], subjectline[1], viewportline[0], viewportline[1])
+                    P.append(poi)
+                    Ie.append(poi)
+                    crossCount += 1
+                if crossCount > 1:
+                    if Ie[-1] == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
+                        # perform swap
+                        Ie[-1], Ie[-2] = Ie[-2], Ie[-1]
+                        P[-1], P[-2] = P[-2], P[-1]
+                if crossCount == 2:
+                    break
+        P.reverse()
+        return P, Ie
+
+    def getQ(self, viewportlines, Ie):
+        """
+        'Author' Bob S. Nick L., and Bill C.
+
+        this method returns the collection, Q, of all points that lie on the lines of the viewport polyogn being examined
+        By iterating over Ie, the list of points of intersection, every point of intersection cooresponding to the line starting with the point at index 1-4 of the viewport is checked and ordered as to generate a counter clockwise, flattened collection of the viewport
+
+        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+
+        `Ie`:  and the collection of all points of intersection between subjeclines and viewportlines
+
+        `return`: Q, the collection of all points that lie on the viewport polygon
+        """
+        Q = []
+        storagebank = []
+        for i in range(0, 4):
+            corner = viewportlines[i][0]
+            storage = []
+            storage.append(corner)
+            for point in Ie:
+                corner_coords = [corner.lat, corner.lng]
+                point_coords = [point.lat, point.lng]
+                if corner_coords[i % 2] == point_coords[i % 2]:
+                    storage.append(point)
+                #if i == 0 or i == 2:
+                #    if(corner.lat == point.lat):
+                #        storage.append(point)
+                #else:  # i == 1 or i == 3
+                #    if(corner.lng == point.lng):
+                #        storage.append(point)
+            storagebank.append(storage)
+        storagebank[0].sort(key=lambda tup: tup.lng, reverse=True)
+        storagebank[1].sort(key=lambda tup: tup.lat, reverse=True)
+        storagebank[2].sort(key=lambda tup: tup.lng)
+        storagebank[3].sort(key=lambda tup: tup.lat)
+        Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
+        return Q
+
+    def unwrap(self, list):
+        """
+        'Author' Bob S. and Nick L.
+
+        this method 'wraps' the longitude points of an *already un-flattened list*
+        By ensuring the polygon crosses the anti-meridian, then moving all points that extend around the anti-meridian going negative to positive;
+        by moving those points into the extra dimensional standard coordinate plain 'off the map' from the polar plain
+
+        NOTE: this method acts on the implication that the points of the polygon being transformed are NO MORE than 180 degrees apart longitudinally
+        This is required to be the case as there exists no other way to determine whether or not a point should or should not be transformed
+        By relying on a maximum limit, we have chosen to be 180, the polyogns' diemnsion are capped at a width of no more 180 degreees
+        However, the path of the visualization software in google earth will not limit the capacity for polygons' dimensions to exceed 180 degrees width
+
+        `list`: the un-flattened list of the polygon being modified
+
+        `return`: None, this method statically modifies the parameterized list
+        """
+        for p in list:
+            if (p[0].lng * p[1].lng) < 0:    # if one is negative and the other positive
+                if p[0].lng > p[1].lng:
+                    if p[0].lng - p[1].lng > 180:
+                        p[1].lng = p[1].lng + 360
+                elif p[1].lng > p[0].lng:
+                    if p[1].lng - p[0].lng > 180:
+                        p[0].lng = p[0].lng + 360
+
+    def rewrap(self, list):
+        """
+        'Author' Bob S.
+
+        This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by calculating each of the coordinate pair's values individually
+
+        `list`: the un-flattened list of the polygon being modified
+
+        `return`: None, this method statically modifies the parameterized list
+        """
+        for p in list:
+            p[0].rewrap()
+            p[1].rewrap()
+
+    def unFlattenList(self, list):
+        """
+        'Author' Bob S.
+
+        this method 'un-flattens' the list being passed
+        by creating a tuple of each lat-long-point and it's respective neighbor a new list of 'lines' is created for the purpose of iteration by the necessary methods.
+
+        `list`: list to be modified.
+
+        `return`: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
+        """
+        temp = list[1:] + list[:1]  # rotate list by one, to the left
+        return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
+
+
+    def clip(self, subjectlines, viewportlines):
+        """
+        This method takes in flattened, lists of lat long points representing the polygon of the subject polygon and the viewport polygon.
+        first the two collections are un-flattened to form the list of lists needed to run the algorithm
+        Next the lists are unwrapped to fold them over the anti-meridian, allowing analysis of continuous lines in the solution space
+        Next the three integral collections P, Ie, and Q are found using the deferred methods
+        Finally the resultant clipped polygon is found with a call to the local method and returned
+
+        `subjectlines`: list of points on subject shape
+        `viewportlines`: list of pints on the viewport shape
+        `return`: the result of the call to get clipped
+        """
+
+        # un-flatten subject viewport
+        subjectlines = self.unFlattenList(subjectlines)
+        viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
+
+        # next unwrap these line sets
+        self.unwrap(subjectlines)
+        self.unwrap(viewportlines)
+
+        # find P, Ie
+        P, Ie = self.getP(subjectlines, viewportlines)
+        if self.debug: print "P :",P
+        if self.debug: print "Ie:", Ie
+        if not Ie or Ie == []:
+            return None
+
+        # then find Q
+        Q = self.getQ(viewportlines, Ie)
+        if self.debug: print "Q :",Q
+
+        # then get Clipped
+        result = self.getClipped(P, Q, Ie)
+        result.append(result[0])
+        return result
+</code></pre>
+  </div>
+
+  </header>
+
+  <section id="section-items">
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping" class="name">class <span class="ident">WeilerClipping</span></p>
+      
+  
+    <div class="desc"><p><code>Author</code>: Bob S. Bill C. Nick L. and Eliakah K.</p>
+<p>This class encapsulates all of the functionality of our implementation of the 'Weiler Atherton' Polygon Clipping Algorithm.</p>
+<p>Included are all of the arithmetic operations, transformations and calculations necessary to accomplish our goal.
+First build the polygons composed of the subject, being clipped, and the viewport against which the subject is being clipped are defined
+Next we construct the integral collections, P, Q, and Ie (see the methods getP and getQ) to stage the execution of clipping.
+Finally, these collections are fed into the clip method, that returns the new polygon as a flat list of points, in sequence, representing the new polygon as a set of vertices</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping" class="source">
+    <pre><code>class WeilerClipping:
+    """
+    `Author`: Bob S. Bill C. Nick L. and Eliakah K.
+
+    This class encapsulates all of the functionality of our implementation of the 'Weiler Atherton' Polygon Clipping Algorithm.
+
+    Included are all of the arithmetic operations, transformations and calculations necessary to accomplish our goal.
+    First build the polygons composed of the subject, being clipped, and the viewport against which the subject is being clipped are defined
+    Next we construct the integral collections, P, Q, and Ie (see the methods getP and getQ) to stage the execution of clipping.
+    Finally, these collections are fed into the clip method, that returns the new polygon as a flat list of points, in sequence, representing the new polygon as a set of vertices
+
+    """
+
+    def __init__(self, debug=0):
+        self.debug = debug
+
+    def getLineIntersection(self, pointA, pointB, pointC, pointD):
+        """
+        `Author`: Bob Seedorf, Eliakah K.
+
+        Returns the point, as a LatLongPoint object, at which the line segments composed of points A, B and points C, D intersect
+        First the tuple of the difference in the x's an y's of points A, B and then points C, D are found.
+        Next the determinant of the difference of the x values y values, respctively, are stored
+        Next the determinant of the the individual lines, A, B and C, D are found, this yields value d.
+        Subsequently the corresponding point of intersection's x and y values are found through the division of the determinant of d and ydiff and d and xdiff by div
+        The return is the pair of values, resutltx and resulty, representing the coordinate pair that is the point of intersection
+
+        NOTE: Does NOT check if lines intersect, as a precondition that should be accomplished before this method is called
+
+        `pointA`: start point of first line
+
+        `pointB`: end point of first line
+
+        `pointC`: start point of second line
+
+        `pointD`: end point of second line
+        """
+
+        xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
+        ydiff = pointA.lat - pointB.lat, pointC.lat - pointD.lat
+
+        div = self.determinant(xdiff, ydiff)
+        d = self.determinant(pointA.getTup(), pointB.getTup()), self.determinant(pointC.getTup(), pointD.getTup())
+
+        resultx = float(self.determinant(d, xdiff)) / float(div)
+        resulty = float(self.determinant(d, ydiff)) / float(div)
+        return LatLongPoint(resulty, resultx)
+
+    def determinant(self, tupA, tupB):
+        """
+        `Author`: Bob Seedorf
+
+        Returns the algebraic determinant of the parameterized tuple using linear combinations of their coordinate pairs ([0], [1]).
+         _    _
+        | A  C |
+        |_B, D_|    =   (A * D) - (B * C) = return value
+
+        `pointA`: start point of line
+
+        `pointB`: end point of line
+        """
+        return (tupA[0] * tupB[1] - tupB[0] * tupA[1])
+
+    def doLinesIntersect(self, pointA, pointB, pointC, pointD):
+        """
+        `Author`: Bob Seedorf, Eliakah K.
+
+        Returns True if the line segments composed of points A, B and points C, D have an intersection point.
+        By finding the orientation of any three given points the traits of the lines intersection can be determined through relational equality
+        The orientation of the lines, being only the decision that they rotate either clockwise, counterclockwise, or not at all (collinear) is used to determine the
+        In the case that the orientation of A, B, and C is the same as A, B, and D, and the the orientation of C, D, and A is the same as C, D, and B, then the lines do not intersect
+
+        `pointA`: start point of first line
+
+        `pointB`: end point of first line
+
+        `pointC`: start point of second line
+
+        `pointD`: end point of second line
+        """
+
+        o1 = self.findOrientation(pointA, pointB, pointC)
+        o2 = self.findOrientation(pointA, pointB, pointD)
+        o3 = self.findOrientation(pointC, pointD, pointA)
+        o4 = self.findOrientation(pointC, pointD, pointB)
+
+        if o1 != o2 and o3 != o4:
+            return True
+        return False
+
+    def findOrientation(self, pointA, pointB, pointC):
+        """
+        `Author`: Bob Seedorf
+
+        Returns orientation of three given points in coordinate space.
+        The assumption lines drawn between points A, B and B, C and C, A are used to define this 'orientation'
+        Through projection of the combinations of lines and extraneous points the slopes of the projections are found to be of an appropriate orientatoin
+
+        `pointA`: first point being passed
+
+        `pointB`: second point being passed
+
+        `pointC`: third point being passed
+        """
+        val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - \
+              (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
+        if val == 0.0: return 0   # Orientation.COLLINEAR
+        elif val > 0: return -1   # Orientation.RIGHT
+        else: return 1            # Orientation.LEFT
+
+    def getClosestPoint(self, target, pointA, pointB):
+        """
+        `Author`: Bob Seedorf
+
+        Returns the point, of the set {pointA, pointB} that is dimensionally closest to the point target
+        By using the pythagorean theorem and calculating the hypotenuse of the triangle composed of sides of the difference in x and difference in y for the two given points, the closest point is selected based on this distance.
+
+        NOTE: in the case that the two points are of equal distance, point A will be chosen over point B
+
+        `target`: control point form whom the distances of the other two will be checked
+
+        `pointA`: first point to be checked, has return precedence over pointB
+
+        `pointB`: second point to be checked
+        """
+        distToA = math.sqrt(((target.lng - pointA.lng) ** 2) + (target.lat - pointA.lat) ** 2)
+        distToB = math.sqrt(((target.lng - pointB.lng) ** 2) + (target.lat - pointB.lat) ** 2)
+        return pointA if distToA <= distToB else pointB
+
+    def getClipped(self, P, Q, Ie):
+        """
+        `Author`: Bob S, Nick L, Bill C.
+
+        This method returns the result of the clipping algorithm as a collection of coordinate pairs; a list of tuples
+        Using the collections, P, Q, and Ie, the resultant clipped polygon is found through an iteration over P and Q based on Ie.
+        The collection of P is used to find all the necessary points on the subject polygon, while the collection of Q is used to find the necessary points on the viewport polygon.
+        by 'bouncing back and forth' between these two collections, as we pop intersection points off Ie, the bounded region of the result is constructed in a dynamic fashion and returned as a list of points representing every vertex of the shape
+
+        `return`: result, the collection of tuples representing the points of the new polygon
+
+        """
+
+        result = []
+        reserve = Ie[-1]
+        location = reserve
+        flag = 1
+        while flag:
+            Ie.pop()
+            end = Ie[-1]
+            index = P.index(location)
+            while not location == end:
+                location.rewrap()
+                result.append(location)
+                index = (index+1) % len(P)
+                location = P[index]
+            Ie.pop()
+
+            if len(Ie) == 0:
+                end = reserve
+                flag = 0
+            else:
+                end = Ie[-1]
+
+            index = Q.index(location)
+            while not location == end:
+                location.rewrap()
+                result.append(location)
+                index = (index+1) % len(Q)
+                location = Q[index]
+        return result
+
+    def getP(self, subjectlines, viewportlines):
+        """
+        'Author' Bob S. Nick L. and Bill C.
+
+        This method calculates and maintains the list of points, P, to be used during the iterative phase of the getCLipped method
+
+        `subjectlines`: The collection points that compose all vertices of the subject which we are clipping
+
+        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+
+        `return`: P and Ie, the collection of all points that lie on the subject lines of the polygon being examined and the collection of all points of intersection respectively
+        """
+        P = []
+        Ie = []
+        for subjectline in reversed(subjectlines):
+            P.append(subjectline[1])
+            crossCount = 0
+            for viewportline in viewportlines:
+                poi = None
+                if self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1]):
+                    poi = self.getLineIntersection(subjectline[0], subjectline[1], viewportline[0], viewportline[1])
+                    P.append(poi)
+                    Ie.append(poi)
+                    crossCount += 1
+                if crossCount > 1:
+                    if Ie[-1] == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
+                        # perform swap
+                        Ie[-1], Ie[-2] = Ie[-2], Ie[-1]
+                        P[-1], P[-2] = P[-2], P[-1]
+                if crossCount == 2:
+                    break
+        P.reverse()
+        return P, Ie
+
+    def getQ(self, viewportlines, Ie):
+        """
+        'Author' Bob S. Nick L., and Bill C.
+
+        this method returns the collection, Q, of all points that lie on the lines of the viewport polyogn being examined
+        By iterating over Ie, the list of points of intersection, every point of intersection cooresponding to the line starting with the point at index 1-4 of the viewport is checked and ordered as to generate a counter clockwise, flattened collection of the viewport
+
+        `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+
+        `Ie`:  and the collection of all points of intersection between subjeclines and viewportlines
+
+        `return`: Q, the collection of all points that lie on the viewport polygon
+        """
+        Q = []
+        storagebank = []
+        for i in range(0, 4):
+            corner = viewportlines[i][0]
+            storage = []
+            storage.append(corner)
+            for point in Ie:
+                corner_coords = [corner.lat, corner.lng]
+                point_coords = [point.lat, point.lng]
+                if corner_coords[i % 2] == point_coords[i % 2]:
+                    storage.append(point)
+                #if i == 0 or i == 2:
+                #    if(corner.lat == point.lat):
+                #        storage.append(point)
+                #else:  # i == 1 or i == 3
+                #    if(corner.lng == point.lng):
+                #        storage.append(point)
+            storagebank.append(storage)
+        storagebank[0].sort(key=lambda tup: tup.lng, reverse=True)
+        storagebank[1].sort(key=lambda tup: tup.lat, reverse=True)
+        storagebank[2].sort(key=lambda tup: tup.lng)
+        storagebank[3].sort(key=lambda tup: tup.lat)
+        Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
+        return Q
+
+    def unwrap(self, list):
+        """
+        'Author' Bob S. and Nick L.
+
+        this method 'wraps' the longitude points of an *already un-flattened list*
+        By ensuring the polygon crosses the anti-meridian, then moving all points that extend around the anti-meridian going negative to positive;
+        by moving those points into the extra dimensional standard coordinate plain 'off the map' from the polar plain
+
+        NOTE: this method acts on the implication that the points of the polygon being transformed are NO MORE than 180 degrees apart longitudinally
+        This is required to be the case as there exists no other way to determine whether or not a point should or should not be transformed
+        By relying on a maximum limit, we have chosen to be 180, the polyogns' diemnsion are capped at a width of no more 180 degreees
+        However, the path of the visualization software in google earth will not limit the capacity for polygons' dimensions to exceed 180 degrees width
+
+        `list`: the un-flattened list of the polygon being modified
+
+        `return`: None, this method statically modifies the parameterized list
+        """
+        for p in list:
+            if (p[0].lng * p[1].lng) < 0:    # if one is negative and the other positive
+                if p[0].lng > p[1].lng:
+                    if p[0].lng - p[1].lng > 180:
+                        p[1].lng = p[1].lng + 360
+                elif p[1].lng > p[0].lng:
+                    if p[1].lng - p[0].lng > 180:
+                        p[0].lng = p[0].lng + 360
+
+    def rewrap(self, list):
+        """
+        'Author' Bob S.
+
+        This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by calculating each of the coordinate pair's values individually
+
+        `list`: the un-flattened list of the polygon being modified
+
+        `return`: None, this method statically modifies the parameterized list
+        """
+        for p in list:
+            p[0].rewrap()
+            p[1].rewrap()
+
+    def unFlattenList(self, list):
+        """
+        'Author' Bob S.
+
+        this method 'un-flattens' the list being passed
+        by creating a tuple of each lat-long-point and it's respective neighbor a new list of 'lines' is created for the purpose of iteration by the necessary methods.
+
+        `list`: list to be modified.
+
+        `return`: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
+        """
+        temp = list[1:] + list[:1]  # rotate list by one, to the left
+        return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
+
+
+    def clip(self, subjectlines, viewportlines):
+        """
+        This method takes in flattened, lists of lat long points representing the polygon of the subject polygon and the viewport polygon.
+        first the two collections are un-flattened to form the list of lists needed to run the algorithm
+        Next the lists are unwrapped to fold them over the anti-meridian, allowing analysis of continuous lines in the solution space
+        Next the three integral collections P, Ie, and Q are found using the deferred methods
+        Finally the resultant clipped polygon is found with a call to the local method and returned
+
+        `subjectlines`: list of points on subject shape
+        `viewportlines`: list of pints on the viewport shape
+        `return`: the result of the call to get clipped
+        """
+
+        # un-flatten subject viewport
+        subjectlines = self.unFlattenList(subjectlines)
+        viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
+
+        # next unwrap these line sets
+        self.unwrap(subjectlines)
+        self.unwrap(viewportlines)
+
+        # find P, Ie
+        P, Ie = self.getP(subjectlines, viewportlines)
+        if self.debug: print "P :",P
+        if self.debug: print "Ie:", Ie
+        if not Ie or Ie == []:
+            return None
+
+        # then find Q
+        Q = self.getQ(viewportlines, Ie)
+        if self.debug: print "Q :",Q
+
+        # then get Clipped
+        result = self.getClipped(P, Q, Ie)
+        result.append(result[0])
+        return result
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping">WeilerClipping</a></li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.debug" class="name">var <span class="ident">debug</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, debug=0)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.__init__" class="source">
+    <pre><code>def __init__(self, debug=0):
+    self.debug = debug
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.clip">
+    <p>def <span class="ident">clip</span>(</p><p>self, subjectlines, viewportlines)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This method takes in flattened, lists of lat long points representing the polygon of the subject polygon and the viewport polygon.
+first the two collections are un-flattened to form the list of lists needed to run the algorithm
+Next the lists are unwrapped to fold them over the anti-meridian, allowing analysis of continuous lines in the solution space
+Next the three integral collections P, Ie, and Q are found using the deferred methods
+Finally the resultant clipped polygon is found with a call to the local method and returned</p>
+<p><code>subjectlines</code>: list of points on subject shape
+<code>viewportlines</code>: list of pints on the viewport shape
+<code>return</code>: the result of the call to get clipped</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.clip', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.clip" class="source">
+    <pre><code>def clip(self, subjectlines, viewportlines):
+    """
+    This method takes in flattened, lists of lat long points representing the polygon of the subject polygon and the viewport polygon.
+    first the two collections are un-flattened to form the list of lists needed to run the algorithm
+    Next the lists are unwrapped to fold them over the anti-meridian, allowing analysis of continuous lines in the solution space
+    Next the three integral collections P, Ie, and Q are found using the deferred methods
+    Finally the resultant clipped polygon is found with a call to the local method and returned
+    `subjectlines`: list of points on subject shape
+    `viewportlines`: list of pints on the viewport shape
+    `return`: the result of the call to get clipped
+    """
+    # un-flatten subject viewport
+    subjectlines = self.unFlattenList(subjectlines)
+    viewportlines = [(viewportlines[0], viewportlines[1]), (viewportlines[1], viewportlines[2]),(viewportlines[2], viewportlines[3]),(viewportlines[3], viewportlines[0])]
+    # next unwrap these line sets
+    self.unwrap(subjectlines)
+    self.unwrap(viewportlines)
+    # find P, Ie
+    P, Ie = self.getP(subjectlines, viewportlines)
+    if self.debug: print "P :",P
+    if self.debug: print "Ie:", Ie
+    if not Ie or Ie == []:
+        return None
+    # then find Q
+    Q = self.getQ(viewportlines, Ie)
+    if self.debug: print "Q :",Q
+    # then get Clipped
+    result = self.getClipped(P, Q, Ie)
+    result.append(result[0])
+    return result
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.determinant">
+    <p>def <span class="ident">determinant</span>(</p><p>self, tupA, tupB)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bob Seedorf</p>
+<p>Returns the algebraic determinant of the parameterized tuple using linear combinations of their coordinate pairs ([0], [1]).
+ _    <em>
+| A  C |
+|_B, D</em>|    =   (A * D) - (B * C) = return value</p>
+<p><code>pointA</code>: start point of line</p>
+<p><code>pointB</code>: end point of line</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.determinant', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.determinant" class="source">
+    <pre><code>def determinant(self, tupA, tupB):
+    """
+    `Author`: Bob Seedorf
+    Returns the algebraic determinant of the parameterized tuple using linear combinations of their coordinate pairs ([0], [1]).
+     _    _
+    | A  C |
+    |_B, D_|    =   (A * D) - (B * C) = return value
+    `pointA`: start point of line
+    `pointB`: end point of line
+    """
+    return (tupA[0] * tupB[1] - tupB[0] * tupA[1])
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.doLinesIntersect">
+    <p>def <span class="ident">doLinesIntersect</span>(</p><p>self, pointA, pointB, pointC, pointD)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bob Seedorf, Eliakah K.</p>
+<p>Returns True if the line segments composed of points A, B and points C, D have an intersection point.
+By finding the orientation of any three given points the traits of the lines intersection can be determined through relational equality
+The orientation of the lines, being only the decision that they rotate either clockwise, counterclockwise, or not at all (collinear) is used to determine the
+In the case that the orientation of A, B, and C is the same as A, B, and D, and the the orientation of C, D, and A is the same as C, D, and B, then the lines do not intersect</p>
+<p><code>pointA</code>: start point of first line</p>
+<p><code>pointB</code>: end point of first line</p>
+<p><code>pointC</code>: start point of second line</p>
+<p><code>pointD</code>: end point of second line</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.doLinesIntersect', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.doLinesIntersect" class="source">
+    <pre><code>def doLinesIntersect(self, pointA, pointB, pointC, pointD):
+    """
+    `Author`: Bob Seedorf, Eliakah K.
+    Returns True if the line segments composed of points A, B and points C, D have an intersection point.
+    By finding the orientation of any three given points the traits of the lines intersection can be determined through relational equality
+    The orientation of the lines, being only the decision that they rotate either clockwise, counterclockwise, or not at all (collinear) is used to determine the
+    In the case that the orientation of A, B, and C is the same as A, B, and D, and the the orientation of C, D, and A is the same as C, D, and B, then the lines do not intersect
+    `pointA`: start point of first line
+    `pointB`: end point of first line
+    `pointC`: start point of second line
+    `pointD`: end point of second line
+    """
+    o1 = self.findOrientation(pointA, pointB, pointC)
+    o2 = self.findOrientation(pointA, pointB, pointD)
+    o3 = self.findOrientation(pointC, pointD, pointA)
+    o4 = self.findOrientation(pointC, pointD, pointB)
+    if o1 != o2 and o3 != o4:
+        return True
+    return False
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.findOrientation">
+    <p>def <span class="ident">findOrientation</span>(</p><p>self, pointA, pointB, pointC)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bob Seedorf</p>
+<p>Returns orientation of three given points in coordinate space.
+The assumption lines drawn between points A, B and B, C and C, A are used to define this 'orientation'
+Through projection of the combinations of lines and extraneous points the slopes of the projections are found to be of an appropriate orientatoin</p>
+<p><code>pointA</code>: first point being passed</p>
+<p><code>pointB</code>: second point being passed</p>
+<p><code>pointC</code>: third point being passed</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.findOrientation', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.findOrientation" class="source">
+    <pre><code>def findOrientation(self, pointA, pointB, pointC):
+    """
+    `Author`: Bob Seedorf
+    Returns orientation of three given points in coordinate space.
+    The assumption lines drawn between points A, B and B, C and C, A are used to define this 'orientation'
+    Through projection of the combinations of lines and extraneous points the slopes of the projections are found to be of an appropriate orientatoin
+    `pointA`: first point being passed
+    `pointB`: second point being passed
+    `pointC`: third point being passed
+    """
+    val = (pointB.lat - pointA.lat) * (pointC.lng - pointB.lng) - \
+          (pointB.lng - pointA.lng) * (pointC.lat - pointB.lat);
+    if val == 0.0: return 0   # Orientation.COLLINEAR
+    elif val > 0: return -1   # Orientation.RIGHT
+    else: return 1            # Orientation.LEFT
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClipped">
+    <p>def <span class="ident">getClipped</span>(</p><p>self, P, Q, Ie)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bob S, Nick L, Bill C.</p>
+<p>This method returns the result of the clipping algorithm as a collection of coordinate pairs; a list of tuples
+Using the collections, P, Q, and Ie, the resultant clipped polygon is found through an iteration over P and Q based on Ie.
+The collection of P is used to find all the necessary points on the subject polygon, while the collection of Q is used to find the necessary points on the viewport polygon.
+by 'bouncing back and forth' between these two collections, as we pop intersection points off Ie, the bounded region of the result is constructed in a dynamic fashion and returned as a list of points representing every vertex of the shape</p>
+<p><code>return</code>: result, the collection of tuples representing the points of the new polygon</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClipped', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClipped" class="source">
+    <pre><code>def getClipped(self, P, Q, Ie):
+    """
+    `Author`: Bob S, Nick L, Bill C.
+    This method returns the result of the clipping algorithm as a collection of coordinate pairs; a list of tuples
+    Using the collections, P, Q, and Ie, the resultant clipped polygon is found through an iteration over P and Q based on Ie.
+    The collection of P is used to find all the necessary points on the subject polygon, while the collection of Q is used to find the necessary points on the viewport polygon.
+    by 'bouncing back and forth' between these two collections, as we pop intersection points off Ie, the bounded region of the result is constructed in a dynamic fashion and returned as a list of points representing every vertex of the shape
+    `return`: result, the collection of tuples representing the points of the new polygon
+    """
+    result = []
+    reserve = Ie[-1]
+    location = reserve
+    flag = 1
+    while flag:
+        Ie.pop()
+        end = Ie[-1]
+        index = P.index(location)
+        while not location == end:
+            location.rewrap()
+            result.append(location)
+            index = (index+1) % len(P)
+            location = P[index]
+        Ie.pop()
+        if len(Ie) == 0:
+            end = reserve
+            flag = 0
+        else:
+            end = Ie[-1]
+        index = Q.index(location)
+        while not location == end:
+            location.rewrap()
+            result.append(location)
+            index = (index+1) % len(Q)
+            location = Q[index]
+    return result
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClosestPoint">
+    <p>def <span class="ident">getClosestPoint</span>(</p><p>self, target, pointA, pointB)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bob Seedorf</p>
+<p>Returns the point, of the set {pointA, pointB} that is dimensionally closest to the point target
+By using the pythagorean theorem and calculating the hypotenuse of the triangle composed of sides of the difference in x and difference in y for the two given points, the closest point is selected based on this distance.</p>
+<p>NOTE: in the case that the two points are of equal distance, point A will be chosen over point B</p>
+<p><code>target</code>: control point form whom the distances of the other two will be checked</p>
+<p><code>pointA</code>: first point to be checked, has return precedence over pointB</p>
+<p><code>pointB</code>: second point to be checked</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClosestPoint', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getClosestPoint" class="source">
+    <pre><code>def getClosestPoint(self, target, pointA, pointB):
+    """
+    `Author`: Bob Seedorf
+    Returns the point, of the set {pointA, pointB} that is dimensionally closest to the point target
+    By using the pythagorean theorem and calculating the hypotenuse of the triangle composed of sides of the difference in x and difference in y for the two given points, the closest point is selected based on this distance.
+    NOTE: in the case that the two points are of equal distance, point A will be chosen over point B
+    `target`: control point form whom the distances of the other two will be checked
+    `pointA`: first point to be checked, has return precedence over pointB
+    `pointB`: second point to be checked
+    """
+    distToA = math.sqrt(((target.lng - pointA.lng) ** 2) + (target.lat - pointA.lat) ** 2)
+    distToB = math.sqrt(((target.lng - pointB.lng) ** 2) + (target.lat - pointB.lat) ** 2)
+    return pointA if distToA <= distToB else pointB
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getLineIntersection">
+    <p>def <span class="ident">getLineIntersection</span>(</p><p>self, pointA, pointB, pointC, pointD)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p><code>Author</code>: Bob Seedorf, Eliakah K.</p>
+<p>Returns the point, as a LatLongPoint object, at which the line segments composed of points A, B and points C, D intersect
+First the tuple of the difference in the x's an y's of points A, B and then points C, D are found.
+Next the determinant of the difference of the x values y values, respctively, are stored
+Next the determinant of the the individual lines, A, B and C, D are found, this yields value d.
+Subsequently the corresponding point of intersection's x and y values are found through the division of the determinant of d and ydiff and d and xdiff by div
+The return is the pair of values, resutltx and resulty, representing the coordinate pair that is the point of intersection</p>
+<p>NOTE: Does NOT check if lines intersect, as a precondition that should be accomplished before this method is called</p>
+<p><code>pointA</code>: start point of first line</p>
+<p><code>pointB</code>: end point of first line</p>
+<p><code>pointC</code>: start point of second line</p>
+<p><code>pointD</code>: end point of second line</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getLineIntersection', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getLineIntersection" class="source">
+    <pre><code>def getLineIntersection(self, pointA, pointB, pointC, pointD):
+    """
+    `Author`: Bob Seedorf, Eliakah K.
+    Returns the point, as a LatLongPoint object, at which the line segments composed of points A, B and points C, D intersect
+    First the tuple of the difference in the x's an y's of points A, B and then points C, D are found.
+    Next the determinant of the difference of the x values y values, respctively, are stored
+    Next the determinant of the the individual lines, A, B and C, D are found, this yields value d.
+    Subsequently the corresponding point of intersection's x and y values are found through the division of the determinant of d and ydiff and d and xdiff by div
+    The return is the pair of values, resutltx and resulty, representing the coordinate pair that is the point of intersection
+    NOTE: Does NOT check if lines intersect, as a precondition that should be accomplished before this method is called
+    `pointA`: start point of first line
+    `pointB`: end point of first line
+    `pointC`: start point of second line
+    `pointD`: end point of second line
+    """
+    xdiff = pointA.lng - pointB.lng, pointC.lng - pointD.lng
+    ydiff = pointA.lat - pointB.lat, pointC.lat - pointD.lat
+    div = self.determinant(xdiff, ydiff)
+    d = self.determinant(pointA.getTup(), pointB.getTup()), self.determinant(pointC.getTup(), pointD.getTup())
+    resultx = float(self.determinant(d, xdiff)) / float(div)
+    resulty = float(self.determinant(d, ydiff)) / float(div)
+    return LatLongPoint(resulty, resultx)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getP">
+    <p>def <span class="ident">getP</span>(</p><p>self, subjectlines, viewportlines)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>'Author' Bob S. Nick L. and Bill C.</p>
+<p>This method calculates and maintains the list of points, P, to be used during the iterative phase of the getCLipped method</p>
+<p><code>subjectlines</code>: The collection points that compose all vertices of the subject which we are clipping</p>
+<p><code>viewportlines</code>: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines</p>
+<p><code>return</code>: P and Ie, the collection of all points that lie on the subject lines of the polygon being examined and the collection of all points of intersection respectively</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getP', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getP" class="source">
+    <pre><code>def getP(self, subjectlines, viewportlines):
+    """
+    'Author' Bob S. Nick L. and Bill C.
+    This method calculates and maintains the list of points, P, to be used during the iterative phase of the getCLipped method
+    `subjectlines`: The collection points that compose all vertices of the subject which we are clipping
+    `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+    `return`: P and Ie, the collection of all points that lie on the subject lines of the polygon being examined and the collection of all points of intersection respectively
+    """
+    P = []
+    Ie = []
+    for subjectline in reversed(subjectlines):
+        P.append(subjectline[1])
+        crossCount = 0
+        for viewportline in viewportlines:
+            poi = None
+            if self.doLinesIntersect(subjectline[0], subjectline[1], viewportline[0], viewportline[1]):
+                poi = self.getLineIntersection(subjectline[0], subjectline[1], viewportline[0], viewportline[1])
+                P.append(poi)
+                Ie.append(poi)
+                crossCount += 1
+            if crossCount > 1:
+                if Ie[-1] == self.getClosestPoint(P[-3], Ie[-2], Ie[-1]):
+                    # perform swap
+                    Ie[-1], Ie[-2] = Ie[-2], Ie[-1]
+                    P[-1], P[-2] = P[-2], P[-1]
+            if crossCount == 2:
+                break
+    P.reverse()
+    return P, Ie
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getQ">
+    <p>def <span class="ident">getQ</span>(</p><p>self, viewportlines, Ie)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>'Author' Bob S. Nick L., and Bill C.</p>
+<p>this method returns the collection, Q, of all points that lie on the lines of the viewport polyogn being examined
+By iterating over Ie, the list of points of intersection, every point of intersection cooresponding to the line starting with the point at index 1-4 of the viewport is checked and ordered as to generate a counter clockwise, flattened collection of the viewport</p>
+<p><code>viewportlines</code>: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines</p>
+<p><code>Ie</code>:  and the collection of all points of intersection between subjeclines and viewportlines</p>
+<p><code>return</code>: Q, the collection of all points that lie on the viewport polygon</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getQ', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.getQ" class="source">
+    <pre><code>def getQ(self, viewportlines, Ie):
+    """
+    'Author' Bob S. Nick L., and Bill C.
+    this method returns the collection, Q, of all points that lie on the lines of the viewport polyogn being examined
+    By iterating over Ie, the list of points of intersection, every point of intersection cooresponding to the line starting with the point at index 1-4 of the viewport is checked and ordered as to generate a counter clockwise, flattened collection of the viewport
+    `viewportlines`: The collection of points that compose all vertices of the restriction space, against which, we are clipping subjectlines
+    `Ie`:  and the collection of all points of intersection between subjeclines and viewportlines
+    `return`: Q, the collection of all points that lie on the viewport polygon
+    """
+    Q = []
+    storagebank = []
+    for i in range(0, 4):
+        corner = viewportlines[i][0]
+        storage = []
+        storage.append(corner)
+        for point in Ie:
+            corner_coords = [corner.lat, corner.lng]
+            point_coords = [point.lat, point.lng]
+            if corner_coords[i % 2] == point_coords[i % 2]:
+                storage.append(point)
+            #if i == 0 or i == 2:
+            #    if(corner.lat == point.lat):
+            #        storage.append(point)
+            #else:  # i == 1 or i == 3
+            #    if(corner.lng == point.lng):
+            #        storage.append(point)
+        storagebank.append(storage)
+    storagebank[0].sort(key=lambda tup: tup.lng, reverse=True)
+    storagebank[1].sort(key=lambda tup: tup.lat, reverse=True)
+    storagebank[2].sort(key=lambda tup: tup.lng)
+    storagebank[3].sort(key=lambda tup: tup.lat)
+    Q = storagebank[0] + storagebank[1] + storagebank[2] + storagebank[3]
+    return Q
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.rewrap">
+    <p>def <span class="ident">rewrap</span>(</p><p>self, list)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>'Author' Bob S.</p>
+<p>This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by calculating each of the coordinate pair's values individually</p>
+<p><code>list</code>: the un-flattened list of the polygon being modified</p>
+<p><code>return</code>: None, this method statically modifies the parameterized list</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.rewrap', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.rewrap" class="source">
+    <pre><code>def rewrap(self, list):
+    """
+    'Author' Bob S.
+    This method 're-wraps' all the elements of a given list of tuples of Lat Long Points by calculating each of the coordinate pair's values individually
+    `list`: the un-flattened list of the polygon being modified
+    `return`: None, this method statically modifies the parameterized list
+    """
+    for p in list:
+        p[0].rewrap()
+        p[1].rewrap()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unFlattenList">
+    <p>def <span class="ident">unFlattenList</span>(</p><p>self, list)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>'Author' Bob S.</p>
+<p>this method 'un-flattens' the list being passed
+by creating a tuple of each lat-long-point and it's respective neighbor a new list of 'lines' is created for the purpose of iteration by the necessary methods.</p>
+<p><code>list</code>: list to be modified.</p>
+<p><code>return</code>: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unFlattenList', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unFlattenList" class="source">
+    <pre><code>def unFlattenList(self, list):
+    """
+    'Author' Bob S.
+    this method 'un-flattens' the list being passed
+    by creating a tuple of each lat-long-point and it's respective neighbor a new list of 'lines' is created for the purpose of iteration by the necessary methods.
+    `list`: list to be modified.
+    `return`: new list of tuples of coordinate pairs (LatLongPoints) for the subsequent methods
+    """
+    temp = list[1:] + list[:1]  # rotate list by one, to the left
+    return zip(list, temp)      # zip list, with the stepped temp to create all necessary point pairs; lines
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unwrap">
+    <p>def <span class="ident">unwrap</span>(</p><p>self, list)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>'Author' Bob S. and Nick L.</p>
+<p>this method 'wraps' the longitude points of an <em>already un-flattened list</em>
+By ensuring the polygon crosses the anti-meridian, then moving all points that extend around the anti-meridian going negative to positive;
+by moving those points into the extra dimensional standard coordinate plain 'off the map' from the polar plain</p>
+<p>NOTE: this method acts on the implication that the points of the polygon being transformed are NO MORE than 180 degrees apart longitudinally
+This is required to be the case as there exists no other way to determine whether or not a point should or should not be transformed
+By relying on a maximum limit, we have chosen to be 180, the polyogns' diemnsion are capped at a width of no more 180 degreees
+However, the path of the visualization software in google earth will not limit the capacity for polygons' dimensions to exceed 180 degrees width</p>
+<p><code>list</code>: the un-flattened list of the polygon being modified</p>
+<p><code>return</code>: None, this method statically modifies the parameterized list</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unwrap', this);">Show source &equiv;</a></p>
+  <div id="source-KML-Optimizer-Pathfinder.RestrictionEngine.WeilerAtherton.WeilerClipping.unwrap" class="source">
+    <pre><code>def unwrap(self, list):
+    """
+    'Author' Bob S. and Nick L.
+    this method 'wraps' the longitude points of an *already un-flattened list*
+    By ensuring the polygon crosses the anti-meridian, then moving all points that extend around the anti-meridian going negative to positive;
+    by moving those points into the extra dimensional standard coordinate plain 'off the map' from the polar plain
+    NOTE: this method acts on the implication that the points of the polygon being transformed are NO MORE than 180 degrees apart longitudinally
+    This is required to be the case as there exists no other way to determine whether or not a point should or should not be transformed
+    By relying on a maximum limit, we have chosen to be 180, the polyogns' diemnsion are capped at a width of no more 180 degreees
+    However, the path of the visualization software in google earth will not limit the capacity for polygons' dimensions to exceed 180 degrees width
+    `list`: the un-flattened list of the polygon being modified
+    `return`: None, this method statically modifies the parameterized list
+    """
+    for p in list:
+        if (p[0].lng * p[1].lng) < 0:    # if one is negative and the other positive
+            if p[0].lng > p[1].lng:
+                if p[0].lng - p[1].lng > 180:
+                    p[1].lng = p[1].lng + 360
+            elif p[1].lng > p[0].lng:
+                if p[1].lng - p[0].lng > 180:
+                    p[0].lng = p[0].lng + 360
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.2</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+</body>
+</html>
