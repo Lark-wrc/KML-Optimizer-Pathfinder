@@ -459,7 +459,7 @@ class myFrame(Frame):
         # disable run button, to disallow too many running applications
         self.run.config(state=DISABLED)
 
-        self.wd = WaitDialog.WaitDialog(350, 100, myFrame.outimage)
+        self.wd = waitDialog.WaitDialog(350, 100, myFrame.outimage)
         self.wd.activate()
         uiobserver = UiObserver(self)
         imobserver = WaitObserver(self.wd)
